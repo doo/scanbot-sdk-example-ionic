@@ -4,7 +4,6 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { SdkUiPage } from '../pages/sdk-ui/sdk-ui';
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -15,7 +14,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     SdkUiPage,
     AboutPage,
-    ContactPage,
     TabsPage
   ],
   imports: [
@@ -26,7 +24,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     SdkUiPage,
     AboutPage,
-    ContactPage,
     TabsPage
   ],
   providers: [
