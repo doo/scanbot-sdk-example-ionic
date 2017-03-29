@@ -20,6 +20,14 @@ Fetch this repository and navigate to the project directory.
 
 `cd scanbot-sdk-example-ionic2`
 
+Install node modules:
+
+`npm install`
+
+Create an empty `www` directory (required by the Ionic Framework):
+ 
+`mkdir www`
+
 Install platforms and plugins (defined in the config.xml of this app):
 
 `ionic prepare`
