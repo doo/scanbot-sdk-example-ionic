@@ -15,7 +15,10 @@ export class SdkUiPage {
   constructor(private changeDetector: ChangeDetectorRef) { }
 
   public startCameraUi() {
-    let options = { edgeColor: '#0000ff' };
+    let options = {
+      edgeColor: '#0000ff',
+      quality: 70
+    };
     ScanbotSdkUi.startCamera(
       (result) => {
         this.currentDocumentImageUri = result.imageFileUri;
@@ -33,7 +36,8 @@ export class SdkUiPage {
   public startCroppingUi() {
     let options = {
       imageFileUri: this.currentOriginalImageUri,
-      edgeColor: '#0000ff'
+      edgeColor: '#0000ff',
+      quality: 70
     };
     ScanbotSdkUi.startCropping(
       (result) => {
