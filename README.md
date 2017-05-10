@@ -24,14 +24,9 @@ Install node modules:
 
 `npm install`
 
-Create an empty `www` directory (required by the Ionic Framework):
- 
-`mkdir www`
-
 Install platforms and plugins (defined in the config.xml of this app):
 
 `ionic prepare`
-
 
 Check installed platforms and plugins:
 
