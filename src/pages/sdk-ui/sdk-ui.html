@@ -22,4 +22,10 @@
     <img [src]="currentDocumentImageUri"/>
   </ion-card>
 
+  <div padding>
+    <button ion-button block *ngIf="currentDocumentImageUri" (click)="roateImage()">
+      <ion-icon name="ios-refresh"></ion-icon> &nbsp; Rotate Image CW
+    </button>
+  </div>
+
 </ion-content>

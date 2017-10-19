@@ -2,6 +2,9 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 
 
 declare var ScanbotSdkUi: any;
+declare var ScanbotSdk: any;
+
+const IMAGE_QUALITY = 70;
 
 @Component({
   selector: 'page-sdk-ui',
@@ -38,9 +41,24 @@ export class SdkUiPage {
     let options = {
       imageFileUri: this.currentOriginalImageUri,
       edgeColor: '#0000ff',
-      quality: 70
+      quality: IMAGE_QUALITY
     };
     ScanbotSdkUi.startCropping(
+      (result) => {
+        this.currentDocumentImageUri = result.imageFileUri;
+        this.changeDetector.detectChanges();
+      },
+      this.callbackError, options
+    );
+  }
+
+  public roateImage() {
+    let options = {
+      imageFileUri: this.currentDocumentImageUri,
+      degrees: -90,
+      quality: IMAGE_QUALITY
+    };
+    ScanbotSdk.rotateImage(
       (result) => {
         this.currentDocumentImageUri = result.imageFileUri;
         this.changeDetector.detectChanges();

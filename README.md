@@ -1,6 +1,6 @@
-# Example App for Scanbot SDK Cordova Plugin with Ionic 2 Framework
+# Example App for Scanbot SDK Cordova Plugin with Ionic 2+ Framework
 
-This example app shows how to integrate the Scanbot SDK Cordova Plugin with [Ionic 2 Framework](https://ionicframework.com). 
+This example app shows how to integrate the Scanbot SDK Cordova Plugin with [Ionic 2+ Framework](https://ionicframework.com). 
 
 The Scanbot SDK Cordova Plugin is available as [npm package](https://www.npmjs.com/package/cordova-plugin-scanbot-sdk).
 
@@ -26,13 +26,13 @@ Install node modules:
 
 Install platforms and plugins (defined in the config.xml of this app):
 
-`ionic prepare`
+`ionic cordova prepare`
 
 Check installed platforms and plugins:
 
-`ionic platform ls`
+`ionic cordova platform ls`
 
-`ionic plugin ls`
+`ionic cordova plugin ls`
 
 You should see *android* and *ios* as installed platforms and *cordova-plugin-scanbot-sdk* as installed plugins. 
 
@@ -41,7 +41,7 @@ Connect a device via USB and run the app.
 
 Android:
 
-`ionic run android`
+`ionic cordova run android`
 
 iOS:
 
@@ -49,7 +49,7 @@ To run this example app on an iOS device you have to adjust some settings in Xco
 - *Provisioning* and *Code Signing* settings - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html) 
 - Add *ScanbotSDK.framework* as Embedded Binary  - see our [plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
 
-Then you can start the App in Xcode or via `ionic run ios`.
+Then you can start the App in Xcode or via `ionic cordova run ios`.
 
 
 
