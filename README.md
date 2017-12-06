@@ -24,7 +24,7 @@ Install node modules:
 
 `npm install`
 
-Install platforms and plugins (defined in the config.xml of this app):
+Install Cordova platforms and plugins (defined in the config.xml of this app):
 
 `ionic cordova prepare`
 
