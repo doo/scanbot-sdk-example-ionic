@@ -14,6 +14,7 @@ export class SdkUiPage {
 
   public currentDocumentImageUri: string = '';
   public currentOriginalImageUri: string = '';
+  public pdfFileUri: string = '';
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -61,6 +62,17 @@ export class SdkUiPage {
     ScanbotSdk.rotateImage(
       (result) => {
         this.currentDocumentImageUri = result.imageFileUri;
+        this.changeDetector.detectChanges();
+      },
+      this.callbackError, options
+    );
+  }
+
+  public createPdf() {
+    let options = { images: [this.currentDocumentImageUri] };
+    ScanbotSdk.createPdf(
+      (result) => {
+        this.pdfFileUri = result.pdfFileUri;
         this.changeDetector.detectChanges();
       },
       this.callbackError, options
