@@ -15,6 +15,7 @@ export class SdkUiPage {
   public currentDocumentImageUri: string = '';
   public currentOriginalImageUri: string = '';
   public pdfFileUri: string = '';
+  public barcodeResult: string = '';
 
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -73,6 +74,24 @@ export class SdkUiPage {
     ScanbotSdk.createPdf(
       (result) => {
         this.pdfFileUri = result.pdfFileUri;
+        this.changeDetector.detectChanges();
+      },
+      this.callbackError, options
+    );
+  }
+
+  public startBarcodeScannerUi() {
+    this.barcodeResult = '';
+
+    let options = {
+      flashEnabled: false,
+      playTone: true,
+      vibrate: true,
+      //barcodeFormats: [ScanbotSdk.BarcodeFormat.EAN_8, ScanbotSdk.BarcodeFormat.EAN_13, ScanbotSdk.BarcodeFormat.CODE_128]
+    };
+    ScanbotSdkUi.startBarcodeScanner(
+      (result) => {
+        this.barcodeResult = 'Barcode format: ' + result.barcodeFormat + ', ' + 'Value: ' + result.textValue;
         this.changeDetector.detectChanges();
       },
       this.callbackError, options

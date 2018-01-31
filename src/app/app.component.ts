@@ -26,7 +26,7 @@ export class MyApp {
   }
 
   private initScanbotSdk() {
-    var options = { loggingEnabled: true, licenseKey: '' };
+    let options = { loggingEnabled: true, licenseKey: '' };
     ScanbotSdk.initializeSdk(function(result) {
         console.log(result);
       },

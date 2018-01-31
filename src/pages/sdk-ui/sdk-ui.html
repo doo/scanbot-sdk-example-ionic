@@ -30,12 +30,21 @@
 
   <div padding>
     <button ion-button block *ngIf="currentDocumentImageUri" (click)="createPdf()">
-      <ion-icon name="document-text"></ion-icon> &nbsp; Create PDF
+      <ion-icon name="ios-document"></ion-icon> &nbsp; Create PDF
     </button>
     <p *ngIf="pdfFileUri">
       PDF created. Please see:
       <br>
       {{pdfFileUri}}
+    </p>
+  </div>
+
+  <div padding>
+    <button ion-button block (click)="startBarcodeScannerUi()">
+      <ion-icon name="ios-barcode"></ion-icon> &nbsp; Start Barcode Scanner
+    </button>
+    <p>
+      {{barcodeResult}}
     </p>
   </div>
 
