@@ -19,7 +19,7 @@
   </div>
 
   <ion-card *ngIf="currentDocumentImageUri">
-    <img [src]="currentDocumentImageUri"/>
+    <img [src]="currentDocumentImageUri.replace('file://', '')"/>
   </ion-card>
 
   <div padding>

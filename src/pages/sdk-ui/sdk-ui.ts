@@ -17,7 +17,7 @@ export class SdkUiPage {
   public pdfFileUri: string = '';
   public barcodeResult: string = '';
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(public changeDetector: ChangeDetectorRef) { }
 
   public startCameraUi() {
     let options = {
