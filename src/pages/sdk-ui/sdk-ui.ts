@@ -1,4 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
+import { normalizeURL } from 'ionic-angular';
 
 
 declare var ScanbotSdkUi: any;
@@ -96,6 +97,10 @@ export class SdkUiPage {
       },
       this.callbackError, options
     );
+  }
+
+  public normalizeImageFileUri(imageFileUri: string) {
+    return normalizeURL(imageFileUri);
   }
 
 }
