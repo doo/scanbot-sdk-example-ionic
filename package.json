@@ -20,15 +20,17 @@
     "@angular/http": "5.0.0",
     "@angular/platform-browser": "5.0.0",
     "@angular/platform-browser-dynamic": "5.0.0",
+    "@ionic-native/camera": "^4.7.0",
     "@ionic-native/core": "4.3.2",
     "@ionic-native/splash-screen": "4.3.2",
     "@ionic-native/status-bar": "4.3.2",
     "@ionic/storage": "2.1.3",
-    "cordova-android": "~7.0.0",
+    "cordova-android": "^7.1.0",
     "cordova-ios": "~4.5.4",
+    "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-ionic-webview": "^1.1.16",
-    "cordova-plugin-scanbot-sdk": "^1.6.0",
+    "cordova-plugin-scanbot-sdk": "file:../cordova-plugin-scanbot-sdk",
     "cordova-plugin-splashscreen": "^4.0.3",
     "cordova-plugin-whitelist": "^1.3.1",
     "ionic-angular": "3.9.2",
@@ -54,11 +56,13 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-scanbot-sdk": {
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-camera": {
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Allow gallery access",
         "CAMERA_USAGE_DESCRIPTION": " ",
         "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
       },
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-scanbot-sdk": {}
     }
   }
 }

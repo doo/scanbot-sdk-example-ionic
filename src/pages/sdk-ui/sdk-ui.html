@@ -1,51 +1,124 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Scanbot SDK UI</ion-title>
+    <ion-title>Scanbot SDK Demo</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <div padding>
-    <button ion-button block (click)="startCameraUi()">
-      <ion-icon name="ios-camera"></ion-icon> &nbsp; Start Camera UI
-    </button>
-  </div>
+  <ion-grid padding>
+    <ion-row>
+      <ion-col col-12>
+        <button ion-button block (click)="startCameraUi()">
+          <ion-icon name="ios-camera"></ion-icon> &nbsp; Open Document Scanner
+        </button>
+      </ion-col>
+      <ion-col col-12>
+        <button ion-button block (click)="pickImageFromGallery()">
+          <ion-icon name="ios-open"></ion-icon> &nbsp; Pick Image From Gallery
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <div padding>
-    <button ion-button block *ngIf="currentOriginalImageUri" (click)="startCroppingUi()">
-      <ion-icon name="ios-crop"></ion-icon> &nbsp; Start Cropping UI
-    </button>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col padding col-3 *ngFor='let page of pages'
+        [style.backgroundColor]='page == selectedPage ? "#ddd" : null'
+        (tap)='onImagePreviewTapped(page)'>
+        <img [src]='normalizeImageFileUri(page.documentPreviewImageFileUri || page.originalPreviewImageFileUri)'/>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <ion-card *ngIf="currentDocumentImageUri">
-    <img [src]="normalizeImageFileUri(currentDocumentImageUri)"/>
+  <ion-card *ngIf="selectedPage">
+    <img [src]="normalizeImageFileUri(selectedPage.documentPreviewImageFileUri || selectedPage.originalPreviewImageFileUri)"/>
   </ion-card>
 
-  <div padding>
-    <button ion-button block *ngIf="currentDocumentImageUri" (click)="roateImage()">
-      <ion-icon name="ios-refresh"></ion-icon> &nbsp; Rotate Image CW
-    </button>
-  </div>
+  <ion-grid padding>
+    <ion-row>
+      <ion-col col-12>
+        <button ion-button block (click)="startCroppingUi()">
+          <ion-icon name="ios-crop"></ion-icon> &nbsp; Open Cropping Screen
+        </button>
+      </ion-col>
+      <ion-col col-12>
+        <button ion-button block (click)="autoCrop()">
+          <ion-icon name="ios-crop"></ion-icon> &nbsp; Auto-crop
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <div padding>
-    <button ion-button block *ngIf="currentDocumentImageUri" (click)="createPdf()">
-      <ion-icon name="ios-document"></ion-icon> &nbsp; Create PDF
-    </button>
-    <p *ngIf="pdfFileUri">
-      PDF created. Please see:
-      <br>
-      {{pdfFileUri}}
-    </p>
-  </div>
 
+  </div>
+  
+  <ion-grid padding>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block (click)="rotateImage(-90)">
+          <ion-icon name="ios-redo"></ion-icon> &nbsp; Rotate Image CW
+        </button>
+      </ion-col>
+      <ion-col col-6>
+          <button ion-button block (click)="rotateImage(90)">
+            <ion-icon name="ios-undo"></ion-icon> &nbsp; Rotate Image CCW
+          </button>
+        </ion-col>
+      <ion-col col-12>
+        <button ion-button block (click)="binarize()">
+          <ion-icon name="star-half"></ion-icon> &nbsp; Binarize
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid padding>
+    <ion-row>
+      <ion-col col-12>
+        <button ion-button block (click)="performOcr()">
+          <ion-icon name="ios-document"></ion-icon> &nbsp; Perform OCR
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block (click)="createPdf()">
+          <ion-icon name="ios-document"></ion-icon> &nbsp; Create PDF
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block (click)="writeTiff()">
+          <ion-icon name="ios-document"></ion-icon> &nbsp; Create TIFF
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid padding>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block (click)="removePage()">
+          Remove Page 
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block (click)="cleanup()">
+          Clean up
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div padding>
+    <button ion-button block (click)="startMrzScanner()">
+      <ion-icon name="ios-barcode"></ion-icon> &nbsp; Start MRZ Scanner
+    </button>
+  </div>
+  
   <div padding>
     <button ion-button block (click)="startBarcodeScannerUi()">
       <ion-icon name="ios-barcode"></ion-icon> &nbsp; Start Barcode Scanner
     </button>
-    <p>
-      {{barcodeResult}}
-    </p>
   </div>
 
 </ion-content>
