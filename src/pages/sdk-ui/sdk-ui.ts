@@ -27,7 +27,13 @@ export class SdkUiPage {
     sdkInitializer: SdkInitializer,
     private camera: Camera,
   ) {
-    sdkInitializer.onInitialize(this.reloadStoredPages.bind(this));
+    sdkInitializer.onInitialize(err => {
+      if (err) {
+        this.showAlert(err.message);
+      } else {
+        this.reloadStoredPages();
+      }
+    });
   }
 
   public async pickImageFromGallery() {
