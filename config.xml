@@ -99,4 +99,8 @@
     </plugin>
     <engine name="android" spec="^7.1.0" />
     <engine name="ios" spec="~4.5.4" />
+    <plugin name="cordova-plugin-scanbot-sdk" spec="../cordova-plugin-scanbot-sdk">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
+    </plugin>
 </widget>

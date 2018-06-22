@@ -79,25 +79,23 @@ export class SdkUiPage {
     this.updatePage(result.page);
   }
 
-  public async rotateImage(degrees: number) {
+  public async rotateImage(times: number) {
     if (!this.checkSelectedPage()) return;
 
-    let options = {
-      imageFileUri: this.selectedPage.documentImageFileUri,
-      degrees,
-    };
-
-    const {imageFileUri} = await SBSDK.rotateImage(options);
-    this.updatePage(await SBSDK.setDocumentImage({page: this.selectedPage, documentImageFileUri: imageFileUri}));
+    const rotatedPage = await SBSDK.rotatePage({
+      page: this.selectedPage,
+      times,
+    });
+    this.updatePage(rotatedPage);
   }
 
   public async binarize() {
     if (!this.checkSelectedPage()) return;
-    const {imageFileUri} = await SBSDK.applyImageFilter({
-      imageFileUri: this.selectedPage.documentImageFileUri,
+    const newPage = await SBSDK.applyImageFilterOnPage({
+      page: this.selectedPage,
       imageFilter: 'BINARIZED'
     });
-    this.updatePage(await SBSDK.setDocumentImage({page: this.selectedPage, documentImageFileUri: imageFileUri}));
+    this.updatePage(newPage);
   }
 
   public async autoCrop() {

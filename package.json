@@ -61,6 +61,10 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Allow gallery access",
         "CAMERA_USAGE_DESCRIPTION": " ",
         "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
+      },
+      "cordova-plugin-scanbot-sdk": {
+        "CAMERA_USAGE_DESCRIPTION": " ",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
       }
     }
   }
