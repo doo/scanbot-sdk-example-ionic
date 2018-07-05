@@ -97,7 +97,7 @@
         <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
     </plugin>
-    <plugin name="cordova-plugin-scanbot-sdk" spec="../cordova-plugin-scanbot-sdk">
+    <plugin name="cordova-plugin-scanbot-sdk" spec="^2.0.0">
         <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
     </plugin>
