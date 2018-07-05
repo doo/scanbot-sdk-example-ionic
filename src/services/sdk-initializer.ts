@@ -3,8 +3,10 @@ import { Platform } from 'ionic-angular';
 
 import ScanbotSdk, { ScanbotSDKConfiguration } from 'cordova-plugin-scanbot-sdk'
 
-var licenseKey = null;
+// TODO Put the Scanbot SDK license key here
+const myLicenseKey = '';
 
+export const IMAGE_QUALITY = 75;
 
 @Injectable()
 export default class SdkInitializer {
@@ -35,14 +37,14 @@ export default class SdkInitializer {
   private initScanbotSdk() {
     console.log("Initializing SDK...");
 
-    let options: ScanbotSDKConfiguration = {
+    let config: ScanbotSDKConfiguration = {
       loggingEnabled: true,
-      licenseKey: licenseKey,
+      licenseKey: myLicenseKey,
       storageImageFormat: 'JPG',
-      storageImageQuality: 70,
+      storageImageQuality: IMAGE_QUALITY
     };
 
-    return ScanbotSdk.promisify().initializeSdk(options).then(result => {
+    return ScanbotSdk.promisify().initializeSdk(config).then(result => {
       this._promise = null;
       console.log(JSON.stringify(result));
     });

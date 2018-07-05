@@ -1,9 +1,9 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { normalizeURL, AlertController } from 'ionic-angular';
+import { normalizeURL, AlertController, Platform } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 
-import ScanbotSdk, { Page } from 'cordova-plugin-scanbot-sdk'
-import SdkInitializer from '../../services/sdk-initializer';
+import ScanbotSdk, { Page, MrzScannerConfiguration, BarcodeScannerConfiguration } from 'cordova-plugin-scanbot-sdk'
+import SdkInitializer, { IMAGE_QUALITY } from '../../services/sdk-initializer';
 
 const SBSDK = ScanbotSdk.promisify();
 
@@ -26,30 +26,35 @@ export class SdkUiPage {
     private alertCtrl: AlertController,
     sdkInitializer: SdkInitializer,
     private camera: Camera,
+    private platform: Platform
   ) {
     sdkInitializer.onInitialize(err => {
       if (err) {
         this.showAlert(err.message);
       } else {
-        this.reloadStoredPages();
+        // ...
       }
     });
   }
 
   public async pickImageFromGallery() {
-    var options = {
-      quality: 70,
+    let options = {
+      quality: IMAGE_QUALITY,
       destinationType: this.camera.DestinationType.FILE_URI,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
     };
     const originalImageFileUri: string = await this.camera.getPicture(options);
-    this.updatePage(await SBSDK.createPage({originalImageFileUri}));
+    const result = await SBSDK.createPage({originalImageFileUri});
+    this.updatePage(result.page);
   }
 
   public async startCameraUi() {
     const result = await SBSDK.UI.startDocumentScanner({
       uiConfigs: {
-        multiPageButtonTitle: 'Snap multiple'
+        // Customize colors, text resources, etc..
+        cameraPreviewMode: "FIT_IN",
+        orientationLockMode: "PORTRAIT",
+        //...
       }
     });
 
@@ -68,7 +73,9 @@ export class SdkUiPage {
     const result = await SBSDK.UI.startCroppingScreen({
       page: this.selectedPage,
       uiConfigs: {
-        backgroundColor: '#FF0000',
+        // Customize colors, text resources, etc..
+        //backgroundColor: '#FF0000',
+        //...
       }
     });
 
@@ -79,38 +86,39 @@ export class SdkUiPage {
     this.updatePage(result.page);
   }
 
-  public async rotateImage(times: number) {
+  public async rotatePage(times: number) {
     if (!this.checkSelectedPage()) return;
 
-    const rotatedPage = await SBSDK.rotatePage({
+    const result = await SBSDK.rotatePage({
       page: this.selectedPage,
       times,
     });
-    this.updatePage(rotatedPage);
+    this.updatePage(result.page);
   }
 
   public async binarize() {
     if (!this.checkSelectedPage()) return;
-    const newPage = await SBSDK.applyImageFilterOnPage({
+    const result = await SBSDK.applyImageFilterOnPage({
       page: this.selectedPage,
       imageFilter: 'BINARIZED'
     });
-    this.updatePage(newPage);
+    this.updatePage(result.page);
   }
 
   public async autoCrop() {
     if (!this.checkSelectedOriginal()) return;
-    this.updatePage(await SBSDK.detectDocumentOnPage({page: this.selectedPage}));
+    const result = await SBSDK.detectDocumentOnPage({page: this.selectedPage});
+    this.updatePage(result.page);
   }
 
   public async performOcr() {
     if (!this.checkSelectedPage()) return;
     const result = await SBSDK.performOcr({
       images: [this.selectedPage.documentImageFileUri],
-      languages: ['en','de'],
+      languages: ['en'],
       outputFormat: 'PLAIN_TEXT',
     });
-    this.showAlert(result.plainText, "OCR");
+    this.showAlert(result.plainText, "OCR result");
   }
 
   public async createPdf() {
@@ -130,15 +138,29 @@ export class SdkUiPage {
   }
 
   public async startMrzScanner() {
-    const result = await SBSDK.UI.startMrzScanner();
+    let config: MrzScannerConfiguration = {
+      // Customize colors, text resources, etc..
+      finderTextHint: 'Please hold your phone over the 2- or 3-line MRZ code at the front of your passport.'
+    };
+
+    if (this.platform.is('ios')) {
+      let widthPx = window.screen.width;
+      config.finderWidth = widthPx * 0.9;
+      config.finderHeight = widthPx * 0.18;
+    }
+
+    const result = await SBSDK.UI.startMrzScanner({uiConfigs: config});
     if (result.status == 'OK') {
-      const fields = result.fields.map(f => `<div>${f.name}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
+      const fields = result.mrzResult.fields.map(f => `<div>${f.name}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
       this.showAlert(fields.join(''), 'MRZ');
     }
   }
 
   public async startBarcodeScannerUi() {
-    const result = await SBSDK.UI.startBarcodeScanner();
+    let config: BarcodeScannerConfiguration = {
+      finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.'
+    };
+    const result = await SBSDK.UI.startBarcodeScanner({uiConfigs: config});
     if (result.status == 'OK') {
       this.showAlert(result.barcodeResult.textValue, `Barcode: ${result.barcodeResult.barcodeFormat}`);
     }
@@ -147,20 +169,23 @@ export class SdkUiPage {
   public async removePage() {
     if (!this.checkSelectedOriginal()) return;
 
-    await SBSDK.removePage(this.selectedPage);
-    this.reloadStoredPages();
+    await SBSDK.removePage({page: this.selectedPage});
+
+    let pageIndexToRemove = null;
+    this.pages.forEach((p, index) => {
+      if (this.selectedPage.pageId === p.pageId) {
+        pageIndexToRemove = index;
+      }
+    });
+    this.pages.splice(pageIndexToRemove, 1);
+    this.selectedPage = null;
+    this.changeDetector.detectChanges();
   }
 
   public async cleanup() {
     await SBSDK.cleanup();
-    this.reloadStoredPages();
-  }
-
-  public async reloadStoredPages() {
-    const result = await SBSDK.getStoredPages();
-    console.log(JSON.stringify(result));
-    this.pages = result.pages;
-    this.selectedPage = this.pages[this.pages.length - 1];
+    this.pages = [];
+    this.selectedPage = null;
     this.changeDetector.detectChanges();
   }
 
