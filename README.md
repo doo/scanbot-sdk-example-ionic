@@ -55,11 +55,9 @@ Then you can start the App in Xcode or via `ionic cordova run ios`.
 
 ## Please note
 
-This example app doesn't contain a Scanbot SDK license key and runs in a **trial mode (trial period of 1 minute)**!  
-After the trial period is over the Scanbot SDK functions will stop working. 
-The UI parts (like Document Scanner UI) will stop working or may be terminated.
-You have to restart the app to get another trial period.
-
 The Scanbot SDK will run without a license for one minute per session!
+
+After the trial period is over all Scanbot SDK functions as well as the UI components (like Document Scanner UI) will stop working or may be terminated.
+You have to restart the app to get another trial period.
 
 To get an unrestricted "no-strings-attached" 30 day trial license, please submit the [Trial License Form](https://scanbot.io/sdk/trial.html) on our website.
