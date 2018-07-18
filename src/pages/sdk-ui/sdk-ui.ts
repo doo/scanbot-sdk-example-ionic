@@ -1,9 +1,17 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { normalizeURL, AlertController, Platform } from 'ionic-angular';
+import {
+  normalizeURL,
+  AlertController,
+  Platform,
+  ActionSheetController,
+  NavController,
+  LoadingController
+} from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 
 import ScanbotSdk, { Page, MrzScannerConfiguration, BarcodeScannerConfiguration } from 'cordova-plugin-scanbot-sdk'
 import SdkInitializer, { IMAGE_QUALITY } from '../../services/sdk-initializer';
+import { PageFilterPage } from "./filter";
 
 const SBSDK = ScanbotSdk.promisify();
 
@@ -13,11 +21,6 @@ const SBSDK = ScanbotSdk.promisify();
 })
 export class SdkUiPage {
 
-  public currentDocumentImageUri: string = '';
-  public currentOriginalImageUri: string = '';
-  public pdfFileUri: string = '';
-  public barcodeResult: string = '';
-
   public pages: Page[] = [];
   public selectedPage: Page;
 
@@ -26,7 +29,10 @@ export class SdkUiPage {
     private alertCtrl: AlertController,
     sdkInitializer: SdkInitializer,
     private camera: Camera,
-    private platform: Platform
+    private platform: Platform,
+    private actionSheetCtrl: ActionSheetController,
+    private navCtrl: NavController,
+    private loadingCtrl: LoadingController
   ) {
     sdkInitializer.onInitialize(err => {
       if (err) {
@@ -37,6 +43,12 @@ export class SdkUiPage {
     });
   }
 
+  private createLoading(message: string) {
+    return this.loadingCtrl.create({
+      content: message
+    });
+  }
+
   public async pickImageFromGallery() {
     let options = {
       quality: IMAGE_QUALITY,
@@ -44,11 +56,25 @@ export class SdkUiPage {
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
     };
     const originalImageFileUri: string = await this.camera.getPicture(options);
-    const result = await SBSDK.createPage({originalImageFileUri});
-    this.updatePage(result.page);
+
+    if (!(await this.checkLicense())) { return; }
+
+    let loading = this.createLoading('Auto-detecting and cropping...');
+    try {
+      loading.present();
+      // First create a new page with the selected original image file:
+      const createResult = await SBSDK.createPage({originalImageFileUri});
+      // and then run auto document detection and cropping on this new page:
+      const docResult = await SBSDK.detectDocumentOnPage({page: createResult.page});
+      this.updatePage(docResult.page);
+    } finally {
+      loading.dismiss();
+    }
   }
 
   public async startCameraUi() {
+    if (!(await this.checkLicense())) { return; }
+
     const result = await SBSDK.UI.startDocumentScanner({
       uiConfigs: {
         // Customize colors, text resources, etc..
@@ -68,7 +94,8 @@ export class SdkUiPage {
   }
 
   public async startCroppingUi() {
-    if (!this.checkSelectedOriginal()) return;
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkSelectedPage()) { return; }
 
     const result = await SBSDK.UI.startCroppingScreen({
       page: this.selectedPage,
@@ -87,57 +114,68 @@ export class SdkUiPage {
   }
 
   public async rotatePage(times: number) {
-    if (!this.checkSelectedPage()) return;
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkSelectedPage()) { return; }
 
-    const result = await SBSDK.rotatePage({
-      page: this.selectedPage,
-      times,
-    });
-    this.updatePage(result.page);
-  }
-
-  public async binarize() {
-    if (!this.checkSelectedPage()) return;
-    const result = await SBSDK.applyImageFilterOnPage({
-      page: this.selectedPage,
-      imageFilter: 'BINARIZED'
-    });
-    this.updatePage(result.page);
-  }
-
-  public async autoCrop() {
-    if (!this.checkSelectedOriginal()) return;
-    const result = await SBSDK.detectDocumentOnPage({page: this.selectedPage});
-    this.updatePage(result.page);
+    let loading = this.createLoading('Rotating Page...');
+    try {
+      loading.present();
+      const result = await SBSDK.rotatePage({page: this.selectedPage, times});
+      this.updatePage(result.page);
+    } finally {
+      loading.dismiss();
+    }
   }
 
   public async performOcr() {
-    if (!this.checkSelectedPage()) return;
-    const result = await SBSDK.performOcr({
-      images: [this.selectedPage.documentImageFileUri],
-      languages: ['en'],
-      outputFormat: 'PLAIN_TEXT',
-    });
-    this.showAlert(result.plainText, "OCR result");
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkAllPagesHaveDocuments()) { return; }
+
+    let loading = this.createLoading('Performing OCR ...');
+    try {
+      loading.present();
+      const result = await SBSDK.performOcr({
+        images: this.pages.map(p => p.documentImageFileUri),
+        languages: ['en'],
+        outputFormat: 'FULL_OCR_RESULT',
+      });
+      this.showAlert(result.plainText, "OCR result");
+    } finally {
+      loading.dismiss();
+    }
   }
 
   public async createPdf() {
-    if (!this.checkSelectedPage()) return;
-    if (!this.checkAllPagesHaveDocuments()) return;
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkAllPagesHaveDocuments()) { return; }
 
-    const result = await SBSDK.createPdf({images: this.pages.map(p => p.documentImageFileUri)});
-    this.showAlert(result.pdfFileUri, "PDF created");
+    let loading = this.createLoading('Creating PDF ...');
+    try {
+      loading.present();
+      const result = await SBSDK.createPdf({images: this.pages.map(p => p.documentImageFileUri)});
+      this.showAlert(result.pdfFileUri, "PDF created");
+    } finally {
+      loading.dismiss();
+    }
   }
 
   public async writeTiff() {
-    if (!this.checkSelectedPage()) return;
-    if (!this.checkAllPagesHaveDocuments()) return;
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkAllPagesHaveDocuments()) { return; }
 
-    const result = await SBSDK.writeTiff({images: this.pages.map(p => p.documentImageFileUri), oneBitEncoded: true});
-    this.showAlert(result.tiffFileUri, "TIFF created");
+    let loading = this.createLoading('Creating TIFF ...');
+    try {
+      loading.present();
+      const result = await SBSDK.writeTiff({images: this.pages.map(p => p.documentImageFileUri), oneBitEncoded: true});
+      this.showAlert(result.tiffFileUri, "TIFF created");
+    } finally {
+      loading.dismiss();
+    }
   }
 
   public async startMrzScanner() {
+    if (!(await this.checkLicense())) { return; }
+
     let config: MrzScannerConfiguration = {
       // Customize colors, text resources, etc..
       finderTextHint: 'Please hold your phone over the 2- or 3-line MRZ code at the front of your passport.'
@@ -152,11 +190,13 @@ export class SdkUiPage {
     const result = await SBSDK.UI.startMrzScanner({uiConfigs: config});
     if (result.status == 'OK') {
       const fields = result.mrzResult.fields.map(f => `<div>${f.name}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
-      this.showAlert(fields.join(''), 'MRZ');
+      this.showAlert(fields.join(''), 'MRZ Result');
     }
   }
 
   public async startBarcodeScannerUi() {
+    if (!(await this.checkLicense())) { return; }
+
     let config: BarcodeScannerConfiguration = {
       finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.'
     };
@@ -167,7 +207,8 @@ export class SdkUiPage {
   }
 
   public async removePage() {
-    if (!this.checkSelectedOriginal()) return;
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkSelectedPage()) { return; }
 
     await SBSDK.removePage({page: this.selectedPage});
 
@@ -190,22 +231,13 @@ export class SdkUiPage {
   }
 
   public normalizeImageFileUri(imageFileUri: string) {
+    // normalizeURL - see https://ionicframework.com/docs/wkwebview/
     return normalizeURL(imageFileUri);
   }
 
   public onImagePreviewTapped(page: Page) {
     this.selectedPage = page;
     this.changeDetector.detectChanges();
-  }
-
-  private checkSelectedPage() {
-    if (this.selectedPage && this.selectedPage.documentImageFileUri) {
-      return true;
-    } else {
-      this.showAlert(this.selectedPage ? "The selected page has not yet been cropped. Crop it and try again."
-        : "No page selected. Snap a document photo or crop a picture from the gallery");
-      return false;
-    }
   }
 
   private updatePage(page: Page) {
@@ -224,23 +256,39 @@ export class SdkUiPage {
     this.changeDetector.detectChanges();
   }
 
-  private checkSelectedOriginal() {
-    if (this.selectedPage) {
+  private async checkLicense() {
+    const result = await SBSDK.isLicenseValid();
+    if (result.isLicenseValid == true) {
+      // OK - trial session, valid trial license or valid production license.
+      return true;
+    }
+    this.showAlert("Scanbot SDK (trial) license has expired!");
+    return false;
+  }
+
+  private checkSelectedPage() {
+    if (this.selectedPage && this.selectedPage.documentImageFileUri) {
       return true;
     } else {
-      this.showAlert("Snap a picture of a document or select a picture from the phone's gallery");
-      return false
+      this.showAlert(this.selectedPage ? "The selected page has not yet been cropped. Crop it and try again."
+        : "No page selected. Please snap an image via Document Scanner or select one from the phone's gallery.");
+      return false;
     }
   }
 
   private checkAllPagesHaveDocuments() {
+    if (this.pages.length == 0) {
+      this.showAlert("Please snap some images via Document Scanner or select from the phone's gallery.");
+      return false;
+    }
+
     let every = true;
     this.pages.forEach(p => {
       if (!p.documentImageFileUri) {
         every = false;
       }
     });
-    if (this.pages.length == 0 || !every) {
+    if (!every) {
       this.showAlert("Some pages have not yet been cropped. Crop all uncropped pages and try again.");
       return false;
     }
@@ -260,4 +308,70 @@ export class SdkUiPage {
     });
     prompt.present();
   }
+
+  public async presentPageEditActionsSheet() {
+    if (!(await this.checkLicense())) { return; }
+    if (!this.checkSelectedPage()) { return; }
+
+    const actionSheet = this.actionSheetCtrl.create({
+      title: 'Edit selected Page',
+      buttons: [
+        {
+          text: 'Crop/Rotate (Cropping UI)',
+          icon: 'ios-crop',
+          handler: () => {
+            this.startCroppingUi();
+          }
+        },
+        {
+          text: 'Apply Image Filter',
+          icon: 'contrast',
+          handler: () => {
+            this.openPageFilterPage(this.selectedPage);
+          }
+        },
+        {
+          text: 'Rotate Clockwise',
+          icon: 'ios-redo',
+          handler: () => {
+            this.rotatePage(-1);
+          }
+        },
+        {
+          text: 'Rotate Counter-Clockwise',
+          icon: 'ios-undo',
+          handler: () => {
+            this.rotatePage(1);
+          }
+        },
+        {
+          text: 'Delete Page',
+          icon: 'trash',
+          handler: () => {
+            this.removePage();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  private openPageFilterPage(page: Page) {
+    if (!this.checkSelectedPage()) return;
+
+    new Promise<{page: Page}>((resolve, reject) => {
+      this.navCtrl.push(PageFilterPage, {page: page, resolve: resolve});
+    }).then(data => {
+      this.updatePage(data.page);
+    });
+  }
+
 }

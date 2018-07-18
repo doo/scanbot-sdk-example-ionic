@@ -4,7 +4,7 @@ This example app shows how to integrate the Scanbot SDK Cordova Plugin with [Ion
 
 The Scanbot SDK Cordova Plugin is available as [npm package](https://www.npmjs.com/package/cordova-plugin-scanbot-sdk).
 
-The app demonstrates only a few features of the plugin. For more details please see this [documentation](https://scanbotsdk.github.io/documentation/cordova/).
+For more details about the Plugin please see this [documentation](https://scanbotsdk.github.io/documentation/cordova/).
 
 
 ## What is Scanbot SDK?
@@ -47,7 +47,7 @@ iOS:
 
 To run this example app on an iOS device you have to adjust some settings in Xcode: 
 - *Provisioning* and *Code Signing* settings - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html) 
-- Add *ScanbotSDK.framework* as Embedded Binary  - see our [plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
+- Make sure *ScanbotSDK.framework* was added as **Embedded Binary** - see our [Plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
 
 Then you can start the App in Xcode or via `ionic cordova run ios`.
 
@@ -57,5 +57,9 @@ Then you can start the App in Xcode or via `ionic cordova run ios`.
 
 This example app doesn't contain a Scanbot SDK license key and runs in a **trial mode (trial period of 1 minute)**!  
 After the trial period is over the Scanbot SDK functions will stop working. 
-The UI parts (like Camera UI) will stop working or may be terminated.
+The UI parts (like Document Scanner UI) will stop working or may be terminated.
 You have to restart the app to get another trial period.
+
+The Scanbot SDK will run without a license for one minute per session!
+
+To get an unrestricted "no-strings-attached" 30 day trial license, please submit the [Trial License Form](https://scanbot.io/sdk/trial.html) on our website.

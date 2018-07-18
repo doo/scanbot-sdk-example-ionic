@@ -1,0 +1,19 @@
+page-filter {
+
+  .page-content {
+    height: 100%;
+  }
+
+  .filtered-preview-img {
+    max-height: 70%;
+    width: auto;
+    margin: auto;
+    display: block;
+  }
+
+  .filters-list {
+    height: 30%;
+    overflow-y: scroll;
+  }
+
+}

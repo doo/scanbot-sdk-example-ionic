@@ -38,37 +38,8 @@
   <ion-grid padding>
     <ion-row>
       <ion-col col-12>
-        <button ion-button block (click)="startCroppingUi()">
-          <ion-icon name="ios-crop"></ion-icon> &nbsp; Open Cropping Screen
-        </button>
-      </ion-col>
-      <ion-col col-12>
-        <button ion-button block (click)="autoCrop()">
-          <ion-icon name="ios-crop"></ion-icon> &nbsp; Auto-crop
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <div padding>
-
-  </div>
-
-  <ion-grid padding>
-    <ion-row>
-      <ion-col col-6>
-          <button ion-button block (click)="rotatePage(1)">
-            <ion-icon name="ios-undo"></ion-icon> &nbsp; Rotate CCW
-          </button>
-      </ion-col>
-      <ion-col col-6>
-        <button ion-button block (click)="rotatePage(-1)">
-          <ion-icon name="ios-redo"></ion-icon> &nbsp; Rotate CW
-        </button>
-      </ion-col>
-      <ion-col col-12>
-        <button ion-button block (click)="binarize()">
-          <ion-icon name="star-half"></ion-icon> &nbsp; Binarize
+        <button ion-button block (click)="presentPageEditActionsSheet()">
+          <ion-icon name="create"></ion-icon> &nbsp; Edit Page
         </button>
       </ion-col>
     </ion-row>
@@ -78,7 +49,7 @@
     <ion-row>
       <ion-col col-12>
         <button ion-button block (click)="performOcr()">
-          <ion-icon name="ios-document"></ion-icon> &nbsp; Perform OCR
+          <ion-icon name="paper"></ion-icon> &nbsp; Perform OCR
         </button>
       </ion-col>
       <ion-col col-6>
@@ -95,19 +66,13 @@
   </ion-grid>
 
   <ion-grid padding>
-    <ion-row>
-      <ion-col col-6>
-        <button ion-button block (click)="removePage()">
-          Remove Page
-        </button>
-      </ion-col>
-      <ion-col col-6>
-        <button ion-button block (click)="cleanup()">
-          Clean up
-        </button>
-      </ion-col>
-    </ion-row>
+    <button ion-button block (click)="cleanup()">
+      <ion-icon name="trash"></ion-icon> &nbsp; Clean up (Delete all Pages)
+    </button>
   </ion-grid>
+
+  <div padding>
+  </div>
 
   <div padding>
     <button ion-button block (click)="startMrzScanner()">

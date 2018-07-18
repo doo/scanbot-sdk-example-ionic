@@ -6,7 +6,7 @@ import ScanbotSdk, { ScanbotSDKConfiguration } from 'cordova-plugin-scanbot-sdk'
 // TODO Put the Scanbot SDK license key here
 const myLicenseKey = '';
 
-export const IMAGE_QUALITY = 75;
+export const IMAGE_QUALITY = 80;
 
 @Injectable()
 export default class SdkInitializer {
@@ -35,10 +35,10 @@ export default class SdkInitializer {
   }
 
   private initScanbotSdk() {
-    console.log("Initializing SDK...");
+    console.log("Initializing Scanbot SDK...");
 
     let config: ScanbotSDKConfiguration = {
-      loggingEnabled: true,
+      loggingEnabled: true, // ! Consider switching logging OFF in production builds for security and performance reasons !
       licenseKey: myLicenseKey,
       storageImageFormat: 'JPG',
       storageImageQuality: IMAGE_QUALITY

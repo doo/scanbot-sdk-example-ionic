@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Image Filter
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="applyImageFilter()">
+        <ion-icon name="checkmark"></ion-icon>&nbsp; Apply
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="page-content">
+
+  <img *ngIf="imgUri" [src]="normalizeImageFileUri(imgUri)" class="filtered-preview-img" />
+
+  <ion-list radio-group class="filters-list" [(ngModel)]="selectedFilter">
+    <ion-item *ngFor='let filter of imageFilterList'>
+      <ion-label>{{filter}}</ion-label>
+      <ion-radio value="{{filter}}" (ionSelect)="onFilterSelected()"></ion-radio>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

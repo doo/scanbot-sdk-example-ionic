@@ -4,6 +4,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { SdkUiPage } from '../pages/sdk-ui/sdk-ui';
+import { PageFilterPage } from '../pages/sdk-ui/filter';
 import { AboutPage } from '../pages/about/about';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -18,6 +19,7 @@ import SdkInitializer from '../services/sdk-initializer';
   declarations: [
     MyApp,
     SdkUiPage,
+    PageFilterPage,
     AboutPage,
     TabsPage
   ],
@@ -29,6 +31,7 @@ import SdkInitializer from '../services/sdk-initializer';
   entryComponents: [
     MyApp,
     SdkUiPage,
+    PageFilterPage,
     AboutPage,
     TabsPage
   ],
