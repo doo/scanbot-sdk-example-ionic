@@ -77,9 +77,10 @@ export class SdkUiPage {
 
     const result = await SBSDK.UI.startDocumentScanner({
       uiConfigs: {
-        // Customize colors, text resources, etc..
-        cameraPreviewMode: "FIT_IN",
-        orientationLockMode: "PORTRAIT",
+        // Customize colors, text resources, behavior, etc..
+        cameraPreviewMode: 'FIT_IN',
+        orientationLockMode: 'PORTRAIT',
+        pageCounterButtonTitle: '%d Page(s)'
         //...
       }
     });
@@ -100,8 +101,8 @@ export class SdkUiPage {
     const result = await SBSDK.UI.startCroppingScreen({
       page: this.selectedPage,
       uiConfigs: {
-        // Customize colors, text resources, etc..
-        //backgroundColor: '#FF0000',
+        // Customize colors, text resources, behavior, etc..
+        orientationLockMode: 'PORTRAIT',
         //...
       }
     });
