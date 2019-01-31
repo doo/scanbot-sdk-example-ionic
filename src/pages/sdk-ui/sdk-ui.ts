@@ -103,6 +103,7 @@ export class SdkUiPage {
       uiConfigs: {
         // Customize colors, text resources, behavior, etc..
         orientationLockMode: 'PORTRAIT',
+        polygonColor: '#0000ff'
         //...
       }
     });
