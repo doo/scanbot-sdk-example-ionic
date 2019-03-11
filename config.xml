@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.scanbot.example.sdk.ionic2" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Scanbot SDK Example Ionic2</name>
+<widget id="io.scanbot.example.sdk.ionic" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Scanbot SDK Example Ionic</name>
     <description>
-      Example App for Scanbot SDK Cordova Plugin with Ionic 2+ Framework
+      Example App for Scanbot SDK Cordova Plugin with Ionic Framework
     </description>
     <author email="sdk@scanbot.io" href="https://scanbot.io/sdk.html">
       doo GmbH
@@ -96,9 +96,11 @@
     <plugin name="cordova-plugin-camera" spec="^4.0.3">
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
     </plugin>
-    <plugin name="cordova-plugin-scanbot-sdk" spec="^2.1.2">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="Your custom text for camera permission." />
+    <plugin name="cordova-plugin-scanbot-sdk" spec="3.0.0">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
     </plugin>
+    <plugin name="cordova-plugin-file" spec="6.0.1" />
     <engine name="ios" spec="4.5.4" />
-    <engine name="android" spec="7.1.0" />
+    <engine name="android" spec="8.0.0" />
 </widget>

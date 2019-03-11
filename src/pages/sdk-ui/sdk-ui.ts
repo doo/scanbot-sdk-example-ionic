@@ -36,6 +36,7 @@ export class SdkUiPage {
   ) {
     sdkInitializer.onInitialize(err => {
       if (err) {
+        //console.log(JSON.stringify(err));
         this.showAlert(err.message);
       } else {
         // ...
@@ -154,7 +155,7 @@ export class SdkUiPage {
     let loading = this.createLoading('Creating PDF ...');
     try {
       loading.present();
-      const result = await SBSDK.createPdf({images: this.pages.map(p => p.documentImageFileUri)});
+      const result = await SBSDK.createPdf({images: this.pages.map(p => p.documentImageFileUri), pageSize: 'FIXED_A4'});
       this.showAlert(result.pdfFileUri, "PDF created");
     } finally {
       loading.dismiss();

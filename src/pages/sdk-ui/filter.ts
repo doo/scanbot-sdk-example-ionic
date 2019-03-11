@@ -22,7 +22,10 @@ export class PageFilterPage {
     "COLOR_DOCUMENT",
     "PURE_BINARIZED",
     "BACKGROUND_CLEAN",
-    "BLACK_AND_WHITE"
+    "BLACK_AND_WHITE",
+    "OTSU_BINARIZATION",
+    "DEEP_BINARIZATION",
+    "EDGE_HIGHLIGHT"
   ];
   public selectedFilter: ImageFilter;
 
