@@ -1,48 +1,29 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { File } from '@ionic-native/file';
+import { RouteReuseStrategy } from '@angular/router';
 
-import { MyApp } from './app.component';
-import { SdkUiPage } from '../pages/sdk-ui/sdk-ui';
-import { PageFilterPage } from '../pages/sdk-ui/filter';
-import { AboutPage } from '../pages/about/about';
-import { TabsPage } from '../pages/tabs/tabs';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { Camera } from '@ionic-native/camera';
-import SdkInitializer from '../services/sdk-initializer';
-
-
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { DialogsService } from './services/dialogs.service';
+import { ScanbotSdkDemoService } from './services/scanbot-sdk-demo.service';
+import { ImageResultsRepository } from './services/image-results.repository';
 
 @NgModule({
-  declarations: [
-    MyApp,
-    SdkUiPage,
-    PageFilterPage,
-    AboutPage,
-    TabsPage
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp)
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    SdkUiPage,
-    PageFilterPage,
-    AboutPage,
-    TabsPage
-  ],
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
-    Camera,
-    SdkInitializer,
-    File,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    DialogsService,
+    ScanbotSdkDemoService,
+    ImageResultsRepository,
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

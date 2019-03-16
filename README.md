@@ -10,6 +10,7 @@ For more details about the Plugin please see this [documentation](https://scanbo
 
 
 ## What is Scanbot SDK?
+
 The Scanbot SDK brings scanning and document creation capabilities to your mobile apps. 
 It contains modules which are individually licensable as license packages. 
 For more details visit our website https://scanbot.io/sdk
@@ -17,10 +18,10 @@ For more details visit our website https://scanbot.io/sdk
 
 ## How to run this app
 
-Install [Cordova](https://cordova.apache.org) and [Ionic](https://ionicframework.com). 
+Install the latest versions of [Cordova](https://cordova.apache.org) and [Ionic](https://ionicframework.com). 
 Fetch this repository and navigate to the project directory.
 
-`cd scanbot-sdk-example-ionic`
+`cd scanbot-sdk-example-ionic/`
 
 Install node modules:
 
@@ -28,31 +29,32 @@ Install node modules:
 
 Install Cordova platforms and plugins (defined in the config.xml of this app):
 
-`ionic cordova prepare`
+`cordova prepare`
 
 Check installed platforms and plugins:
 
-`ionic cordova platform ls`
+`cordova platform ls`
 
-`ionic cordova plugin ls`
+`cordova plugin ls`
 
 You should see *android* and *ios* as installed platforms and *cordova-plugin-scanbot-sdk* as installed plugins. 
 
 
 Connect a device via USB and run the app.
 
-Android:
+**Android:**
 
 `ionic cordova run android`
 
-iOS:
+**iOS:**
 
-To run this example app on an iOS device you have to adjust some settings in Xcode: 
-- *Provisioning* and *Code Signing* settings - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html) 
-- Make sure *ScanbotSDK.framework* was added as **Embedded Binary** - see our [Plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
+`ionic cordova prepare ios`
 
-Then you can start the App in Xcode or via `ionic cordova run ios`.
+Open the project `platforms/ios/Scanbot SDK Example Ionic.xcodeproj` in Xcode and check/adjust the following settings: 
+- *Provisioning* and *Code Signing* - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html) 
+- Make sure the `ScanbotSDK.framework` was properly added as **Embedded Binary** - see our [Plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
 
+Then build and run the app in Xcode.
 
 
 ## Please note

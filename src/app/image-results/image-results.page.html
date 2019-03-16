@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            Image Results
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-grid>
+        <ion-row *ngFor="let row of rows">
+            <ng-container *ngFor="let page of row.pages">
+                <ion-col size="4" (click)="gotoImageView(page)">
+                    <img [src]='page.sanitizedDocumentPreviewImage' />
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="addScan()">
+                <ion-icon slot="start" name="add-circle"></ion-icon>
+                Add
+            </ion-button>
+            <ion-button (click)="showSaveSelection()">
+                <ion-icon slot="start" name="document"></ion-icon>
+                Save
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button (click)="removeAll()">
+                <ion-icon slot="start" name="trash"></ion-icon>
+                Delete All
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>

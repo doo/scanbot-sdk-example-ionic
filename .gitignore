@@ -13,16 +13,15 @@ log.txt
 npm-debug.log*
 
 .idea/
+.ionic/
 .sourcemaps/
 .sass-cache/
 .tmp/
 .versions/
 coverage/
-dist/
 node_modules/
 tmp/
 temp/
-hooks/
 platforms/
 plugins/
 plugins/android.json
@@ -34,4 +33,3 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 
 reinstall-dev-scanbot-plugin.sh
-
