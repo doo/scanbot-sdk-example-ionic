@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { ImageResultsRepository, SanitizedPage } from '../services/image-results
     selector: 'app-image-view',
     templateUrl: 'image-view.page.html',
 })
-export class ImageViewPage implements OnInit {
+export class ImageViewPage {
 
     public page: SanitizedPage;
 
@@ -34,7 +34,7 @@ export class ImageViewPage implements OnInit {
                 private route: ActivatedRoute,
                 private actionSheetController: ActionSheetController) { }
 
-    ngOnInit() {
+    ionViewWillEnter() {
         const pageId = this.route.params['value'].pageId;
         this.page = this.imageResultsRepository.getPageById(pageId);
     }

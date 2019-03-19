@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActionSheetController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,7 @@ import { ImageResultsRepository, SanitizedPage } from '../services/image-results
     templateUrl: 'image-results.page.html',
     styleUrls: ['image-results.page.scss'],
 })
-export class ImageResultsPage implements OnInit {
+export class ImageResultsPage {
 
     public pages: SanitizedPage[] = [];
     public rows = [];
@@ -23,7 +23,7 @@ export class ImageResultsPage implements OnInit {
                 private router: Router,
                 private actionSheetController: ActionSheetController) { }
 
-    ngOnInit() {
+    ionViewWillEnter() {
         this.reloadPages();
     }
 
