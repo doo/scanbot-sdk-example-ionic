@@ -70,9 +70,9 @@ export class ScanbotSdkDemoService {
         // tslint:enable:max-line-length
 
         if (this.platform.is('android')) {
-            return this.file.externalDataDirectory + '/my-custom-storage';
+            return this.file.externalDataDirectory + 'my-custom-storage';
         } else if (this.platform.is('ios')) {
-            return this.file.documentsDirectory + '/my-custom-storage';
+            return this.file.documentsDirectory + 'my-custom-storage';
         }
         return null;
     }
@@ -93,7 +93,11 @@ export class ScanbotSdkDemoService {
             cameraPreviewMode: 'FIT_IN',
             orientationLockMode: 'PORTRAIT',
             pageCounterButtonTitle: '%d Page(s)',
-            multiPageEnabled: true
+            multiPageEnabled: true,
+            // maxNumberOfPages: 3,
+            // documentImageSizeLimit: { width: 1500, height: 2000 },
+            // shutterButtonHidden: true,
+            // bottomBarBackgroundColor: '#0000ff',
             // ...
         };
     }
