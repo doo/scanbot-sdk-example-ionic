@@ -29,6 +29,7 @@ export class ImageViewPage {
         'DEEP_BINARIZATION',
         'EDGE_HIGHLIGHT',
         'LOW_LIGHT_BINARIZATION',
+        'LOW_LIGHT_BINARIZATION_2',
     ];
 
     constructor(private scanbotService: ScanbotSdkDemoService,
