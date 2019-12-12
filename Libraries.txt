@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK for Android version 1.39.52.1:
+Open Source libraries used in the Scanbot SDK for Android version 1.39.52.2:
 
 Android PDF Writer version 1.0.8
 Copyright (c) 2010 - 2013, Javier Santo Domingo (j-a-s-d@coderesearchlabs.com).
@@ -208,7 +208,7 @@ OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
 WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 OF THIS SOFTWARE.
 
-OpenCV 3.4.5
+OpenCV 3.4.7
 Copyright © 2014, Itseez. All rights reserved.
 This library is distributed under the terms of a 3-clause BSD license: http://opencv.org/license.html.
 
@@ -272,7 +272,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 This software includes several classes from the Android Open Source Project distributed under the Apache License Version 2.0.
 Copyright (c) 2010 - present The Android Open Source Project.
 
-CWAC-Camera version 0.6.30
+CWAC-Camera version 0.6.33
 Copyright © CommonsWare
 (https://github.com/commonsguy/cwac-camera/blob/master/LICENSE)
 
