@@ -101,6 +101,4 @@
     <plugin name="cordova-plugin-scanbot-sdk" spec="3.2.2">
         <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
     </plugin>
-    <engine name="ios" spec="5.0.0" />
-    <engine name="android" spec="8.0.0" />
 </widget>
