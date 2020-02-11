@@ -90,11 +90,12 @@ export class ImageResultsPage {
 
         const loading = await this.dialogsService.createLoading('Creating TIFF ...');
         try {
-            loading.present();
+            await loading.present();
             const result = await this.scanbotService.SDK.writeTiff({
                 images: this.pages.map(p => p.documentImageFileUri),
-                // oneBitEncoded = creates a b&w 1-bit TIFF
-                oneBitEncoded: true
+                oneBitEncoded: true, // creates 1-bit binarized black and white TIFF
+                // dpi: 300, // default value is 200
+                // compression: 'LZW' // recommended default value is 'CCITT_T6' (aka. "CCITT Fax 4")
             });
 
             await this.dialogsService.showAlert(result.tiffFileUri, 'TIFF file created');
