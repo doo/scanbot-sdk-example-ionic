@@ -114,4 +114,7 @@ export class HomePage {
     }
   }
 
+    async setAcceptedFormats() {
+      await this.router.navigateByUrl('/barcode-list');
+    }
 }
