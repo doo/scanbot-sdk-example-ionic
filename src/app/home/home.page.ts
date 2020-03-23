@@ -118,12 +118,32 @@ export class HomePage {
     }
   }
 
-    async setAcceptedFormats() {
-      await this.router.navigateByUrl('/barcode-list');
-    }
+  async setAcceptedFormats() {
+    await this.router.navigateByUrl('/barcode-list');
+  }
 
-    async viewLicenseInfo() {
-      const result = await this.scanbotService.SDK.getLicenseInfo();
-      await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
-    }
+  async viewLicenseInfo() {
+    const result = await this.scanbotService.SDK.getLicenseInfo();
+    await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
+  }
+
+  async importAndDetectBarcodes() {
+    const picture = await this.imagePicker.getPicture({
+      sourceType: this.imagePicker.PictureSourceType.PHOTOLIBRARY,
+      mediaType: this.imagePicker.MediaType.PICTURE,
+      destinationType: this.imagePicker.DestinationType.FILE_URI,
+      quality: 80,
+      encodingType: this.imagePicker.EncodingType.JPEG,
+      allowEdit: false,
+    });
+
+    const imageUri = picture as string;
+
+    if (!(await this.scanbotService.checkLicense())) { return; }
+
+    const result = await this.scanbotService.SDK.detectBarcodesOnImage({ imageFileUri: imageUri });
+    BarcodeListService.detectedBarcodes = result.barcodes;
+    console.log("detected", JSON.stringify(BarcodeListService.detectedBarcodes));
+    await this.router.navigateByUrl('/barcode-result-list');
+  }
 }
