@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>barcode-result-list</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <li *ngFor="let barcode of barcodes" style="list-style: none;">
+    <ion-item>
+
+        <ion-label>{{barcode.text}}</ion-label>
+        <ion-label>{{barcode.type}}</ion-label>
+
+    </ion-item>
+  </li>
+
+</ion-content>

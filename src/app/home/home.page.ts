@@ -8,6 +8,8 @@ import { MrzScannerConfiguration } from 'cordova-plugin-scanbot-sdk';
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
+import {BarcodeListService} from '../services/barcode-list.service';
+import {json} from '@angular-devkit/core';
 
 
 @Component({
@@ -89,8 +91,9 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      const barcode = result.barcodes[0];
-      await this.dialogsService.showAlert(barcode.text, `Barcode: ${barcode.type}`);
+      BarcodeListService.detectedBarcodes = result.barcodes;
+      console.log("detected", JSON.stringify(BarcodeListService.detectedBarcodes));
+      await this.router.navigateByUrl('/barcode-result-list');
     }
   }
 

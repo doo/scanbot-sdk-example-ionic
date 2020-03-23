@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class BarcodeListService {
+
+    public static detectedBarcodes = [];
+
     public static items = [
         { key: 'AZTEC',        value: true },
         { key: 'CODABAR',      value: true },
