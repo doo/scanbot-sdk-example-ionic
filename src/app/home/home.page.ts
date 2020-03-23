@@ -118,4 +118,9 @@ export class HomePage {
     async setAcceptedFormats() {
       await this.router.navigateByUrl('/barcode-list');
     }
+
+    async viewLicenseInfo() {
+      const result = await this.scanbotService.SDK.getLicenseInfo();
+      await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
+    }
 }
