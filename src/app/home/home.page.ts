@@ -89,7 +89,8 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      await this.dialogsService.showAlert(result.barcodeResult.textValue, `Barcode: ${result.barcodeResult.barcodeFormat}`);
+      const barcode = result.barcodes[0];
+      await this.dialogsService.showAlert(barcode.text, `Barcode: ${barcode.type}`);
     }
   }
 

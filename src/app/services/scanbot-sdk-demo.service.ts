@@ -78,12 +78,13 @@ export class ScanbotSdkDemoService {
     }
 
     public async checkLicense() {
-        const result = await this.SDK.isLicenseValid();
-        if (result.isLicenseValid === true) {
+        const result = await this.SDK.getLicenseInfo();
+
+        if (result.info.isLicenseValid) {
             // OK - we have a trial session, a valid trial license or valid production license.
             return true;
         }
-        this.dialogsService.showAlert('Scanbot SDK (trial) license has expired!');
+        await this.dialogsService.showAlert('Scanbot SDK (trial) license has expired!');
         return false;
     }
 
