@@ -10,10 +10,19 @@
 <ion-content padding>
 
   <li *ngFor="let barcode of barcodes" style="list-style: none;">
-    <ion-item>
+    <ion-item style="flex: 1; flex-direction: column">
+        <ion-img src="{{barcode.imageSourceUri}}"></ion-img>
+        <div style="flex: 1; flex-direction: row">
+            <ion-label
+                    style="margin-left: 1.5em; font-size: 0.8em; font-weight: 600;">
+                {{barcode.type}}
+            </ion-label>
+            <ion-label
+                    style="margin-left: 1.5em; font-size: 0.8em; font-weight: 400; white-space: pre-wrap">
+                {{barcode.text}}
+            </ion-label>
+        </div>
 
-        <ion-label>{{barcode.text}}</ion-label>
-        <ion-label>{{barcode.type}}</ion-label>
 
     </ion-item>
   </li>

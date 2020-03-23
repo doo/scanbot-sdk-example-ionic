@@ -12,7 +12,7 @@
 <ion-content padding>
 
     <li *ngFor="let barcode of barcodes" style="list-style: none;">
-        <ion-item>
+        <ion-item style="display: block;">
             <ion-label>{{barcode.key}}</ion-label>
             <ion-toggle value="{{barcode.key}}" checked="{{barcode.value}}" (ionChange)="onChange($event)"></ion-toggle>
         </ion-item>
