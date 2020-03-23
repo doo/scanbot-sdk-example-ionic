@@ -86,13 +86,13 @@ export class HomePage {
     const result = await this.scanbotService.SDK.UI.startBarcodeScanner({
       uiConfigs: {
         // Customize colors, text resources, behavior, etc..
-        finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.'
+        finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
+        barcodeFormats: BarcodeListService.getAcceptedTypes()
       }
     });
 
     if (result.status === 'OK') {
       BarcodeListService.detectedBarcodes = result.barcodes;
-      console.log("detected", JSON.stringify(BarcodeListService.detectedBarcodes));
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
@@ -143,7 +143,6 @@ export class HomePage {
 
     const result = await this.scanbotService.SDK.detectBarcodesOnImage({ imageFileUri: imageUri });
     BarcodeListService.detectedBarcodes = result.barcodes;
-    console.log("detected", JSON.stringify(BarcodeListService.detectedBarcodes));
     await this.router.navigateByUrl('/barcode-result-list');
   }
 }
