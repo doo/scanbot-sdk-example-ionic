@@ -3,14 +3,12 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera as ImagePicker } from '@ionic-native/camera/ngx';
 
-import { MrzScannerConfiguration } from 'cordova-plugin-scanbot-sdk';
+import ScanbotSdk, { MrzScannerConfiguration } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
 import {BarcodeListService} from '../services/barcode-list.service';
-import {json} from '@angular-devkit/core';
-
 
 @Component({
   selector: 'app-home',
@@ -24,7 +22,24 @@ export class HomePage {
               private dialogsService: DialogsService,
               private platform: Platform,
               private router: Router,
-              private imagePicker: ImagePicker) { }
+              private imagePicker: ImagePicker) {
+
+    document.addEventListener('deviceready', function() {
+      /*
+       * Register a vanilla javascript callback, as setLicenseFailure registers a continuous callback
+       * that does not adhere to the standards of promisified API.
+       * All other Scanbot features are also a part of the normal, non-promisified API
+       *
+       * Note that, as is, license failure handler is never called, because in this example
+       * we always check license validity before calling any Scanbot API.
+       */
+      ScanbotSdk.setLicenseFailureHandler(async callback => {
+        const status = callback.licenseStatus;
+        const feature = callback.licenseFeature;
+        console.log('Feature ' + feature + ' is not available because license is ' + status);
+      });
+    });
+  }
 
   async startDocumentScanner() {
     if (!(await this.scanbotService.checkLicense())) { return; }
@@ -100,6 +115,7 @@ export class HomePage {
   }
 
   async startMrzScanner() {
+
     if (!(await this.scanbotService.checkLicense())) { return; }
 
     const config: MrzScannerConfiguration = {
