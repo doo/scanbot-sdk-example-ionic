@@ -9,7 +9,9 @@
 
 <ion-content padding>
 
-    <img style="max-height: 50%; margin: auto auto;" [src]="imageSourceUri"/>
+    <div style="width: 100%; max-height: 50%;">
+        <img style="max-height: 50%; margin: auto auto;" [src]="imageSourceUri"/>
+    </div>
 
     <li *ngFor="let barcode of barcodes" style="list-style: none;">
         <ion-item style="flex: 1; flex-direction: column">
