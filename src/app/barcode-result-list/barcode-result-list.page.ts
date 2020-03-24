@@ -1,11 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
-import {ImageResultsRepository} from '../services/image-results.repository';
-import {DialogsService} from '../services/dialogs.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ActionSheetController} from '@ionic/angular';
 import {BarcodeListService} from '../services/barcode-list.service';
-import {File} from '@ionic-native/file';
 import { DomSanitizer } from '@angular/platform-browser';
 
 declare var cordova: any;
@@ -21,12 +15,7 @@ export class BarcodeResultListPage {
   barcodes = [];
 
   constructor(public sanitizer: DomSanitizer) {
-
-    console.log(BarcodeListService.snappedImage);
-    BarcodeListService.normalizeUrl();
     this.imageSourceUri = this.sanitizeFileUri(BarcodeListService.snappedImage);
-    console.log(this.imageSourceUri);
-
     this.barcodes = BarcodeListService.detectedBarcodes;
   }
 
