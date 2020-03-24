@@ -58,7 +58,7 @@ export class HomePage {
 
     const loading = await this.dialogsService.createLoading('Auto-detecting and cropping...');
     try {
-      loading.present();
+      await loading.present();
 
       // First create a new SDK page with the selected original image file:
       const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri});
@@ -87,12 +87,14 @@ export class HomePage {
       uiConfigs: {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
-        barcodeFormats: BarcodeListService.getAcceptedTypes()
+        barcodeFormats: BarcodeListService.getAcceptedTypes(),
+        barcodeImageGenerationType: 'CAPTURED_IMAGE'
       }
     });
 
     if (result.status === 'OK') {
       BarcodeListService.detectedBarcodes = result.barcodes;
+      BarcodeListService.snappedImage = result.imageFileUri;
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
@@ -143,6 +145,7 @@ export class HomePage {
 
     const result = await this.scanbotService.SDK.detectBarcodesOnImage({ imageFileUri: imageUri });
     BarcodeListService.detectedBarcodes = result.barcodes;
+    BarcodeListService.snappedImage = result.imageFileUri;
     await this.router.navigateByUrl('/barcode-result-list');
   }
 }

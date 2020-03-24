@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class BarcodeListService {
 
     public static detectedBarcodes = [];
+    public static snappedImage: string;
 
     public static items = [
         { key: 'AZTEC',        value: true },
