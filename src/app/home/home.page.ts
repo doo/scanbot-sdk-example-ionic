@@ -159,7 +159,9 @@ export class HomePage {
 
     if (!(await this.scanbotService.checkLicense())) { return; }
 
-    const result = await this.scanbotService.SDK.detectBarcodesOnImage({ imageFileUri: imageUri });
+    const result = await this.scanbotService.SDK.detectBarcodesOnImage(
+        { imageFileUri: imageUri, barcodeFormats: BarcodeListService.getAcceptedTypes() }
+        );
     BarcodeListService.detectedBarcodes = result.barcodes;
     BarcodeListService.snappedImage = result.imageFileUri;
     await this.router.navigateByUrl('/barcode-result-list');
