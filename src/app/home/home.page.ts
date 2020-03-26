@@ -9,6 +9,7 @@ import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
 import {BarcodeListService} from '../services/barcode-list.service';
+import {load} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-home',
@@ -159,11 +160,15 @@ export class HomePage {
 
     if (!(await this.scanbotService.checkLicense())) { return; }
 
+
+    const loading = await this.dialogsService.createLoading('Detecting barcodes...');
+    await loading.present();
     const result = await this.scanbotService.SDK.detectBarcodesOnImage(
         { imageFileUri: imageUri, barcodeFormats: BarcodeListService.getAcceptedTypes() }
         );
     BarcodeListService.detectedBarcodes = result.barcodes;
-    BarcodeListService.snappedImage = result.imageFileUri;
+    BarcodeListService.snappedImage = imageUri;
+    await loading.dismiss();
     await this.router.navigateByUrl('/barcode-result-list');
   }
 }
