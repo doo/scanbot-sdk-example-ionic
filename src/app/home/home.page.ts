@@ -104,7 +104,8 @@ export class HomePage {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
-        barcodeImageGenerationType: 'CAPTURED_IMAGE'
+        barcodeImageGenerationType: 'VIDEO_FRAME',
+        finderLineColor: '#ff0000',
       }
     });
 
