@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            Accepted Barcode Formats
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <li *ngFor="let barcode of barcodes" style="list-style: none;">
+        <ion-item style="display: block;">
+            <ion-label>{{barcode.key}}</ion-label>
+            <ion-toggle value="{{barcode.key}}" checked="{{barcode.value}}" (ionChange)="onChange($event)"></ion-toggle>
+        </ion-item>
+    </li>
+
+</ion-content>
+
+<ion-footer>
+
+</ion-footer>
