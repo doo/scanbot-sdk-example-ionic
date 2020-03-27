@@ -17,12 +17,12 @@
         <ion-item style="flex: 1; flex-direction: column">
             <div style="flex: 1; flex-direction: row">
                 <ion-label
-                        style="margin-left: 1.5em; font-size: 0.8em; font-weight: 600;">
+                        style="margin-left: 0.5em; font-size: 0.8em; font-weight: 600;">
                     {{barcode.type}}
                 </ion-label>
                 <ion-label
-                        style="margin-left: 1.5em; font-size: 0.8em; font-weight: 400; white-space: pre-wrap">
-                    {{barcode.text}}
+                        style="margin-left: 0.5em; font-size: 0.8em; font-weight: 400; white-space: pre-wrap">
+                    {{barcode.text ? barcode.text.trim() : "" }}
                 </ion-label>
             </div>
         </ion-item>
