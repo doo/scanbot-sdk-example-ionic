@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {BarcodeListService} from '../services/barcode-list.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
-declare var cordova: any;
-
 @Component({
   selector: 'app-barcode-result-list',
   templateUrl: './barcode-result-list.page.html',
@@ -15,7 +13,9 @@ export class BarcodeResultListPage {
   barcodes = [];
 
   constructor(public sanitizer: DomSanitizer) {
-    this.imageSourceUri = this.sanitizeFileUri(BarcodeListService.snappedImage);
+    if (BarcodeListService.snappedImage) {
+      this.imageSourceUri = this.sanitizeFileUri(BarcodeListService.snappedImage);
+    }
     this.barcodes = BarcodeListService.detectedBarcodes;
   }
 
