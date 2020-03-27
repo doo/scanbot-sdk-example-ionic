@@ -17,7 +17,7 @@
         <ion-label>Scan Document</ion-label>
       </ion-item>
       <ion-item (click)="pickImageFromPhotoLibrary()">
-        <ion-label>Import Image</ion-label>
+        <ion-label>Import Image & Detect Document</ion-label>
       </ion-item>
       <ion-item (click)="gotoImageResults()" detail>
         <ion-label>View Image Results</ion-label>
@@ -26,16 +26,25 @@
 
     <ion-list>
       <ion-list-header>
-        <ion-label text-uppercase>Data Detectors</ion-label>
+        <ion-label text-uppercase>Barcode Detector</ion-label>
       </ion-list-header>
       <ion-item (click)="startBarcodeScanner()">
         <ion-label>Scan QR-/Barcode</ion-label>
       </ion-item>
-      <ion-item (click)="startMrzScanner()">
-        <ion-label>Scan MRZ</ion-label>
-      </ion-item>
       <ion-item (click)="importAndDetectBarcodes()">
-        <ion-label>Import & Detect Barcodes</ion-label>
+        <ion-label>Import Image & Detect Barcodes</ion-label>
+      </ion-item>
+      <ion-item (click)="setAcceptedFormats()">
+        <ion-label>Set Barcode Formats Filter</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header>
+        <ion-label text-uppercase>Data Detectors</ion-label>
+      </ion-list-header>
+      <ion-item (click)="startMrzScanner()">
+        <ion-label>Scan MRZ on ID Card</ion-label>
       </ion-item>
     </ion-list>
 
@@ -43,9 +52,6 @@
       <ion-list-header>
         <ion-label text-uppercase>Miscellaneous</ion-label>
       </ion-list-header>
-      <ion-item (click)="setAcceptedFormats()">
-        <ion-label>Set Barcode Formats</ion-label>
-      </ion-item>
       <ion-item (click)="viewLicenseInfo()">
         <ion-label>View License Info</ion-label>
       </ion-item>
