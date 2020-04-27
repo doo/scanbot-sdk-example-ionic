@@ -147,6 +147,10 @@ export class HomePage {
     await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
   }
 
+  async openHTMLCameraPage() {
+    await this.router.navigateByUrl('/html5-camera');
+  }
+
   async importAndDetectBarcodes() {
     const picture = await this.imagePicker.getPicture({
       sourceType: this.imagePicker.PictureSourceType.PHOTOLIBRARY,
@@ -172,4 +176,5 @@ export class HomePage {
     await loading.dismiss();
     await this.router.navigateByUrl('/barcode-result-list');
   }
+
 }
