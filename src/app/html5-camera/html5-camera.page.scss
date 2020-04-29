@@ -1,11 +1,13 @@
 
-#container a {
-  text-decoration: none;
+#container {
+  width: 96%;
+  height: 200px;
+  margin-left: 2%;
+  margin-top: 10%;
+  background-color: #10dc60;
 }
 
-#cameraContainer {
-  width: 90%;
-  height: 500px;
-  margin-left: 5%;
-  margin-top: 5%;
+#foundBarcodeHeader {
+  margin-top: 20px;
+  font-weight: bold;
 }
