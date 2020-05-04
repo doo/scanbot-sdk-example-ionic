@@ -18,6 +18,15 @@ export class Html5CameraPage implements OnInit {
   }
 
   async ngOnInit() {
+
+    const permissionResult = await this.sdk.SDK.requestCameraPermission();
+    if (permissionResult.status !== 'OK') {
+      await this._ngZone.run(async () => {
+        await this.alert.showAlert('Camera permission is required to capture video stream', 'Oops!');
+      });
+      return;
+    }
+
     const container = document.getElementById('container');
     const camera = await ScanbotHTMLCamera.create(container);
 
