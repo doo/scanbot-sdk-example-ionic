@@ -18,7 +18,8 @@ export class Html5CameraPage implements OnInit {
   }
 
   async ngOnInit() {
-
+    // 'requestCameraPermission' is a helper function, not required by ScanbotHTMLCamera.
+    // If already have your own logic (e.g. another plugin) to request permission, feel free to do that
     const permissionResult = await this.sdk.SDK.requestCameraPermission();
     if (permissionResult.status !== 'OK') {
       await this._ngZone.run(async () => {
@@ -31,7 +32,6 @@ export class Html5CameraPage implements OnInit {
     const camera = await ScanbotHTMLCamera.create(container);
 
     camera.startBarcodeDetector(async result => {
-
       const info = await this.sdk.SDK.getLicenseInfo();
       if (!info.info.isLicenseValid) {
         camera.stopBarcodeDetector();
@@ -43,7 +43,8 @@ export class Html5CameraPage implements OnInit {
         this.showDetectionResult();
         return;
       }
-
+      // The scan result can contain multiple barcodes,
+      // this example just conveniently displays the first one
       const barcode = result.barcodes[0];
       this.showDetectionResult(barcode.type, barcode.text);
     });
