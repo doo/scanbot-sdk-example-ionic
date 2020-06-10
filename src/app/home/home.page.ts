@@ -148,6 +148,11 @@ export class HomePage {
   }
 
   async openHTMLCameraPage() {
+    if (this.platform.is('ios')) {
+      await this.dialogsService.showAlert('HTML5 Camera is an Android-only feature');
+      return;
+    }
+
     await this.router.navigateByUrl('/html5-camera');
   }
 
