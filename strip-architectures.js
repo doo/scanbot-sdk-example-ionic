@@ -16,7 +16,7 @@ module.exports = function (ctx) {
     // Proper options found by comparing the diff after manually adding correct paths, script and inputPaths
     const options = {
         shellPath: '/bin/sh',
-        shellScript: '"bash \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/ScanbotSDK.framework/strip-SBSDK-Framework.sh\""',
+        shellScript: 'bash \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/ScanbotSDK.framework/strip-SBSDK-Framework.sh\"',
         inputPaths: ['"$(SRCROOT)/../../plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks/ScanbotSDK.framework.dSYM"']
     };
 
