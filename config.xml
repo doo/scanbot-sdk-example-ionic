@@ -117,7 +117,7 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
-    <plugin name="cordova-plugin-scanbot-sdk" spec="v4.1.0-beta1">
+    <plugin name="cordova-plugin-scanbot-sdk" spec="v4.1.0-beta8">
         <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
     </plugin>
 </widget>
