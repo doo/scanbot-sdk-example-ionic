@@ -37,7 +37,8 @@ export class ScanbotSdkDemoService {
             licenseKey: this.myLicenseKey,
             storageImageFormat: 'JPG',
             storageImageQuality: 80,
-            storageBaseDirectory: customStorageBaseDirectory
+            storageBaseDirectory: customStorageBaseDirectory,
+            documentDetectorMode: 'ML_BASED'
         };
 
         return this.SDK.initializeSdk(config).then(result => {
