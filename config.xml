@@ -43,6 +43,7 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
         <resource-file src="scanbot-sdk-app-resources/shared/ocr/osd.traineddata" target="app/src/main/assets/ocr_blobs/osd.traineddata" />
+        <resource-file src="scanbot-sdk-app-resources/shared/ocr/deu.traineddata" target="app/src/main/assets/ocr_blobs/deu.traineddata" />
         <resource-file src="scanbot-sdk-app-resources/shared/ocr/eng.traineddata" target="app/src/main/assets/ocr_blobs/eng.traineddata" />
     </platform>
     <platform name="ios">
