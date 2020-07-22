@@ -1,7 +1,9 @@
 import {Component, NgZone, OnInit} from '@angular/core';
-import {ScanbotHTMLCamera} from 'cordova-plugin-scanbot-sdk/camera';
+// import {ScanbotHTMLCamera} from 'cordova-plugin-scanbot-sdk/camera';
 import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
 import {DialogsService} from '../services/dialogs.service';
+import {BarcodeListService} from '../services/barcode-list.service';
+import {ScanbotHTMLCamera} from '../../../plugins/cordova-plugin-scanbot-sdk/camera';
 
 @Component({
   selector: 'app-html5-camera',
@@ -12,6 +14,8 @@ export class Html5CameraPage implements OnInit {
 
   public barcodeFormat: string;
   public barcodeText: string;
+  public container: HTMLElement;
+  public camera: ScanbotHTMLCamera;
 
   constructor(private sdk: ScanbotSdkDemoService, private alert: DialogsService, private _ngZone: NgZone) {
       this.showDetectionResult();
@@ -28,13 +32,16 @@ export class Html5CameraPage implements OnInit {
       return;
     }
 
-    const container = document.getElementById('container');
-    const camera = await ScanbotHTMLCamera.create(container);
+    this.container = document.getElementById('container');
+  }
 
-    camera.startBarcodeDetector(async result => {
+  async initialize() {
+    this.camera = await ScanbotHTMLCamera.create(this.container);
+
+    this.camera.startBarcodeDetector(BarcodeListService.getAcceptedTypes(), async result => {
       const info = await this.sdk.SDK.getLicenseInfo();
       if (!info.info.isLicenseValid) {
-        camera.stopBarcodeDetector();
+        this.camera.stopBarcodeDetector();
         this.showDetectionResult('License expired', 'Barcode detection stopped');
         return;
       }
@@ -48,6 +55,10 @@ export class Html5CameraPage implements OnInit {
       const barcode = result.barcodes[0];
       this.showDetectionResult(barcode.type, barcode.text);
     });
+  }
+
+  dispose() {
+    this.camera.dispose();
   }
 
   showDetectionResult(format = '-', text = '-') {
