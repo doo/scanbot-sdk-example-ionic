@@ -38,6 +38,15 @@ export class Html5CameraPage implements OnInit {
   async initialize() {
     this.camera = await ScanbotHTMLCamera.create(this.container);
 
+
+    this.camera.addViewFinder({
+      // backgroundColor: "blue",
+      // width: 300,
+      // height: 200,
+      // border: "5px solid red",
+      // borderRadius: 0
+    });
+
     this.camera.startBarcodeDetector(BarcodeListService.getAcceptedTypes(), async result => {
       const info = await this.sdk.SDK.getLicenseInfo();
       if (!info.info.isLicenseValid) {
