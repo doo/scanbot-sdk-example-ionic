@@ -197,4 +197,8 @@ export class HomePage {
     await this.router.navigateByUrl('/barcode-result-list');
   }
 
+  hasHtml5CameraSupport() {
+    return this.platform.is('android');
+  }
+
 }
