@@ -1,9 +1,10 @@
 import {Component, NgZone, OnInit} from '@angular/core';
-// import {ScanbotHTMLCamera} from 'cordova-plugin-scanbot-sdk/camera';
+import ScanbotHTMLCamera from 'cordova-plugin-scanbot-sdk/camera';
 import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
 import {DialogsService} from '../services/dialogs.service';
 import {BarcodeListService} from '../services/barcode-list.service';
-import {ScanbotHTMLCamera} from '../../../plugins/cordova-plugin-scanbot-sdk/camera';
+// For plugin development/debugging, reference camera directly:
+// import ScanbotHTMLCamera from '../../../plugins/cordova-plugin-scanbot-sdk/camera';
 
 @Component({
   selector: 'app-html5-camera',
