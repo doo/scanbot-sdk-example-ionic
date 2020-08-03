@@ -162,6 +162,11 @@ export class HomePage {
     await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
   }
 
+  async viewOcrConfigs() {
+    const result = await this.scanbotService.SDK.getOcrConfigs();
+    await this.dialogsService.showAlert(JSON.stringify(result), 'OCR Configs');
+  }
+
   async openHTMLCameraPage() {
     if (this.platform.is('ios')) {
       await this.dialogsService.showAlert('HTML5 Camera is an Android-only feature');
