@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 import { ImageFilter, Page } from 'cordova-plugin-scanbot-sdk';
 
@@ -12,7 +14,7 @@ import { ImageResultsRepository, SanitizedPage } from '../services/image-results
     selector: 'app-image-view',
     templateUrl: 'image-view.page.html',
 })
-export class ImageViewPage {
+export class ImageViewPage implements OnInit {
 
     public page: SanitizedPage;
 
@@ -39,9 +41,12 @@ export class ImageViewPage {
                 private route: ActivatedRoute,
                 private actionSheetController: ActionSheetController) { }
 
-    ionViewWillEnter() {
-        const pageId = this.route.params['value'].pageId;
-        this.page = this.imageResultsRepository.getPageById(pageId);
+    ngOnInit() {
+        this.route.paramMap.pipe(
+            switchMap((params: ParamMap) => of(params.get('pageId')))
+        ).subscribe(pageId => {
+            this.page = this.imageResultsRepository.getPageById(pageId);
+        });
     }
 
     async startCroppingScreen() {

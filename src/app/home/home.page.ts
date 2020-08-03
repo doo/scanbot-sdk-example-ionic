@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera as ImagePicker } from '@ionic-native/camera/ngx';
 
-import ScanbotSdk, { MrzScannerConfiguration } from 'cordova-plugin-scanbot-sdk';
+import ScanbotSdk, {HealthInsuranceCardScannerConfiguration, MrzScannerConfiguration} from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
@@ -138,13 +138,33 @@ export class HomePage {
     }
   }
 
-  async setAcceptedFormats() {
+  async startEHICScanner() {
+
+    if (!(await this.scanbotService.checkLicense())) {
+      return;
+    }
+
+    const config: HealthInsuranceCardScannerConfiguration = {
+      finderTextHint: 'Please hold your phone over the back of your Health Insurance Card.'
+    };
+    const result = await this.scanbotService.SDK.UI.startEHICScanner({uiConfigs: config});
+    if (result.status === 'OK') {
+      const fields = result.ehicResult.fields.map(f => `<div>${f.type}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
+      await this.dialogsService.showAlert(fields.join(''), 'EHIC Result');
+    }
+  }
+    async setAcceptedFormats() {
     await this.router.navigateByUrl('/barcode-list');
   }
 
   async viewLicenseInfo() {
     const result = await this.scanbotService.SDK.getLicenseInfo();
     await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
+  }
+
+  async viewOcrConfigs() {
+    const result = await this.scanbotService.SDK.getOcrConfigs();
+    await this.dialogsService.showAlert(JSON.stringify(result), 'OCR Configs');
   }
 
   async openHTMLCameraPage() {
@@ -180,6 +200,10 @@ export class HomePage {
     BarcodeListService.snappedImage = imageUri;
     await loading.dismiss();
     await this.router.navigateByUrl('/barcode-result-list');
+  }
+
+  hasHtml5CameraSupport() {
+    return this.platform.is('android');
   }
 
 }

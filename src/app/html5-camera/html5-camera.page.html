@@ -9,6 +9,11 @@
 
 <ion-content padding>
 
+  <div id="buttonContainer" text-center>
+    <ion-button color="success" style="margin-right: 20px" (click)="initialize()">INITIALIZE</ion-button>
+    <ion-button color="danger"  style="margin-left: 20px" (click)="dispose()"    >DISPOSE   </ion-button>
+  </div>
+
   <div id="container"></div>
 
   <div id="foundBarcodeHeader">Found the following barcode:</div>
