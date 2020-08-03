@@ -96,6 +96,7 @@ export class ScanbotSdkDemoService {
             orientationLockMode: 'PORTRAIT',
             pageCounterButtonTitle: '%d Page(s)',
             multiPageEnabled: true,
+            ignoreBadAspectRatio: true,
             // maxNumberOfPages: 3,
             // documentImageSizeLimit: { width: 1500, height: 2000 },
             // shutterButtonHidden: true,
