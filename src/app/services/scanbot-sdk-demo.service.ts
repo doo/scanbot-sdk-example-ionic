@@ -97,11 +97,12 @@ export class ScanbotSdkDemoService {
             pageCounterButtonTitle: '%d Page(s)',
             multiPageEnabled: true,
             ignoreBadAspectRatio: true,
+            topBarBackgroundColor: '#c8193c',
+            bottomBarBackgroundColor: '#c8193c',
             // maxNumberOfPages: 3,
             // documentImageSizeLimit: { width: 1500, height: 2000 },
             // shutterButtonHidden: true,
-            // bottomBarBackgroundColor: '#0000ff',
-            // ...
+            // see further configs ...
         };
     }
 }
