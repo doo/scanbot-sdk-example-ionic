@@ -75,7 +75,7 @@ export class HomePage {
     const loading = await this.dialogsService.createLoading('Auto-detecting and cropping...');
     try {
       await loading.present();
-      
+
       /**
        * Estimates image blurriness. Less is sharper, more is blurred.
        *
@@ -89,6 +89,7 @@ export class HomePage {
        * It is therefore best to use blur estimator in conjunction with a finder view or on an already cropped document
        */
       const blurResult = await this.scanbotService.SDK.estimateBlur({imageFileUri: originalImageFileUri});
+      console.log('Estimated blur on imported image:', blurResult.blur);
 
       // First create a new SDK page with the selected original image file:
       const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri});
