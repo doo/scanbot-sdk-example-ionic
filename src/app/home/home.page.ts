@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera as ImagePicker } from '@ionic-native/camera/ngx';
 
-import ScanbotSdk, {HealthInsuranceCardScannerConfiguration, MrzScannerConfiguration} from 'cordova-plugin-scanbot-sdk';
+import ScanbotSdk, {FinderAspectRatio, HealthInsuranceCardScannerConfiguration, MrzScannerConfiguration} from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
@@ -127,8 +127,26 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      BarcodeListService.detectedBarcodes = result.barcodes;
+      BarcodeListService.detectedBarcodes = result.barcodes
       BarcodeListService.snappedImage = result.imageFileUri;
+      await this.router.navigateByUrl('/barcode-result-list');
+    }
+  }
+
+  async startBatchBarcodeScanner() {
+    if (!(await this.scanbotService.checkLicense())) { return; }
+
+    const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({
+      uiConfigs: {
+        // Customize colors, text resources, behavior, etc..
+        finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
+        barcodeFormats: BarcodeListService.getAcceptedTypes(),
+        finderAspectRatio: { width: 1, height: 1 }
+      }
+    });
+
+    if (result.status === 'OK') {
+      BarcodeListService.detectedBarcodes = result.barcodes;
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
