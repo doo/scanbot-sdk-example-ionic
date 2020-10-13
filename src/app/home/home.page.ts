@@ -3,13 +3,12 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera as ImagePicker } from '@ionic-native/camera/ngx';
 
-import ScanbotSdk, {FinderAspectRatio, HealthInsuranceCardScannerConfiguration, MrzScannerConfiguration} from 'cordova-plugin-scanbot-sdk';
+import ScanbotSdk, { HealthInsuranceCardScannerConfiguration, MrzScannerConfiguration } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
-import {BarcodeListService} from '../services/barcode-list.service';
-import {load} from '@angular/core/src/render3';
+import { BarcodeListService } from '../services/barcode-list.service';
 
 @Component({
   selector: 'app-home',
@@ -75,21 +74,6 @@ export class HomePage {
     const loading = await this.dialogsService.createLoading('Auto-detecting and cropping...');
     try {
       await loading.present();
-
-      /**
-       * Estimates image blurriness. Less is sharper, more is blurred.
-       *
-       * In board terms, consider blur values as follows:
-       * • 0.0-0.3: This image isn't blurry at all
-       * • 0.3-0.6: Somewhat blurry, should be ok
-       * • 0.6-1.0: I'm skeptical of the usefulness of the image
-       *
-       * However, this isn't that black and white.
-       * If a scanned document has a lot white background, that will be considered a very blurred image.
-       * It is therefore best to use blur estimator in conjunction with a finder view or on an already cropped document
-       */
-      const blurResult = await this.scanbotService.SDK.estimateBlur({imageFileUri: originalImageFileUri});
-      console.log('Estimated blur on imported image:', blurResult.blur);
 
       // First create a new SDK page with the selected original image file:
       const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri});
