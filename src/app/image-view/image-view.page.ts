@@ -57,7 +57,9 @@ export class ImageViewPage implements OnInit {
             uiConfigs: {
                 // Customize colors, text resources, behavior, etc..
                 doneButtonTitle: 'Save',
-                orientationLockMode: 'PORTRAIT'
+                orientationLockMode: 'PORTRAIT',
+                hintTitle: 'Drag the dots to the document edges',
+                hintTitleColor: 'green'
                 // ...
             }
         });
