@@ -58,8 +58,10 @@ export class ImageViewPage implements OnInit {
                 // Customize colors, text resources, behavior, etc..
                 doneButtonTitle: 'Save',
                 orientationLockMode: 'PORTRAIT',
-                hintTitle: 'Drag the dots to the document edges',
-                hintTitleColor: 'green'
+                topBarBackgroundColor: '#c8193c',
+                bottomBarBackgroundColor: '#c8193c',
+                hintTitle: 'Custom hint:\nDrag the dots to the document edges.',
+                hintTitleColor: '#0000ff'
                 // ...
             }
         });
