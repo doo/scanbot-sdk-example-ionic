@@ -50,7 +50,7 @@ Connect a device via USB and run the app.
 
 `ionic cordova prepare ios`
 
-Open the project `platforms/ios/Scanbot SDK Example Ionic.xcodeproj` in Xcode and check/adjust the following settings: 
+Open the project `platforms/ios/Scanbot SDK Example Ionic.xcworkspace` in Xcode and check/adjust the following settings: 
 - *Provisioning* and *Code Signing* - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html) 
 - Make sure the `ScanbotSDK.framework` was properly added as **Embedded Binary** - see our [Plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
 
