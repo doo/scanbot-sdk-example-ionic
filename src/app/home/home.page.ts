@@ -104,6 +104,7 @@ export class HomePage {
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
         barcodeImageGenerationType: 'VIDEO_FRAME',
+        orientationLockMode: 'PORTRAIT',
         finderLineColor: '#0000ff',
         topBarBackgroundColor: '#c8193c',
         // see further configs ...
@@ -111,7 +112,7 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      BarcodeListService.detectedBarcodes = result.barcodes
+      BarcodeListService.detectedBarcodes = result.barcodes;
       BarcodeListService.snappedImage = result.imageFileUri;
       await this.router.navigateByUrl('/barcode-result-list');
     }
@@ -125,7 +126,9 @@ export class HomePage {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
-        finderAspectRatio: { width: 1, height: 1 }
+        finderAspectRatio: { width: 1, height: 1 },
+        orientationLockMode: 'PORTRAIT',
+        // see further configs ...
       }
     });
 
@@ -141,7 +144,9 @@ export class HomePage {
 
     const config: MrzScannerConfiguration = {
       // Customize colors, text resources, etc..
-      finderTextHint: 'Please hold your phone over the 2- or 3-line MRZ code at the front of your passport.'
+      finderTextHint: 'Please hold your phone over the 2- or 3-line MRZ code at the front of your passport.',
+      orientationLockMode: 'PORTRAIT',
+      // see further configs ...
     };
 
     if (this.platform.is('ios')) {
@@ -164,7 +169,9 @@ export class HomePage {
     }
 
     const config: HealthInsuranceCardScannerConfiguration = {
-      finderTextHint: 'Please hold your phone over the back of your Health Insurance Card.'
+      finderTextHint: 'Please hold your phone over the back of your Health Insurance Card.',
+      orientationLockMode: 'PORTRAIT',
+      // see further configs ...
     };
     const result = await this.scanbotService.SDK.UI.startEHICScanner({uiConfigs: config});
     if (result.status === 'OK') {
