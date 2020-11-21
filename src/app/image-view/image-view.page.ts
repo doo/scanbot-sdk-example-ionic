@@ -84,7 +84,8 @@ export class ImageViewPage implements OnInit {
     }
 
     private updatePage(page: Page) {
-        this.page = this.imageResultsRepository.updatePage(page);
+        this.imageResultsRepository.updatePage(page);
+        this.page = page;
         this.sanitizePreviewImage();
     }
 

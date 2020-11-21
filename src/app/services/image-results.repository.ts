@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Platform } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 import { Page } from 'cordova-plugin-scanbot-sdk';
+import { ScanbotSdkDemoService } from './scanbot-sdk-demo.service';
 
 
 @Injectable()
@@ -9,7 +12,29 @@ export class ImageResultsRepository {
 
     private pages: Page[] = [];
 
-    constructor(public sanitizer: DomSanitizer) { }
+    constructor(private sanitizer: DomSanitizer,
+                private storage: Storage,
+                private platform: Platform,
+                private scanbotService: ScanbotSdkDemoService) {
+        this.platform.ready().then(() => this.loadPagesFromStorage());
+    }
+
+    private async loadPagesFromStorage() {
+        const val = await this.storage.get('pages');
+        const storedPages: Page[] = val ? val as Page[] : [];
+        if (storedPages.length === 0) {
+            this.pages = [];
+            return;
+        }
+        this.scanbotService.ready().then(async () => {
+            const result = await this.scanbotService.SDK.refreshImageUris({pages: storedPages});
+            this.pages = result.pages;
+        });
+    }
+
+    private async storePagesInStorage() {
+        await this.storage.set('pages', this.pages);
+    }
 
     public getPages(): Page[] {
         return this.pages;
@@ -19,11 +44,12 @@ export class ImageResultsRepository {
         return this.pages.find(p => p.pageId === id);
     }
 
-    public addPages(pages: Page[]) {
+    public async addPages(pages: Page[]) {
         this.pages = this.pages.concat(pages);
+        await this.storePagesInStorage();
     }
 
-    public updatePage(page: Page): Page {
+    public async updatePage(page: Page) {
         let replaced = false;
         for (let i = 0; i < this.pages.length; ++i) {
             if (this.pages[i].pageId === page.pageId) {
@@ -35,18 +61,20 @@ export class ImageResultsRepository {
         if (!replaced) {
             this.pages.push(page);
         }
-        return page;
+        await this.storePagesInStorage();
     }
 
-    public removePage(page: Page) {
+    public async removePage(page: Page) {
         const index = this.pages.findIndex(p => p.pageId === page.pageId);
         if (index > -1) {
             this.pages.splice(index, 1);
         }
+        await this.storePagesInStorage();
     }
 
-    public removeAllPages() {
+    public async removeAllPages() {
         this.pages = [];
+        await this.storePagesInStorage();
     }
 
     public sanitizeFileUri(fileUri: string): string {

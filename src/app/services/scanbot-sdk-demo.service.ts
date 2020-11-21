@@ -4,6 +4,7 @@ import { File } from '@ionic-native/file/ngx';
 
 import ScanbotSdk, { DocumentScannerConfiguration, ScanbotSDKConfiguration } from 'cordova-plugin-scanbot-sdk';
 
+import { environment } from '../../environments/environment';
 import { DialogsService } from './dialogs.service';
 
 @Injectable()
@@ -22,10 +23,22 @@ export class ScanbotSdkDemoService {
 
     public SDK = ScanbotSdk.promisify();
 
+    private readonly sdkReady: Promise<any>;
+
     constructor(private platform: Platform,
                 private dialogsService: DialogsService,
                 private file: File) {
-        this.platform.ready().then(() => this.initScanbotSdk());
+        this.sdkReady = new Promise<any>((resolve, reject) => {
+            this.platform.ready().then(() => {
+                this.initScanbotSdk()
+                    .then(result => resolve(result))
+                    .catch(err => reject(err));
+            });
+        });
+    }
+
+    public ready() {
+        return this.sdkReady;
     }
 
     private initScanbotSdk() {
@@ -33,7 +46,7 @@ export class ScanbotSdkDemoService {
         const customStorageBaseDirectory = this.getDemoStorageBaseDirectory();
 
         const config: ScanbotSDKConfiguration = {
-            loggingEnabled: true, // Consider switching logging OFF in production builds for security and performance reasons!
+            loggingEnabled: !environment.production, // Disable logging in production builds for security and performance reasons!
             licenseKey: this.myLicenseKey,
             storageImageFormat: 'JPG',
             storageImageQuality: 80,
@@ -43,7 +56,7 @@ export class ScanbotSdkDemoService {
 
         return this.SDK.initializeSdk(config).then(result => {
             console.log(JSON.stringify(result));
-        }).catch((err) => {
+        }).catch(err => {
             console.error(JSON.stringify(err));
         });
     }
@@ -80,7 +93,6 @@ export class ScanbotSdkDemoService {
 
     public async checkLicense() {
         const result = await this.SDK.getLicenseInfo();
-
         if (result.info.isLicenseValid) {
             // OK - we have a trial session, a valid trial license or valid production license.
             return true;
@@ -100,8 +112,7 @@ export class ScanbotSdkDemoService {
             topBarBackgroundColor: '#c8193c',
             bottomBarBackgroundColor: '#c8193c',
             // maxNumberOfPages: 3,
-            // documentImageSizeLimit: { width: 1500, height: 2000 },
-            // shutterButtonHidden: true,
+            // documentImageSizeLimit: { width: 2000, height: 3000 },
             // see further configs ...
         };
     }
