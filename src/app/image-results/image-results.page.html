@@ -14,7 +14,7 @@
         <ion-row *ngFor="let row of rows">
             <ng-container *ngFor="let page of row.pages">
                 <ion-col size="4" (click)="gotoImageView(page)">
-                    <img [src]='page.sanitizedDocumentPreviewImage' />
+                    <img [src]="sanitizedPreviewImages.get(page.pageId)" />
                 </ion-col>
             </ng-container>
         </ion-row>

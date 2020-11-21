@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { ActionSheetController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 
+import { Page } from 'cordova-plugin-scanbot-sdk';
+
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
-import { ImageResultsRepository, SanitizedPage } from '../services/image-results.repository';
+import { ImageResultsRepository } from '../services/image-results.repository';
 
 @Component({
     selector: 'app-image-results',
@@ -13,8 +15,9 @@ import { ImageResultsRepository, SanitizedPage } from '../services/image-results
 })
 export class ImageResultsPage {
 
-    public pages: SanitizedPage[] = [];
+    public pages: Page[] = [];
     public rows = [];
+    public sanitizedPreviewImages = new Map<string, string>();
 
     constructor(private scanbotService: ScanbotSdkDemoService,
                 private imageResultsRepository: ImageResultsRepository,
@@ -29,13 +32,19 @@ export class ImageResultsPage {
 
     private reloadPages() {
         this.pages = this.imageResultsRepository.getPages();
+        // build sanitizes preview image file URIs
+        for (const page of this.pages) {
+            this.sanitizedPreviewImages.set(page.pageId,
+                this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
+        }
+        // build rows
         this.rows = [];
         for (let i = 0; i < this.pages.length; i += 3) {
             this.rows.push({ pages: this.pages.slice(i, i + 3) });
         }
     }
 
-    async gotoImageView(page: SanitizedPage) {
+    async gotoImageView(page: Page) {
         await this.router.navigate(['/image-view', page.pageId]);
     }
 
@@ -45,7 +54,7 @@ export class ImageResultsPage {
 
         const loading = await this.dialogsService.createLoading('Creating PDF ...');
         try {
-            loading.present();
+            await loading.present();
             const result = await this.scanbotService.SDK.createPdf({
                 images: this.pages.map(p => p.documentImageFileUri),
                 pageSize: 'FIXED_A4'
@@ -67,7 +76,7 @@ export class ImageResultsPage {
 
         const loading = await this.dialogsService.createLoading('Performing OCR and creating PDF ...');
         try {
-            loading.present();
+            await loading.present();
             const result = await this.scanbotService.SDK.performOcr({
                 images: this.pages.map(p => p.documentImageFileUri),
                 languages: ['en'],

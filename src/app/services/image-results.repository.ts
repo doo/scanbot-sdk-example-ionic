@@ -7,11 +7,11 @@ import { Page } from 'cordova-plugin-scanbot-sdk';
 @Injectable()
 export class ImageResultsRepository {
 
-    private pages: SanitizedPage[] = [];
+    private pages: Page[] = [];
 
     constructor(public sanitizer: DomSanitizer) { }
 
-    public getPages(): SanitizedPage[] {
+    public getPages(): Page[] {
         return this.pages;
     }
 
@@ -20,30 +20,25 @@ export class ImageResultsRepository {
     }
 
     public addPages(pages: Page[]) {
-        const spages: SanitizedPage[] = [];
-        pages.forEach((p) => {
-            spages.push(this.sanitizePage(p));
-        });
-        this.pages = this.pages.concat(spages);
+        this.pages = this.pages.concat(pages);
     }
 
-    public updatePage(page: Page): SanitizedPage {
-        const sp = this.sanitizePage(page);
+    public updatePage(page: Page): Page {
         let replaced = false;
         for (let i = 0; i < this.pages.length; ++i) {
-            if (this.pages[i].pageId === sp.pageId) {
-                this.pages[i] = sp;
+            if (this.pages[i].pageId === page.pageId) {
+                this.pages[i] = page;
                 replaced = true;
                 break;
             }
         }
         if (!replaced) {
-            this.pages.push(sp);
+            this.pages.push(page);
         }
-        return sp;
+        return page;
     }
 
-    public removePage(page: SanitizedPage) {
+    public removePage(page: Page) {
         const index = this.pages.findIndex(p => p.pageId === page.pageId);
         if (index > -1) {
             this.pages.splice(index, 1);
@@ -54,20 +49,10 @@ export class ImageResultsRepository {
         this.pages = [];
     }
 
-    private sanitizePage(page: Page): SanitizedPage {
+    public sanitizeFileUri(fileUri: string): string {
         // see https://ionicframework.com/docs/building/webview/#file-protocol
-        let url = (<any>window).Ionic.WebView.convertFileSrc(page.documentPreviewImageFileUri);
-
+        const url = (<any>window).Ionic.WebView.convertFileSrc(fileUri);
         // see https://angular.io/guide/security#bypass-security-apis
-        url = this.sanitizer.bypassSecurityTrustUrl(url);
-
-        const sp: SanitizedPage = page as SanitizedPage;
-        sp.sanitizedDocumentPreviewImage = url;
-        return sp;
+        return this.sanitizer.bypassSecurityTrustUrl(url) as string;
     }
-
-}
-
-export interface SanitizedPage extends Page {
-    sanitizedDocumentPreviewImage: string;
 }

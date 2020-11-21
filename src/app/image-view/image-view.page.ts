@@ -8,7 +8,7 @@ import { ImageFilter, Page } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
-import { ImageResultsRepository, SanitizedPage } from '../services/image-results.repository';
+import { ImageResultsRepository } from '../services/image-results.repository';
 
 @Component({
     selector: 'app-image-view',
@@ -16,7 +16,8 @@ import { ImageResultsRepository, SanitizedPage } from '../services/image-results
 })
 export class ImageViewPage implements OnInit {
 
-    public page: SanitizedPage;
+    public page: Page;
+    public sanitizedPreviewImage: string;
 
     private imageFilterList: ImageFilter[] = [
         'NONE',
@@ -46,14 +47,19 @@ export class ImageViewPage implements OnInit {
             switchMap((params: ParamMap) => of(params.get('pageId')))
         ).subscribe(pageId => {
             this.page = this.imageResultsRepository.getPageById(pageId);
+            this.sanitizePreviewImage();
         });
+    }
+
+    private sanitizePreviewImage() {
+        this.sanitizedPreviewImage = this.imageResultsRepository.sanitizeFileUri(this.page.documentPreviewImageFileUri);
     }
 
     async startCroppingScreen() {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
         const result = await this.scanbotService.SDK.UI.startCroppingScreen({
-            page: this.page as Page,
+            page: this.page,
             uiConfigs: {
                 // Customize colors, text resources, behavior, etc..
                 doneButtonTitle: 'Save',
@@ -72,13 +78,14 @@ export class ImageViewPage implements OnInit {
     }
 
     async deletePage() {
-        await this.scanbotService.SDK.removePage({page: this.page as Page});
+        await this.scanbotService.SDK.removePage({page: this.page});
         this.imageResultsRepository.removePage(this.page);
         await this.router.navigate(['/image-results']);
     }
 
     private updatePage(page: Page) {
         this.page = this.imageResultsRepository.updatePage(page);
+        this.sanitizePreviewImage();
     }
 
     async showFilterSelection() {
@@ -108,9 +115,8 @@ export class ImageViewPage implements OnInit {
 
         const loading = await this.dialogsService.createLoading('Applying image filter ...');
         try {
-            loading.present();
-
-            const result = await this.scanbotService.SDK.applyImageFilterOnPage({page: this.page as Page, imageFilter: filter});
+            await loading.present();
+            const result = await this.scanbotService.SDK.applyImageFilterOnPage({page: this.page, imageFilter: filter});
             this.updatePage(result.page);
         }
         finally {
@@ -123,8 +129,7 @@ export class ImageViewPage implements OnInit {
 
         const loading = await this.dialogsService.createLoading('Estimating blurriness ...');
         try {
-            loading.present();
-
+            await loading.present();
             /**
              * Estimates image blurriness. Less is sharper, more is blurred.
              *
