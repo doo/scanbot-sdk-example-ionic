@@ -74,17 +74,17 @@ export class ImageViewPage implements OnInit {
 
         if (result.status === 'CANCELED') { return; }
 
-        this.updatePage(result.page);
+        await this.updatePage(result.page);
     }
 
     async deletePage() {
         await this.scanbotService.SDK.removePage({page: this.page});
-        this.imageResultsRepository.removePage(this.page);
+        await this.imageResultsRepository.removePage(this.page);
         await this.router.navigate(['/image-results']);
     }
 
-    private updatePage(page: Page) {
-        this.imageResultsRepository.updatePage(page);
+    private async updatePage(page: Page) {
+        await this.imageResultsRepository.updatePage(page);
         this.page = page;
         this.sanitizePreviewImage();
     }
@@ -118,7 +118,7 @@ export class ImageViewPage implements OnInit {
         try {
             await loading.present();
             const result = await this.scanbotService.SDK.applyImageFilterOnPage({page: this.page, imageFilter: filter});
-            this.updatePage(result.page);
+            await this.updatePage(result.page);
         }
         finally {
             await loading.dismiss();

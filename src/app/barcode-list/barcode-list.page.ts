@@ -1,10 +1,5 @@
-import {Component} from '@angular/core';
-import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
-import {DialogsService} from '../services/dialogs.service';
-import {ActionSheetController, Platform} from '@ionic/angular';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BarcodeListService} from '../services/barcode-list.service';
-import {ImageResultsRepository} from '../services/image-results.repository';
+import { Component } from '@angular/core';
+import { BarcodeListService } from '../services/barcode-list.service';
 
 @Component({
     selector: 'app-barcode-list',
@@ -14,13 +9,7 @@ export class BarcodeListPage {
 
     barcodes = [];
 
-    constructor(private scanbotService: ScanbotSdkDemoService,
-                private imageResultsRepository: ImageResultsRepository,
-                private dialogsService: DialogsService,
-                private router: Router,
-                private route: ActivatedRoute,
-                private actionSheetController: ActionSheetController) {
-
+    constructor() {
         this.barcodes = BarcodeListService.items;
     }
 

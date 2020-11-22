@@ -52,7 +52,7 @@ export class HomePage {
       return;
     }
 
-    this.imageResultsRepository.addPages(result.pages);
+    await this.imageResultsRepository.addPages(result.pages);
     await this.gotoImageResults();
   }
 
@@ -80,8 +80,8 @@ export class HomePage {
       // and then run auto document detection and cropping on this new page:
       const docResult = await this.scanbotService.SDK.detectDocumentOnPage({page: createResult.page});
 
-      this.imageResultsRepository.addPages([docResult.page]);
-      this.gotoImageResults();
+      await this.imageResultsRepository.addPages([docResult.page]);
+      await this.gotoImageResults();
     } catch (e) {
       console.error('Unable to process selected image.', e);
       await this.dialogsService.showAlert(e.message, 'ERROR', 'Unable to process selected image.');

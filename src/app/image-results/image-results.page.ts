@@ -170,13 +170,13 @@ export class ImageResultsPage {
 
         if (result.status === 'CANCELED') { return; }
 
-        this.imageResultsRepository.addPages(result.pages);
+        await this.imageResultsRepository.addPages(result.pages);
         this.reloadPages();
     }
 
     async removeAll() {
         await this.scanbotService.SDK.cleanup();
-        this.imageResultsRepository.removeAllPages();
+        await this.imageResultsRepository.removeAllPages();
         this.reloadPages();
     }
 }
