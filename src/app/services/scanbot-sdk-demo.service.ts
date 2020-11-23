@@ -42,15 +42,12 @@ export class ScanbotSdkDemoService {
     }
 
     private initScanbotSdk() {
-        // optional storageBaseDirectory - see the comments below.
-        const customStorageBaseDirectory = this.getDemoStorageBaseDirectory();
-
         const config: ScanbotSDKConfiguration = {
             loggingEnabled: !environment.production, // Disable logging in production builds for security and performance reasons!
             licenseKey: this.myLicenseKey,
             storageImageFormat: 'JPG',
             storageImageQuality: 80,
-            storageBaseDirectory: customStorageBaseDirectory,
+            // storageBaseDirectory: this.getDemoStorageBaseDirectory(), // optional storageBaseDirectory, see comments below
             documentDetectorMode: 'ML_BASED'
         };
 
