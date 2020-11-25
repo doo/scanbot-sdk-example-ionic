@@ -106,7 +106,9 @@ export class HomePage {
         barcodeImageGenerationType: 'VIDEO_FRAME',
         orientationLockMode: 'PORTRAIT',
         finderLineColor: '#0000ff',
+        finderAspectRatio: { width: 2, height: 1 },
         topBarBackgroundColor: '#c8193c',
+        useButtonsAllCaps: false,
         // see further configs ...
       }
     });
@@ -128,6 +130,7 @@ export class HomePage {
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
         finderAspectRatio: { width: 1, height: 1 },
         orientationLockMode: 'PORTRAIT',
+        useButtonsAllCaps: false,
         // see further configs ...
       }
     });
