@@ -17,7 +17,7 @@ module.exports = function (ctx) {
     const options = {
         shellPath: '/bin/sh',
         shellScript: 'bash \"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/ScanbotSDK.framework/strip-SBSDK-Framework.sh\"',
-        inputPaths: ['"$(SRCROOT)/../../plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks/ScanbotSDK.framework.dSYM"']
+        inputPaths: ['"$(SRCROOT)/../../plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks/dSYMs/ScanbotSDK.framework.dSYM"']
     };
 
     // Add the actual via the magic of cordova-node-xcode (https://github.com/apache/cordova-node-xcode)
