@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.scanbot.example.sdk.cordova.ionic" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.scanbot.example.sdk.cordova.ionic" version="2.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Scanbot SDK Example Ionic</name>
     <description>Example App for the Scanbot SDK Cordova Plugin with Ionic Framework</description>
     <author email="sdk@scanbot.io" href="https://scanbot.io/sdk">Scanbot / doo GmbH</author>
