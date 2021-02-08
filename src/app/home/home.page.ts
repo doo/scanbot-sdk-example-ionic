@@ -3,7 +3,14 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Camera as ImagePicker } from '@ionic-native/camera/ngx';
 
-import ScanbotSdk, { HealthInsuranceCardScannerConfiguration, MrzScannerConfiguration } from 'cordova-plugin-scanbot-sdk';
+import ScanbotSdk, {
+  DataScannerConfiguration,
+  HealthInsuranceCardScannerConfiguration,
+  LicensePlateDetectorMode,
+  LicensePlateScannerConfiguration,
+  MrzScannerConfiguration,
+  TextDataScannerStep
+} from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
@@ -219,7 +226,6 @@ export class HomePage {
 
     if (!(await this.scanbotService.checkLicense())) { return; }
 
-
     const loading = await this.dialogsService.createLoading('Detecting barcodes...');
     await loading.present();
     const result = await this.scanbotService.SDK.detectBarcodesOnImage(
@@ -233,6 +239,55 @@ export class HomePage {
 
   hasHtml5CameraSupport() {
     return this.platform.is('android');
+  }
+
+  async startLicensePlateScanner(mode: LicensePlateDetectorMode) {
+    if (!(await this.scanbotService.checkLicense())) { return; }
+
+    const config: LicensePlateScannerConfiguration = {
+      detectorMode: mode,
+      topBarBackgroundColor: '#c8193c',
+      topBarButtonsColor: '#ffffff',
+      cancelButtonTitle: 'Cancel',
+      finderLineColor: '#c8193c',
+      finderLineWidth: 5,
+      guidanceText: 'Place the whole license plate in the frame to scan it',
+      orientationLockMode: 'PORTRAIT',
+      // see further configs...
+    };
+
+    const result = await this.scanbotService.SDK.UI.startLicensePlateScanner({uiConfigs: config});
+
+    if (result.status === 'OK') {
+      await this.dialogsService.showAlert(
+          `Country: ${result.licensePlateResult.countryCode}<br>` +
+          `License Plate: ${result.licensePlateResult.licensePlate}<br><br>` +
+          `OCR Value: ${result.licensePlateResult.ocrValue}`,
+          'License Plate Result');
+    }
+  }
+
+  async startLcDisplayScanner() {
+    if (!(await this.scanbotService.checkLicense())) { return; }
+
+    const uiConfigs: DataScannerConfiguration = {
+      cancelButtonTitle: 'Cancel',
+      topBarBackgroundColor: '#c8193c',
+      topBarButtonsColor: '#ffffff',
+      finderLineColor: '#c8193c',
+      orientationLockMode: 'PORTRAIT',
+      // see further configs...
+    };
+
+    const scannerStep: TextDataScannerStep = {
+      guidanceText: 'Place the LC display in the frame to scan it',
+      textFilterStrategy: 'LC_DOT_MATRIX_DISPLAY',
+    };
+
+    const result = await this.scanbotService.SDK.UI.startDataScanner({uiConfigs, scannerStep});
+    if (result.status === 'OK') {
+      await this.dialogsService.showAlert(`Value: ${result.dataResult.textValue}`, 'Scanner Result');
+    }
   }
 
 }
