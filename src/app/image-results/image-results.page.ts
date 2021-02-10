@@ -37,8 +37,8 @@ export class ImageResultsPage {
             // this.sanitizedPreviewImages.set(page.pageId,
             //     this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
 
-            const data = (await this.scanbotService.SDK.getImageData({imageFileUri: page.documentPreviewImageFileUri})).base64ImageData;
-            this.sanitizedPreviewImages.set(page.pageId, this.imageResultsRepository.sanitizeBase64("data:image/jpeg;base64," + data));
+            const data = await this.scanbotService.fetchDataFromUri(page.documentPreviewImageFileUri);
+            this.sanitizedPreviewImages.set(page.pageId, this.imageResultsRepository.sanitizeBase64(data));
         }
         // build rows
         this.rows = [];
