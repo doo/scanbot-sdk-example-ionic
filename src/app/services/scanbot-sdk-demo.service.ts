@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 
-import ScanbotSdk, { DocumentScannerConfiguration, ScanbotSDKConfiguration } from 'cordova-plugin-scanbot-sdk';
+import ScanbotSdk, {
+    CameraImageFormat,
+    DocumentScannerConfiguration,
+    FileEncryptionMode,
+    ScanbotSDKConfiguration
+} from 'cordova-plugin-scanbot-sdk';
 
 import { environment } from '../../environments/environment';
 import { DialogsService } from './dialogs.service';
@@ -19,7 +24,16 @@ export class ScanbotSdkDemoService {
      * the app identifier "io.scanbot.example.sdk.cordova.ionic" of this example app
      * or of your app (see config.xml <widget id="your.app.id" ...>).
      */
-    private readonly myLicenseKey = '';
+    static readonly SDK_LICENSE_KEY: string = '';
+
+    /* Optional image format & quality parameters */
+    static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';
+    static readonly JPG_IMAGE_QUALITY = 80;
+
+    static ENCRYPTION_ENABLED = true;
+    /* Optional file encryption parameters */
+    static readonly FILE_ENCRYPTION_PASSWORD: string = 'SomeSecretPa$$w0rdForFileEncryption';
+    static readonly FILE_ENCRYPTION_MODE: FileEncryptionMode = 'AES256';
 
     public SDK = ScanbotSdk.promisify();
 
@@ -44,12 +58,17 @@ export class ScanbotSdkDemoService {
     private initScanbotSdk() {
         const config: ScanbotSDKConfiguration = {
             loggingEnabled: !environment.production, // Disable logging in production builds for security and performance reasons!
-            licenseKey: this.myLicenseKey,
-            storageImageFormat: 'JPG',
-            storageImageQuality: 80,
+            licenseKey: ScanbotSdkDemoService.SDK_LICENSE_KEY,
+            storageImageFormat: ScanbotSdkDemoService.IMAGE_FILE_FORMAT,
+            storageImageQuality: ScanbotSdkDemoService.JPG_IMAGE_QUALITY,
             storageBaseDirectory: this.getDemoStorageBaseDirectory(), // optional storageBaseDirectory, see comments below
             documentDetectorMode: 'ML_BASED'
         };
+
+        if (ScanbotSdkDemoService.ENCRYPTION_ENABLED) {
+            config.fileEncryptionPassword = ScanbotSdkDemoService.FILE_ENCRYPTION_PASSWORD;
+            config.fileEncryptionMode = ScanbotSdkDemoService.FILE_ENCRYPTION_MODE;
+        }
 
         return this.SDK.initializeSdk(config).then(result => {
             console.log(JSON.stringify(result));
