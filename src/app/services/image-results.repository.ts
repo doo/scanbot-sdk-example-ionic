@@ -83,4 +83,9 @@ export class ImageResultsRepository {
         // see https://angular.io/guide/security#bypass-security-apis
         return this.sanitizer.bypassSecurityTrustUrl(url) as string;
     }
+
+    public sanitizeBase64(data: string): string {
+        // see https://angular.io/guide/security#bypass-security-apis
+        return this.sanitizer.bypassSecurityTrustResourceUrl(data) as string;
+    }
 }
