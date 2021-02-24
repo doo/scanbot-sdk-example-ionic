@@ -30,7 +30,7 @@ export class ScanbotSdkDemoService {
     static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';
     static readonly JPG_IMAGE_QUALITY = 80;
 
-    static ENCRYPTION_ENABLED = true;
+    public static readonly ENCRYPTION_ENABLED: boolean = true;
     /* Optional file encryption parameters */
     static readonly FILE_ENCRYPTION_PASSWORD: string = 'SomeSecretPa$$w0rdForFileEncryption';
     static readonly FILE_ENCRYPTION_MODE: FileEncryptionMode = 'AES256';
