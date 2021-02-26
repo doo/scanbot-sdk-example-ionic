@@ -30,12 +30,15 @@ export class ImageResultsPage {
         this.reloadPages();
     }
 
-    private reloadPages() {
+    private async reloadPages() {
         this.pages = this.imageResultsRepository.getPages();
         // build sanitizes preview image file URIs
         for (const page of this.pages) {
-            this.sanitizedPreviewImages.set(page.pageId,
-                this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
+            // this.sanitizedPreviewImages.set(page.pageId,
+            //     this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
+
+            const data = await this.scanbotService.fetchDataFromUri(page.documentPreviewImageFileUri);
+            this.sanitizedPreviewImages.set(page.pageId, this.imageResultsRepository.sanitizeBase64(data));
         }
         // build rows
         this.rows = [];
@@ -96,6 +99,14 @@ export class ImageResultsPage {
     async saveAsBinarizedTiff() {
         if (!(await this.scanbotService.checkLicense())) { return; }
         if (!this.checkImages()) { return; }
+
+        if (ScanbotSdkDemoService.ENCRYPTION_ENABLED) {
+            // TODO encryption for TIFF files currently not supported
+            await this.dialogsService.showAlert(
+                'Encryption for TIFF files currently not supported. ' +
+                'In order to test TIFF please disable image file encryption.', 'INFO');
+            return;
+        }
 
         const loading = await this.dialogsService.createLoading('Creating TIFF ...');
         try {

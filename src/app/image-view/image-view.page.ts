@@ -51,8 +51,9 @@ export class ImageViewPage implements OnInit {
         });
     }
 
-    private sanitizePreviewImage() {
-        this.sanitizedPreviewImage = this.imageResultsRepository.sanitizeFileUri(this.page.documentPreviewImageFileUri);
+    private async sanitizePreviewImage() {
+        const data = await this.scanbotService.fetchDataFromUri(this.page.documentPreviewImageFileUri);
+        this.sanitizedPreviewImage = this.imageResultsRepository.sanitizeBase64(data);
     }
 
     async startCroppingScreen() {
