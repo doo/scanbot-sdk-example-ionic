@@ -24,7 +24,21 @@ export class ScanbotSdkDemoService {
      * the app identifier "io.scanbot.example.sdk.cordova.ionic" of this example app
      * or of your app (see config.xml <widget id="your.app.id" ...>).
      */
-    static readonly SDK_LICENSE_KEY: string = '';
+    static readonly SDK_LICENSE_KEY: string = "ZZV2adGH1AlRjBD8Hm0asS7nfyI27R" +
+    "tgBte/rfhdVqNDhra6+zNTYGwGBJlY" +
+    "qPSNEdgH+h8TYNIi4AYLJVXXmTcyqh" +
+    "f/Siwo26yaid3JqcHkLqIzgh/ARsyF" +
+    "tpGRvdVtGYjas/9DeLF5NZkdYaB61O" +
+    "M+bEzABOw5Jo7XipBrWQOOhZQI3i6f" +
+    "zLiqjogZdRqy4Nw3YedvGr+kT9KFQz" +
+    "98IBlMobSQ0/iNugXWM8kJzJCbKbuH" +
+    "ZzruD4EJn2czmDtlE1NByu+8jt4QNF" +
+    "IRe7fSOrSiLxxKoJzk/V2nOhlqni3N" +
+    "AnDwGgtf188LY5uYqRRVKokJn0hmxR" +
+    "UGQhX+9DGIVw==\nU2NhbmJvdFNESw" +
+    "ppby5zY2FuYm90LmV4YW1wbGUuc2Rr" +
+    "LmNvcmRvdmEuaW9uaWMKMTYxNzQwNz" +
+    "k5OQoyMDk3MTUxCjM=\n";
 
     /* Optional image format & quality parameters */
     static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';

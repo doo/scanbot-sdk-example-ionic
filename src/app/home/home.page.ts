@@ -9,7 +9,8 @@ import ScanbotSdk, {
   LicensePlateDetectorMode,
   LicensePlateScannerConfiguration,
   MrzScannerConfiguration,
-  TextDataScannerStep
+  TextDataScannerStep,
+  IdCardScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
@@ -121,9 +122,12 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
+      console.log("BARCODE OK");
       BarcodeListService.detectedBarcodes = result.barcodes;
       BarcodeListService.snappedImage = result.imageFileUri;
       await this.router.navigateByUrl('/barcode-result-list');
+    } else {
+      console.log("BARCODE ERROR");
     }
   }
 
@@ -145,6 +149,19 @@ export class HomePage {
     if (result.status === 'OK') {
       BarcodeListService.detectedBarcodes = result.barcodes;
       await this.router.navigateByUrl('/barcode-result-list');
+    }
+  }
+
+  async startIDCardScanner() {
+    if (!(await this.scanbotService.checkLicense())) { return; }
+
+    const config: IdCardScannerConfiguration = {}
+    const result = await this.scanbotService.SDK.UI.startIDCardScanner({uiConfigs: config});
+    
+    if (result.status == 'OK') {
+      const keys = Object.keys(result);
+      const fields = keys.map(key => `<div>${JSON.stringify(result[key])}</div>`);
+      await this.dialogsService.showAlert(fields.join(''), 'ID Card Result');
     }
   }
 
