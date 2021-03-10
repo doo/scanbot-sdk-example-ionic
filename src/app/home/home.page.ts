@@ -149,11 +149,11 @@ export class HomePage {
     }
   }
 
-  async startIDCardScanner() {
+  async startIdCardScanner() {
     if (!(await this.scanbotService.checkLicense())) { return; }
 
     const config: IdCardScannerConfiguration = {}
-    const result = await this.scanbotService.SDK.UI.startIDCardScanner({uiConfigs: config});
+    const result = await this.scanbotService.SDK.UI.startIdCardScanner({uiConfigs: config});
     
     if (result.status == 'OK') {
       const keys = Object.keys(result);
