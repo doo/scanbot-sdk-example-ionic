@@ -152,12 +152,15 @@ export class HomePage {
   async startIDCardScanner() {
     if (!(await this.scanbotService.checkLicense())) { return; }
 
-    const config: IdCardScannerConfiguration = {}
+    const config: IdCardScannerConfiguration = {};
     const result = await this.scanbotService.SDK.UI.startIDCardScanner({uiConfigs: config});
-    
-    if (result.status == 'OK') {
-      const keys = Object.keys(result);
-      const fields = keys.map(key => `<div>${JSON.stringify(result[key])}</div>`);
+
+    if (result.status === 'OK') {
+      const keys = Object.keys(result.fields);
+      const fields = keys.map(key => `<div>${key + ": " + JSON.stringify(result.fields[key])}<br></div>`);
+      keys.forEach((key: string) => {
+        console.log(key + ": " + JSON.stringify(result.fields[key]));
+      });
       await this.dialogsService.showAlert(fields.join(''), 'ID Card Result');
     }
   }
