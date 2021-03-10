@@ -122,12 +122,9 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      console.log("BARCODE OK");
       BarcodeListService.detectedBarcodes = result.barcodes;
       BarcodeListService.snappedImage = result.imageFileUri;
       await this.router.navigateByUrl('/barcode-result-list');
-    } else {
-      console.log("BARCODE ERROR");
     }
   }
 
