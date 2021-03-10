@@ -92,6 +92,7 @@
         <resource-file src="scanbot-sdk-app-resources/ios/ScanbotSDKOCRData.bundle" target="ScanbotSDKOCRData.bundle" />
         <resource-file src="scanbot-sdk-app-resources/shared/ocr/osd.traineddata" target="ScanbotSDKOCRData.bundle/osd.traineddata" />
         <resource-file src="scanbot-sdk-app-resources/shared/ocr/eng.traineddata" target="ScanbotSDKOCRData.bundle/eng.traineddata" />
+        <resource-file src="scanbot-sdk-app-resources/shared/ocr/deu.traineddata" target="ScanbotSDKOCRData.bundle/deu.traineddata" />
         <icon height="20" src="resources/ios/icon/icon-20.png" width="20" />
         <icon height="40" src="resources/ios/icon/icon-20@2x.png" width="40" />
         <icon height="60" src="resources/ios/icon/icon-20@3x.png" width="60" />
