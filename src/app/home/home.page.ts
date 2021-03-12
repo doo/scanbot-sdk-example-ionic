@@ -153,7 +153,9 @@ export class HomePage {
   async startIdCardScanner() {
     if (!(await this.scanbotService.checkLicense())) { return; }
 
-    const config: IdCardScannerConfiguration = {};
+    const config: IdCardScannerConfiguration = {
+      shouldSavePhotoImageInStorage: true
+    };
     const result = await this.scanbotService.SDK.UI.startIdCardScanner({uiConfigs: config});
 
     if (result.status === 'OK') {
