@@ -12,6 +12,7 @@ rm -rf platforms/
 rm -rf node_modules/
 rm -rf plugins/
 npm cache clean --force
+rm package-lock.json
 
 npm install
 
