@@ -17,6 +17,7 @@ import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
 import { BarcodeListService } from '../services/barcode-list.service';
+import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
 
 @Component({
   selector: 'app-home',
@@ -156,12 +157,9 @@ export class HomePage {
     const result = await this.scanbotService.SDK.UI.startIdCardScanner({uiConfigs: config});
 
     if (result.status === 'OK') {
-      const keys = Object.keys(result.fields);
-      const fields = keys.map(key => `<div>${key + ": " + JSON.stringify(result.fields[key])}<br></div>`);
-      keys.forEach((key: string) => {
-        console.log(key + ": " + JSON.stringify(result.fields[key]));
-      });
-      await this.dialogsService.showAlert(fields.join(''), 'ID Card Result');
+      IdCardScanResultsService.fields = result.fields;
+      await this.dialogsService.showAlert(JSON.stringify(result.fields, null, 4), "Result");
+      await this.router.navigateByUrl('/idcard-scan-results');
     }
   }
 

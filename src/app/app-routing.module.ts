@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'barcode-list', loadChildren: './barcode-list/barcode-list.module#BarcodeListModule' },
   { path: 'barcode-result-list', loadChildren: './barcode-result-list/barcode-result-list.module#BarcodeResultListPageModule' },
   { path: 'html5-camera', loadChildren: './html5-camera/html5-camera.module#Html5CameraPageModule' },
+  { path: 'idcard-scan-results', loadChildren: './idcard-scan-results/idcard-scan-results.module#IdCardScanResultsPageModule' },
 ];
 
 @NgModule({

@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-back-button defaultHref="home"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+          ID Card Scan Results
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <li *ngFor="let item of displayFields | keyvalue" style="list-style: none;">
+      <ion-item style="display: block;">
+          <ion-label style="margin-left: 0.5em; font-size: 0.8em; font-weight: 600;">{{item.key}}</ion-label>
+          <ion-label style="margin-left: 0.5em; font-size: 0.8em; font-weight: 400; white-space: pre-wrap">{{item.value}}</ion-label>
+      </ion-item>
+  </li>
+
+</ion-content>
+
+<ion-footer>
+
+</ion-footer>
