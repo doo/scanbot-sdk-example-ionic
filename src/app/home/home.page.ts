@@ -158,7 +158,6 @@ export class HomePage {
 
     if (result.status === 'OK') {
       IdCardScanResultsService.fields = result.fields;
-      await this.dialogsService.showAlert(JSON.stringify(result.fields, null, 4), "Result");
       await this.router.navigateByUrl('/idcard-scan-results');
     }
   }
