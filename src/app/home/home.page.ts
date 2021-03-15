@@ -54,15 +54,13 @@ export class HomePage {
     if (!(await this.scanbotService.checkLicense())) { return; }
 
     const configs = this.scanbotService.globalDocScannerConfigs();
-    const result = await this.scanbotService.SDK.UI.startDocumentScanner({uiConfigs: configs});
-
-    if (result.status === 'CANCELED') {
-      // user has canceled the scanning operation
-      return;
-    }
-
-    await this.imageResultsRepository.addPages(result.pages);
-    await this.gotoImageResults();
+    ScanbotSdk.UI.startDocumentScanner(async (success) => {
+          console.log('Document scanner success', success);
+          await this.imageResultsRepository.addPages(success.pages);
+          await this.gotoImageResults();
+        }, (error) => {
+          console.log('Document scanner error', error);
+        }, {uiConfigs: configs});
   }
 
   async pickImageFromPhotoLibrary() {
