@@ -276,9 +276,10 @@ export class HomePage {
 
     if (result.status === 'OK') {
       await this.dialogsService.showAlert(
-          `Country: ${result.licensePlateResult.countryCode}<br>` +
+          `Country Code: ${result.licensePlateResult.countryCode}<br>` +
           `License Plate: ${result.licensePlateResult.licensePlate}<br><br>` +
-          `OCR Value: ${result.licensePlateResult.ocrValue}`,
+          `Confidence: ${result.licensePlateResult.confidence}`,
+          `Raw Text: ${result.licensePlateResult.rawText}`,
           'License Plate Result');
     }
   }
