@@ -18,8 +18,6 @@
 #                                                                                                                                              #
 #----------------------------------------------------------------------------------------------------------------------------------------------#
 
-START_TIME=`date +%s`
-
 # Comment these two lines to automatically detect the current platform versions and keep those
 IOS_VERSION=6.2.0
 ANDROID_VERSION=9.0.0
@@ -165,9 +163,6 @@ ionic cordova prepare android;
 echo "\n${ECHO_COLOR}• Preparing iOS...\n${NC}"
 echo "ionic cordova prepare ios";
 ionic cordova prepare ios;
-
-END_TIME=`date +%s`
-RUNTIME=$((END_TIME-START_TIME))
 
 echo "\n${ECHO_COLOR}• DONE! Now it's your turn\n${NC}";
 
