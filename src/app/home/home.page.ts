@@ -18,6 +18,7 @@ import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
 import { BarcodeListService } from '../services/barcode-list.service';
 import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
+import { ScanbotExampleUIService } from '../services/scanbot-example-ui.service';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,7 @@ import { IdCardScanResultsService } from '../services/idcard-scan-results.servic
 export class HomePage {
 
   constructor(private scanbotService: ScanbotSdkDemoService,
+              private exampleUIService: ScanbotExampleUIService,
               private imageResultsRepository: ImageResultsRepository,
               private dialogsService: DialogsService,
               private platform: Platform,
@@ -51,6 +53,7 @@ export class HomePage {
   }
 
   async startDocumentScanner() {
+
     if (!(await this.scanbotService.checkLicense())) { return; }
 
     const configs = this.scanbotService.globalDocScannerConfigs();

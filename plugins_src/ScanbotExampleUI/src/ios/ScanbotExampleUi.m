@@ -15,8 +15,11 @@
 - (void)startMultipleImagePicker:(CDVInvokedUrlCommand*)command
 {
     self.command = command;
-    QBImagePickerController* viewController = [self createImagePickerViewController];
-    [[self rootViewController] presentViewController:viewController animated:true completion:nil];
+    __weak ScanbotExampleUi* weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        QBImagePickerController* viewController = [weakSelf createImagePickerViewController];
+        [[weakSelf rootViewController] presentViewController:viewController animated:true completion:nil];
+    });
 }
 
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didFinishPickingAssets:(NSArray *)assets {

@@ -33,11 +33,11 @@ public class ScanbotExampleUiPlugin extends CordovaPlugin {
             startMultipleImagePicker(jsonArgs, callbackContext);
             return true;
         }
-
         return false;
     }
 
     private void startMultipleImagePicker(JSONObject args, CallbackContext callbackContext) {
+        this.cordova.setActivityResultCallback(ScanbotExampleUiPlugin.this);
         new GligarPicker()
                 .requestCode(MULTIPLE_IMAGE_PICKER_REQUEST_CODE)
                 .limit(30)
@@ -61,7 +61,7 @@ public class ScanbotExampleUiPlugin extends CordovaPlugin {
 
             JsonArgs outResult = new JsonArgs();
             outResult.put("status", "OK");
-            outResult.put("imageUris", imageUris);
+            outResult.put("imagesFileUris", imageUris);
 
             callbackContext.success(outResult.jsonObj());
         }
