@@ -18,11 +18,27 @@
         <source-file src="src/android/ScanbotExampleUiPlugin.java" target-dir="src/io/scanbot/cordova/exampleui" />
     </platform>
     <platform name="ios">
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods>
+                <pod name="QBImagePickerController" version="3.4.0"/>
+            </pods>
+        </podspec>
+
         <config-file parent="/*" target="config.xml">
             <feature name="ScanbotExampleUi">
                 <param name="ios-package" value="ScanbotExampleUi" />
             </feature>
         </config-file>
+
+        <preference name="PHOTOLIBRARY_USAGE_DESCRIPTION" default="This app needs to access your photo library in order to import images" />
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+        <string>$PHOTOLIBRARY_USAGE_DESCRIPTION</string>
+        </config-file>
+
         <source-file src="src/ios/ScanbotExampleUi.m" />
+
     </platform>
 </plugin>

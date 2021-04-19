@@ -14,8 +14,12 @@ export interface ScanbotExampleUI_GenericResult {
     message?: string;
 }
 
+export interface ScanbotExampleUI_MultipleImagePickerResult {
+    imagesFileUris: string[]
+}
+
 export interface ScanbotExampleUIBridge {
-    startMultipleImagePicker(args: {}): Promise<ScanbotExampleUI_GenericResult> ; // & imageFileUris
+    startMultipleImagePicker(args: {}): Promise<ScanbotExampleUI_GenericResult & ScanbotExampleUI_MultipleImagePickerResult> ; // & imageFileUris
 }
 
 export interface ScanbotExampleUICordova {
