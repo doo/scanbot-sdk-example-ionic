@@ -266,16 +266,28 @@ export class HomePage {
 
   async importImagesAndDetectBarcodes() {
     if (!(await this.scanbotService.checkLicense())) { return; }
+    
+    // Shows Image Picker and retrieves Image URI(s)
+    // TODO: Uncomment the following lines when 'cancel' callback will be handled correctly
+    // const pickerLoading = await this.dialogsService.createLoading("");
+    // await pickerLoading.present();
     var result = await this.exampleUIService.Plugin.startMultipleImagePicker({})
+    // await pickerLoading.dismiss();
+
     if (!result || result.status != "OK") {
       return;
     }
 
+    // Detects Barcodes on the given images
+    const loading = await this.dialogsService.createLoading('Detecting barcodes...');
+    await loading.present();
     const scanResult = await this.scanbotService.SDK.detectBarcodesOnImages({
       imageFilesUris: result.imageFilesUris,
       barcodeFormats: BarcodeListService.getAcceptedTypes()
     })
+    await loading.dismiss();
 
+    // TODO: Implement Dedicated Results Screen
     await this.dialogsService.showAlert(`${JSON.stringify(scanResult, null, 4)}`, 'Barcodes Detection Result');
     
     return;
