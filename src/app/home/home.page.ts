@@ -10,7 +10,8 @@ import ScanbotSdk, {
   LicensePlateScannerConfiguration,
   MrzScannerConfiguration,
   TextDataScannerStep,
-  IdCardScannerConfiguration
+  IdCardScannerConfiguration,
+  BatchBarcodeScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
@@ -19,6 +20,7 @@ import { ImageResultsRepository } from '../services/image-results.repository';
 import { BarcodeListService } from '../services/barcode-list.service';
 import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
 import { ScanbotExampleUIService } from '../services/scanbot-example-ui.service';
+import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
 
 @Component({
   selector: 'app-home',
@@ -115,6 +117,7 @@ export class HomePage {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
+        acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
         barcodeImageGenerationType: 'VIDEO_FRAME',
         orientationLockMode: 'PORTRAIT',
         finderLineColor: '#0000ff',
@@ -135,8 +138,7 @@ export class HomePage {
   async startBatchBarcodeScanner() {
     if (!(await this.scanbotService.checkLicense())) { return; }
 
-    const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({
-      uiConfigs: {
+    const configs: BatchBarcodeScannerConfiguration = {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
@@ -144,8 +146,9 @@ export class HomePage {
         orientationLockMode: 'PORTRAIT',
         useButtonsAllCaps: false,
         // see further configs ...
-      }
-    });
+    }
+
+    const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({uiConfigs: configs});
 
     if (result.status === 'OK') {
       BarcodeListService.detectedBarcodes = result.barcodes;
@@ -208,8 +211,13 @@ export class HomePage {
       await this.dialogsService.showAlert(fields.join(''), 'EHIC Result');
     }
   }
-    async setAcceptedFormats() {
+  
+  async setAcceptedBarcodeFormats() {
     await this.router.navigateByUrl('/barcode-list');
+  }
+
+  async setAcceptedBarcodeDocumentFormats() {
+    await this.router.navigateByUrl('/barcode-document-list')
   }
 
   async viewLicenseInfo() {
