@@ -54,6 +54,12 @@
     });
 }
 
+- (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [imagePickerController dismissViewControllerAnimated:true completion:nil];
+    });
+}
+
 - (void) imagePathFromAsset:(PHAsset*)asset onFinish:(void(^_Nonnull)(NSString*))completion {
     PHContentEditingInputRequestOptions* options = [[PHContentEditingInputRequestOptions alloc] init];
     options.networkAccessAllowed = NO;
