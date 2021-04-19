@@ -14,9 +14,7 @@ import org.json.JSONObject;
 
 import io.scanbot.sdk.plugin.cordova.utils.JsonArgs;
 
-/**
- * This class echoes a string called from JavaScript.
- */
+
 public class ScanbotExampleUiPlugin extends CordovaPlugin {
 
 
