@@ -46,7 +46,7 @@
         
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
             @"status": @"OK",
-            @"imagesFileUris": imageFileUrls
+            @"imageFilesUris": imageFileUrls
         }];
         
         [imagePickerController dismissViewControllerAnimated:true completion:nil];

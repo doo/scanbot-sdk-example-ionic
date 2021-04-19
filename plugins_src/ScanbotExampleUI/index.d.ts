@@ -15,7 +15,7 @@ export interface ScanbotExampleUI_GenericResult {
 }
 
 export interface ScanbotExampleUI_MultipleImagePickerResult {
-    imagesFileUris: string[]
+    imageFilesUris: string[]
 }
 
 export interface ScanbotExampleUIBridge {

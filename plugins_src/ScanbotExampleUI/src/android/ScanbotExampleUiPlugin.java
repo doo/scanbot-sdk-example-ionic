@@ -61,7 +61,7 @@ public class ScanbotExampleUiPlugin extends CordovaPlugin {
 
             JsonArgs outResult = new JsonArgs();
             outResult.put("status", "OK");
-            outResult.put("imagesFileUris", imageUris);
+            outResult.put("imageFilesUris", imageUris);
 
             callbackContext.success(outResult.jsonObj());
         }
