@@ -2,7 +2,7 @@
 
 #----------------------------------------------------------------------------------------------------------------------------------------------#
 #                                                                                                                                              #
-#   This is a desperate clean. It basically wipes everything out and reinstalls it again.                                                      #
+#   This is a drastic clean. It basically wipes everything out and reinstalls it again.                                                        #
 #   This script should be used when ALL of the following conditions are met:                                                                   #
 #                                                                                                                                              #
 #   1. You are working with a local referenced Scanbot SDK plugin (not advisable)                                                              #
@@ -17,6 +17,8 @@
 #     * if you can't get it to work after this, you are the root of your problems and you can only blame yourself                              #
 #                                                                                                                                              #
 #----------------------------------------------------------------------------------------------------------------------------------------------#
+
+START_TIME=`date +%s`
 
 # Comment these two lines to automatically detect the current platform versions and keep those
 IOS_VERSION=6.2.0
@@ -47,12 +49,12 @@ then
 fi
 
 if [ "$DOWNLOAD_IOS_SDK" = false ] ; then
-	echo "\n${ECHO_COLOR}• Let's make a copy of the iOS Framework before we mess everything up\n${NC}"
+	echo "\n${ECHO_COLOR}• Let's create a backup of the iOS Framework so that we can restore it later\n${NC}"
 	echo "cp -R plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks .nuke_backup"
 	cp -R plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks .nuke_backup
 fi
 
-echo "\n${ECHO_COLOR}• Saving Private Jason\n${NC}"
+echo "\n${ECHO_COLOR}• Let's backup our package.json, in order to keep the local reference to the plugins_src folder\n${NC}"
 echo "cp package.json .package-json.bak;"
 cp package.json .package-json.bak;
 
@@ -94,7 +96,7 @@ rm -f package-lock.json
 
 echo "\n${ECHO_COLOR}• Now we can start a new adventure.${NC}";
 
-echo "${ECHO_COLOR}• First we restore our friend Jason\n${NC}";
+echo "${ECHO_COLOR}• First we restore our package JSON\n${NC}";
 echo "rm package.json; mv .package-json.bak package.json;"
 rm package.json; mv .package-json.bak package.json;
 
@@ -117,11 +119,11 @@ if [ "$DOWNLOAD_IOS_SDK" = true ] ; then
 	echo "node download-ios-framework.js";
 	node download-ios-framework.js;
 else
-	echo "\n${ECHO_COLOR}• Now let's restore our iOS beautfiul Framework\n${NC}"
+	echo "\n${ECHO_COLOR}• Now let's restore our backed up iOS Framework\n${NC}"
 	echo "cp -R .nuke_backup plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks";
 	cp -R .nuke_backup plugins/cordova-plugin-scanbot-sdk/src/ios/Frameworks;
 
-	echo "\n${ECHO_COLOR}• Finally we remove the SDK temp backup aaaand....\n${NC}"
+	echo "\n${ECHO_COLOR}• Finally we remove the SDK temporary backup aaaand....\n${NC}"
 	echo "rm -rf .nuke_backup";
 	rm -rf .nuke_backup;
 fi
@@ -164,5 +166,8 @@ echo "\n${ECHO_COLOR}• Preparing iOS...\n${NC}"
 echo "ionic cordova prepare ios";
 ionic cordova prepare ios;
 
-echo "\n${ECHO_COLOR}• DONE! It wasn't that difficult after all, was it?\n${NC}";
+END_TIME=`date +%s`
+RUNTIME=$((END_TIME-START_TIME))
+
+echo "\n${ECHO_COLOR}• DONE! Now it's your turn\n${NC}";
 
