@@ -32,10 +32,7 @@ var API = {
       var wrapper = {};
       for (var propName in obj) {
         var prop = obj[propName];
-        /**
-         * TODO: Is this prop necessary? It prevents the normal callback needed for setLicenseFailureHandler
-         */
-        if (typeof prop === "function"/* && prop.__is_cordova_wrapper__*/) {
+        if (typeof prop === "function") {
           wrapper[propName] = promisify(prop);
         }
       }
