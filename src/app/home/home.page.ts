@@ -256,6 +256,25 @@ export class HomePage {
     await this.router.navigateByUrl('/barcode-result-list');
   }
 
+  async importImagesAndDetectBarcodes() {
+    if (!(await this.scanbotService.checkLicense())) { return; }
+    var result = await this.exampleUIService.Plugin.startMultipleImagePicker({})
+    if (!result || result.status != "OK") {
+      return;
+    }
+
+    console.log(JSON.stringify(result, null, 4));
+
+    const scanResult = await this.scanbotService.SDK.detectBarcodesOnImages({
+      imageFileUris: result.imagesFileUris,
+      barcodeFormats: BarcodeListService.getAcceptedTypes()
+    })
+
+    await this.dialogsService.showAlert(`${JSON.stringify(scanResult, null, 4)}`, 'Barcodes Detection Result');
+    
+    return;
+  }
+  
   hasHtml5CameraSupport() {
     return this.platform.is('android');
   }
