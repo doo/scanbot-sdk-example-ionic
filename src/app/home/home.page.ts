@@ -263,8 +263,6 @@ export class HomePage {
       return;
     }
 
-    console.log(JSON.stringify(result, null, 4));
-
     const scanResult = await this.scanbotService.SDK.detectBarcodesOnImages({
       imageFilesUris: result.imageFilesUris,
       barcodeFormats: BarcodeListService.getAcceptedTypes()
