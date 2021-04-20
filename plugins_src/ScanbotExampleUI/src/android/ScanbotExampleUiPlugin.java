@@ -47,6 +47,7 @@ public class ScanbotExampleUiPlugin extends CordovaPlugin {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode != Activity.RESULT_OK) {
+            callbackContext.success(new JsonArgs().put("status", "CANCELED").jsonObj());
             return;
         }
         if (requestCode == MULTIPLE_IMAGE_PICKER_REQUEST_CODE) {

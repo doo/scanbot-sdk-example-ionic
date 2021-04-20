@@ -17,14 +17,13 @@
     self.command = command;
     __weak ScanbotExampleUi* weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!weakSelf) { return; }
         QBImagePickerController* viewController = [weakSelf createImagePickerViewController];
         [[weakSelf rootViewController] presentViewController:viewController animated:true completion:nil];
     });
 }
 
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didFinishPickingAssets:(NSArray *)assets {
-    
-    __weak ScanbotExampleUi *weakSelf = self;
     
     NSLock* lock = [[NSLock alloc] init];
     NSMutableArray* imageFileUrls = [[NSMutableArray alloc] init];
@@ -33,7 +32,7 @@
 
     for (PHAsset *asset in assets) {
         dispatch_group_enter(group);
-        [weakSelf imagePathFromAsset:asset onFinish: ^(NSString* imageFileUrl) {
+        [self imagePathFromAsset:asset onFinish: ^(NSString* imageFileUrl) {
             [lock lock];
             [imageFileUrls addObject:imageFileUrl];
             dispatch_group_leave(group);
@@ -41,7 +40,10 @@
         }];
     }
     
+    __weak ScanbotExampleUi *weakSelf = self;
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (!weakSelf) { return; }
+        
         printf("Got %ld image files", imageFileUrls.count);
         
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
@@ -50,13 +52,22 @@
         }];
         
         [imagePickerController dismissViewControllerAnimated:true completion:nil];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:weakSelf.command.callbackId];
+        [weakSelf.commandDelegate sendPluginResult:pluginResult callbackId:weakSelf.command.callbackId];
     });
 }
 
 - (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController {
+    __weak ScanbotExampleUi* weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!weakSelf) { return; }
+        
         [imagePickerController dismissViewControllerAnimated:true completion:nil];
+        
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{
+            @"status": @"CANCELED"
+        }];
+        
+        [weakSelf.commandDelegate sendPluginResult:result callbackId:weakSelf.command.callbackId];
     });
 }
 

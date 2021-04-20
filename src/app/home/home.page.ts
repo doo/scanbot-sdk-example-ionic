@@ -268,11 +268,10 @@ export class HomePage {
     if (!(await this.scanbotService.checkLicense())) { return; }
     
     // Shows Image Picker and retrieves Image URI(s)
-    // TODO: Uncomment the following lines when 'cancel' callback will be handled correctly
-    // const pickerLoading = await this.dialogsService.createLoading("");
-    // await pickerLoading.present();
+    const pickerLoading = await this.dialogsService.createLoading("");
+    await pickerLoading.present();
     var result = await this.exampleUIService.Plugin.startMultipleImagePicker({})
-    // await pickerLoading.dismiss();
+    await pickerLoading.dismiss();
 
     if (!result || result.status != "OK") {
       return;
