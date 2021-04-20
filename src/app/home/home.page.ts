@@ -308,6 +308,7 @@ export class HomePage {
       finderLineWidth: 5,
       guidanceText: 'Place the whole license plate in the frame to scan it',
       orientationLockMode: 'PORTRAIT',
+      confirmationDialogConfirmButtonFilled: true,
       // see further configs...
     };
 
@@ -317,7 +318,7 @@ export class HomePage {
       await this.dialogsService.showAlert(
           `Country Code: ${result.licensePlateResult.countryCode}<br>` +
           `License Plate: ${result.licensePlateResult.licensePlate}<br><br>` +
-          `Confidence: ${result.licensePlateResult.confidence}`,
+          `Confidence: ${result.licensePlateResult.confidence}<br>` +
           `Raw Text: ${result.licensePlateResult.rawText}`,
           'License Plate Result');
     }
