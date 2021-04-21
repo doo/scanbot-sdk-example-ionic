@@ -17,7 +17,7 @@ import ScanbotSdk, {
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
-import { BarcodeListService } from '../services/barcode-list.service';
+import { BarcodeListService, BarcodesDetectionViewModel } from '../services/barcode-list.service';
 import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
 import { ScanbotExampleUIService } from '../services/scanbot-example-ui.service';
 import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
@@ -129,8 +129,10 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      BarcodeListService.detectedBarcodes = result.barcodes;
-      BarcodeListService.snappedImage = result.imageFileUri;
+      BarcodeListService.detectedBarcodes = [{
+        barcodes: result.barcodes || [],
+        snappedImage: result.imageFileUri
+      }];
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
@@ -145,13 +147,17 @@ export class HomePage {
         finderAspectRatio: { width: 1, height: 1 },
         orientationLockMode: 'PORTRAIT',
         useButtonsAllCaps: false,
+        
         // see further configs ...
     }
 
     const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({uiConfigs: configs});
 
     if (result.status === 'OK') {
-      BarcodeListService.detectedBarcodes = result.barcodes;
+      BarcodeListService.detectedBarcodes = [{
+        barcodes: result.barcodes || [],
+        snappedImage: result.imageFileUri
+      }];
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
@@ -258,8 +264,12 @@ export class HomePage {
     const result = await this.scanbotService.SDK.detectBarcodesOnImage(
         { imageFileUri: imageUri, barcodeFormats: BarcodeListService.getAcceptedTypes() }
         );
-    BarcodeListService.detectedBarcodes = result.barcodes;
-    BarcodeListService.snappedImage = imageUri;
+    
+    BarcodeListService.detectedBarcodes = [{
+      barcodes: result.barcodes || [],
+      snappedImage: imageUri
+    }]
+
     await loading.dismiss();
     await this.router.navigateByUrl('/barcode-result-list');
   }
@@ -286,11 +296,28 @@ export class HomePage {
     })
     await loading.dismiss();
 
-    // TODO: Implement Dedicated Results Screen
-    await this.dialogsService.showAlert(`${JSON.stringify(scanResult, null, 4)}`, 'Barcodes Detection Result');
-    
-    return;
+    let results = scanResult.results;
+    if(!results) {
+      await this.dialogsService.showAlert("No barcodes detected", "Results");
+      return;
+    }
+
+    console.log("These are the original results: " + JSON.stringify(results))
+    BarcodeListService.detectedBarcodes = [];
+
+    for(let i=0; i<results.length; ++i) {
+      let result = results[i];
+
+      BarcodeListService.detectedBarcodes.push({
+        snappedImage: result.imageFileUri,
+        barcodes: result.barcodeResults.map ((item) => { return { type: item.type, text: item.text }})
+      });
+
+    }
+
+    await this.router.navigateByUrl('/barcode-result-list');
   }
+
   
   hasHtml5CameraSupport() {
     return this.platform.is('android');
