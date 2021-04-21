@@ -33,6 +33,7 @@ export class ImageViewPage implements OnInit {
         'EDGE_HIGHLIGHT',
         'LOW_LIGHT_BINARIZATION',
         'LOW_LIGHT_BINARIZATION_2',
+        'SENSITIVE_BINARIZATION'
     ];
 
     constructor(private scanbotService: ScanbotSdkDemoService,

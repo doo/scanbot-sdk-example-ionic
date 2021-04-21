@@ -144,6 +144,7 @@ export class HomePage {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
+        acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
         finderAspectRatio: { width: 1, height: 1 },
         orientationLockMode: 'PORTRAIT',
         useButtonsAllCaps: false,
