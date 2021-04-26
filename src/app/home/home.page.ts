@@ -10,14 +10,17 @@ import ScanbotSdk, {
   LicensePlateScannerConfiguration,
   MrzScannerConfiguration,
   TextDataScannerStep,
-  IdCardScannerConfiguration
+  IdCardScannerConfiguration,
+  BatchBarcodeScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
-import { BarcodeListService } from '../services/barcode-list.service';
+import { BarcodeListService, BarcodesDetectionViewModel } from '../services/barcode-list.service';
 import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
+import { ScanbotExampleUIService } from '../services/scanbot-example-ui.service';
+import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +30,7 @@ import { IdCardScanResultsService } from '../services/idcard-scan-results.servic
 export class HomePage {
 
   constructor(private scanbotService: ScanbotSdkDemoService,
+              private exampleUIService: ScanbotExampleUIService,
               private imageResultsRepository: ImageResultsRepository,
               private dialogsService: DialogsService,
               private platform: Platform,
@@ -51,6 +55,7 @@ export class HomePage {
   }
 
   async startDocumentScanner() {
+
     if (!(await this.scanbotService.checkLicense())) { return; }
 
     const configs = this.scanbotService.globalDocScannerConfigs();
@@ -112,6 +117,7 @@ export class HomePage {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
+        acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
         barcodeImageGenerationType: 'VIDEO_FRAME',
         orientationLockMode: 'PORTRAIT',
         finderLineColor: '#0000ff',
@@ -123,8 +129,10 @@ export class HomePage {
     });
 
     if (result.status === 'OK') {
-      BarcodeListService.detectedBarcodes = result.barcodes;
-      BarcodeListService.snappedImage = result.imageFileUri;
+      BarcodeListService.detectedBarcodes = [{
+        barcodes: result.barcodes || [],
+        snappedImage: result.imageFileUri
+      }];
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
@@ -132,20 +140,25 @@ export class HomePage {
   async startBatchBarcodeScanner() {
     if (!(await this.scanbotService.checkLicense())) { return; }
 
-    const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({
-      uiConfigs: {
+    const configs: BatchBarcodeScannerConfiguration = {
         // Customize colors, text resources, behavior, etc..
         finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
         barcodeFormats: BarcodeListService.getAcceptedTypes(),
+        acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
         finderAspectRatio: { width: 1, height: 1 },
         orientationLockMode: 'PORTRAIT',
         useButtonsAllCaps: false,
+        
         // see further configs ...
-      }
-    });
+    }
+
+    const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({uiConfigs: configs});
 
     if (result.status === 'OK') {
-      BarcodeListService.detectedBarcodes = result.barcodes;
+      BarcodeListService.detectedBarcodes = [{
+        barcodes: result.barcodes || [],
+        snappedImage: result.imageFileUri
+      }];
       await this.router.navigateByUrl('/barcode-result-list');
     }
   }
@@ -205,8 +218,13 @@ export class HomePage {
       await this.dialogsService.showAlert(fields.join(''), 'EHIC Result');
     }
   }
-    async setAcceptedFormats() {
+  
+  async setAcceptedBarcodeFormats() {
     await this.router.navigateByUrl('/barcode-list');
+  }
+
+  async setAcceptedBarcodeDocumentFormats() {
+    await this.router.navigateByUrl('/barcode-document-list')
   }
 
   async viewLicenseInfo() {
@@ -247,12 +265,61 @@ export class HomePage {
     const result = await this.scanbotService.SDK.detectBarcodesOnImage(
         { imageFileUri: imageUri, barcodeFormats: BarcodeListService.getAcceptedTypes() }
         );
-    BarcodeListService.detectedBarcodes = result.barcodes;
-    BarcodeListService.snappedImage = imageUri;
+    
+    BarcodeListService.detectedBarcodes = [{
+      barcodes: result.barcodes || [],
+      snappedImage: imageUri
+    }]
+
     await loading.dismiss();
     await this.router.navigateByUrl('/barcode-result-list');
   }
 
+  async importImagesAndDetectBarcodes() {
+    if (!(await this.scanbotService.checkLicense())) { return; }
+    
+    // Shows Image Picker and retrieves Image URI(s)
+    const pickerLoading = await this.dialogsService.createLoading("");
+    await pickerLoading.present();
+    var result = await this.exampleUIService.Plugin.startMultipleImagePicker({})
+    await pickerLoading.dismiss();
+
+    if (!result || result.status != "OK") {
+      return;
+    }
+
+    // Detects Barcodes on the given images
+    const loading = await this.dialogsService.createLoading('Detecting barcodes...');
+    await loading.present();
+    const scanResult = await this.scanbotService.SDK.detectBarcodesOnImages({
+      imageFilesUris: result.imageFilesUris,
+      barcodeFormats: BarcodeListService.getAcceptedTypes()
+    })
+    await loading.dismiss();
+
+    let results = scanResult.results;
+    if(!results) {
+      await this.dialogsService.showAlert("No barcodes detected", "Results");
+      return;
+    }
+
+    console.log("These are the original results: " + JSON.stringify(results))
+    BarcodeListService.detectedBarcodes = [];
+
+    for(let i=0; i<results.length; ++i) {
+      let result = results[i];
+
+      BarcodeListService.detectedBarcodes.push({
+        snappedImage: result.imageFileUri,
+        barcodes: result.barcodeResults.map ((item) => { return { type: item.type, text: item.text }})
+      });
+
+    }
+
+    await this.router.navigateByUrl('/barcode-result-list');
+  }
+
+  
   hasHtml5CameraSupport() {
     return this.platform.is('android');
   }
@@ -269,6 +336,7 @@ export class HomePage {
       finderLineWidth: 5,
       guidanceText: 'Place the whole license plate in the frame to scan it',
       orientationLockMode: 'PORTRAIT',
+      confirmationDialogConfirmButtonFilled: true,
       // see further configs...
     };
 
@@ -276,9 +344,10 @@ export class HomePage {
 
     if (result.status === 'OK') {
       await this.dialogsService.showAlert(
-          `Country: ${result.licensePlateResult.countryCode}<br>` +
+          `Country Code: ${result.licensePlateResult.countryCode}<br>` +
           `License Plate: ${result.licensePlateResult.licensePlate}<br><br>` +
-          `OCR Value: ${result.licensePlateResult.ocrValue}`,
+          `Confidence: ${result.licensePlateResult.confidence}<br>` +
+          `Raw Text: ${result.licensePlateResult.rawText}`,
           'License Plate Result');
     }
   }
