@@ -56,7 +56,7 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~10.12.0",
-    "codelyzer": "~4.5.0",
+    "codelyzer": "~6.0.1",
     "compare-func": "2.0.0",
     "cordova-android": "^9.0.0",
     "cordova-ios": "^6.2.0",
