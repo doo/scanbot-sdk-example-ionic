@@ -63,7 +63,7 @@
     "cordova-plugin-scanbot-example-ui": "file:plugins_src/ScanbotExampleUI",
     "cordova-plugin-splashscreen": "^6.0.0",
     "jasmine-core": "~2.99.1",
-    "jasmine-spec-reporter": "~4.2.1",
+    "jasmine-spec-reporter": "~7.0.0",
     "karma": "^4.0.1",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
