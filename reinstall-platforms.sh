@@ -20,3 +20,5 @@ ionic cordova platform add ios@6.2.0
 ionic cordova platform add android@9.0.0
 
 
+# ADD DUMMY COMMENT FOR TEST
+node -v
