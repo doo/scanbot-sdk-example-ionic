@@ -10,7 +10,7 @@
     ]
   },
   "types": "index.d.ts",
-  "main": "www/ScanbotExampleUI.js",
+  "main": "www/ScanbotExampleUi.js",
   "keywords": [
     "ecosystem:cordova",
     "cordova-android",
