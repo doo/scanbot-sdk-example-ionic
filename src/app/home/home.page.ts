@@ -278,7 +278,7 @@ export class HomePage {
         var result = await ScanbotImagePicker.pickImages({
             maxImages: 10,
             imageQuality: 90
-        })
+        });
         await pickerLoading.dismiss();
         
         if (!result || result.status != "OK") {
