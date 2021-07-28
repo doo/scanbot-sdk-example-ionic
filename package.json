@@ -27,11 +27,9 @@
     "@ionic-native/status-bar": "5.2.0",
     "@ionic/angular": "^4.1.0",
     "@ionic/storage": "2.2.0",
-    "cordova-plugin-androidx": "1.0.2",
-    "cordova-plugin-androidx-adapter": "1.1.0",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-device": "^2.0.2",
-    "cordova-plugin-file": "6.0.1",
+    "cordova-plugin-file": "6.0.2",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-scanbot-sdk": "4.10.0",
@@ -39,7 +37,7 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-sqlite-storage": "^5.1.0",
     "core-js": "^2.5.4",
-    "rxjs": "~6.3.3",
+    "rxjs": "~6.5.0",
     "source-map": "^0.7.3",
     "zone.js": "~0.8.29"
   },
@@ -56,11 +54,13 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~10.12.0",
-    "codelyzer": "~4.5.0",
+    "codelyzer": "~6.0.1",
     "compare-func": "2.0.0",
     "cordova-android": "^9.0.0",
     "cordova-ios": "^6.2.0",
-    "cordova-plugin-scanbot-example-ui": "file:plugins_src/ScanbotExampleUI",
+    "cordova-plugin-androidx": "^3.0.0",
+    "cordova-plugin-androidx-adapter": "^1.1.3",
+    "cordova-plugin-scanbot-image-picker": "^1.0.0",
     "cordova-plugin-splashscreen": "^6.0.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -72,7 +72,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~8.0.0",
     "tslint": "~5.12.0",
-    "typescript": "~3.1.6"
+    "typescript": "~3.2.0"
   },
   "description": "Example App for the Scanbot SDK Cordova Plugin with Ionic Framework",
   "cordova": {
@@ -83,8 +83,6 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-androidx": {},
-      "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
@@ -93,7 +91,9 @@
         "CAMERA_USAGE_DESCRIPTION": " "
       },
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-scanbot-example-ui": {
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-scanbot-image-picker": {
         "PHOTOLIBRARY_USAGE_DESCRIPTION": "This app needs to access your photo library in order to import images"
       }
     },
