@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
 export interface BarcodesDetectionViewModel {
-    snappedImage?: string,
+    snappedImage?: string;
     barcodes: {
         text: string,
         type: string
-    }[]
+    }[];
 }
 
 @Injectable({
