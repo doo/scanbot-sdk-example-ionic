@@ -2,7 +2,7 @@
   "name": "scanbot-sdk-example-ionic",
   "version": "2.0.0",
   "author": "Scanbot / doo GmbH",
-  "homepage": "https://scanbot.io/sdk",
+  "homepage": "https://scanbot.io",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
