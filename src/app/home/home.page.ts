@@ -124,6 +124,7 @@ export class HomePage {
         finderAspectRatio: { width: 2, height: 1 },
         topBarBackgroundColor: '#c8193c',
         useButtonsAllCaps: false,
+        engineMode: 'NEXT_GEN'
         // see further configs ...
       }
     });
@@ -148,7 +149,7 @@ export class HomePage {
         finderAspectRatio: { width: 1, height: 1 },
         orientationLockMode: 'PORTRAIT',
         useButtonsAllCaps: false,
-        
+
         // see further configs ...
     }
 
@@ -218,7 +219,7 @@ export class HomePage {
       await this.dialogsService.showAlert(fields.join(''), 'EHIC Result');
     }
   }
-  
+
   async setAcceptedBarcodeFormats() {
     await this.router.navigateByUrl('/barcode-list');
   }
@@ -265,7 +266,7 @@ export class HomePage {
     const result = await this.scanbotService.SDK.detectBarcodesOnImage(
         { imageFileUri: imageUri, barcodeFormats: BarcodeListService.getAcceptedTypes() }
         );
-    
+
     BarcodeListService.detectedBarcodes = [{
       barcodes: result.barcodes || [],
       snappedImage: imageUri
@@ -277,7 +278,7 @@ export class HomePage {
 
   async importImagesAndDetectBarcodes() {
     if (!(await this.scanbotService.checkLicense())) { return; }
-    
+
     // Shows Image Picker and retrieves Image URI(s)
     const pickerLoading = await this.dialogsService.createLoading("");
     await pickerLoading.present();
@@ -319,7 +320,7 @@ export class HomePage {
     await this.router.navigateByUrl('/barcode-result-list');
   }
 
-  
+
   hasHtml5CameraSupport() {
     return this.platform.is('android');
   }
