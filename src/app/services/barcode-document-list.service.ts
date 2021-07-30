@@ -23,8 +23,8 @@ export class BarcodeDocumentListService {
         if (!BarcodeDocumentListService.isFilteringEnabled) {
           return [];
         }
-        
-        let result: BarcodeDocumentFormat[] = [];
+
+        const result: BarcodeDocumentFormat[] = [];
         BarcodeDocumentListService.list.forEach((format) => {
           if (format.value) {
             result.push(<BarcodeDocumentFormat>format.key);
