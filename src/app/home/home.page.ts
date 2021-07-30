@@ -46,7 +46,8 @@ export class HomePage {
             ScanbotSdk.setLicenseFailureHandler(async callback => {
                 const status = callback.licenseStatus;
                 const feature = callback.licenseFeature;
-                console.log('Feature ' + feature + ' is not available because license is ' + status);
+                const errorMessage = callback.licenseErrorMessage;
+                console.log('Feature ' + feature + ' is not available because license is ' + status + ' /n' + errorMessage);
             });
         });
     }
