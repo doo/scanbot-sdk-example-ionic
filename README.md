@@ -1,12 +1,11 @@
-# MRZ, barcode and QR code reader and a mobile document scanner with text recognition
+# Scanbot SDK Example App for Cordova with Ionic
 
-## Scanbot SDK example app for Ionic
-
-This example app demonstrates how to integrate the Scanbot SDK Cordova Plugin with [Ionic Framework](https://ionicframework.com).
+This example app demonstrates how to integrate the **Scanbot SDK Cordova Plugin** 
+in a [Cordova](https://cordova.apache.org) app using the [Ionic Framework](https://ionicframework.com).
 
 The Scanbot SDK Cordova Plugin is available as [npm package](https://www.npmjs.com/package/cordova-plugin-scanbot-sdk).
 
-For more details about the Plugin please see this [documentation](https://scanbotsdk.github.io/documentation/cordova/).
+For more details about the Plugin please see this [documentation](https://docs.scanbot.io/document-scanner-sdk/cordova/introduction/).
 
 
 ## What is Scanbot SDK?
@@ -52,7 +51,7 @@ Connect a device via USB and run the app.
 
 Open the project `platforms/ios/Scanbot SDK Example Ionic.xcworkspace` in Xcode and check/adjust the following settings:
 - *Provisioning* and *Code Signing* - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html)
-- Make sure the `ScanbotSDK.framework` was properly added as **Embedded Binary** - see our [Plugin docs](https://scanbotsdk.github.io/documentation/cordova/)
+- Make sure the `ScanbotSDK.framework` was properly added as **Embedded Binary**
 
 Then build and run the app in Xcode.
 

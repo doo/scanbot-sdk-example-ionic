@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IdCardField, IdCardScannerResult } from 'cordova-plugin-scanbot-sdk';
 
 @Injectable({
     providedIn: 'root',
