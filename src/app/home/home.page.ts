@@ -47,7 +47,7 @@ export class HomePage {
                 const status = callback.licenseStatus;
                 const feature = callback.licenseFeature;
                 const errorMessage = callback.licenseErrorMessage;
-                console.log('Feature ' + feature + ' is not available because license is ' + status + ' /n' + errorMessage);
+                console.log('Feature ' + feature + ' is not available because license is ' + status + ' \n' + errorMessage);
             });
         });
     }
