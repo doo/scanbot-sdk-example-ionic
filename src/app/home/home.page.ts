@@ -118,6 +118,7 @@ export class HomePage {
                 finderAspectRatio: { width: 2, height: 1 },
                 topBarBackgroundColor: '#c8193c',
                 useButtonsAllCaps: false,
+                // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
                 // see further configs ...
             }
         });
@@ -142,6 +143,7 @@ export class HomePage {
             finderAspectRatio: { width: 1, height: 1 },
             orientationLockMode: 'PORTRAIT',
             useButtonsAllCaps: false,
+            // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
             // see further configs ...
         };
 
