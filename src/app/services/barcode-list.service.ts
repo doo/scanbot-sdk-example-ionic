@@ -30,7 +30,8 @@ export class BarcodeListService {
         { key: 'RSS_14',       value: true },
         { key: 'RSS_EXPANDED', value: true },
         { key: 'UPC_A',        value: true },
-        { key: 'UPC_E',        value: true }
+        { key: 'UPC_E',        value: true },
+        { key: 'MSI_PLESSEY',  value: false }
     ];
 
     public static update(format, isChecked) {

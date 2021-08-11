@@ -4,7 +4,7 @@ const fs = require('fs');
 const AdmZip = require('adm-zip');
 const path = require('path');
 
-const version = "1.15.1";
+const version = "1.19.3";
 const url = `https://download.scanbot.io/sdk/ios/scanbot-ios-sdk${version}.zip`;
 const zipFile = "sdk-ios.zip";
 
