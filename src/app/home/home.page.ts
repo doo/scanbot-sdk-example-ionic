@@ -9,7 +9,7 @@ import ScanbotSdk, {
     LicensePlateScannerConfiguration,
     MrzScannerConfiguration,
     TextDataScannerStep,
-    IdCardScannerConfiguration,
+    GenericDocumentRecognizerConfiguration,
     BatchBarcodeScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
@@ -17,7 +17,7 @@ import { DialogsService } from '../services/dialogs.service';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
 import { BarcodeListService } from '../services/barcode-list.service';
-import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
+import { GenericDocumentRecognizerResultsService } from '../services/generic-document-recognizer-results.service';
 import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
 import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
 
@@ -158,17 +158,21 @@ export class HomePage {
         }
     }
 
-    async startIdCardScanner() {
+    async startGenericDocumentRecognizer() {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
-        const config: IdCardScannerConfiguration = {
-            shouldSavePhotoImageInStorage: true
+        const config: GenericDocumentRecognizerConfiguration = {
+            shouldSavePhotoImageInStorage: true,
+            detailsFieldConfiguration: {
+                fieldLicenseCategoriesTitle: "NEW TITLE"
+            }
         };
-        const result = await this.scanbotService.SDK.UI.startIdCardScanner({uiConfigs: config});
+        const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({uiConfigs: config});
 
         if (result.status === 'OK') {
-            IdCardScanResultsService.fields = result.fields;
-            await this.router.navigateByUrl('/idcard-scan-results');
+            GenericDocumentRecognizerResultsService.fields = result.fields;
+            GenericDocumentRecognizerResultsService.documentType = result.documentType;
+            await this.router.navigateByUrl('/generic-document-recognizer-results');
         }
     }
 

@@ -1,20 +1,22 @@
 import { Component } from '@angular/core';
-import { IdCardScanResultsService } from '../services/idcard-scan-results.service';
+import { GenericDocumentRecognizerResultsService } from '../services/generic-document-recognizer-results.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-    selector: 'app-idcard-scan-results',
-    templateUrl: './idcard-scan-results.page.html',
-    styleUrls: ['./idcard-scan-results.page.scss'],
+    selector: 'app-generic-document-recognizer-results',
+    templateUrl: './generic-document-recognizer-results.page.html',
+    styleUrls: ['./generic-document-recognizer-results.page.scss'],
 })
-export class IdCardScanResultsPage {
+export class GenericDocumentRecognizerResultsPage {
 
     fields: any;
+    documentType: string;
     displayFields: {};
     photoUri: string;
 
     constructor(public sanitizer: DomSanitizer) {
-        this.fields = IdCardScanResultsService.fields;
+        this.fields = GenericDocumentRecognizerResultsService.fields;
+        this.documentType = GenericDocumentRecognizerResultsService.documentType;
         this.displayFields = {};
         this.setupProperties();
     }
