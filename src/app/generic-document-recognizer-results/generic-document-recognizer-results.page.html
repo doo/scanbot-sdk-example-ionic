@@ -3,14 +3,13 @@
       <ion-buttons slot="start">
           <ion-back-button defaultHref="home"></ion-back-button>
       </ion-buttons>
-      <ion-title>
-          ID Card Scan Results
+      <ion-title  *ngIf="documentType" >
+        {{documentType}} Generic Document Recognizer Results 
       </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
   <div *ngIf="photoUri" style="margin: 1%; width: 98%; height: 50%; text-align: center; background-color: rgb(245, 245, 245)">
     <img style="max-width:100%; max-height:100%; vertical-align: middle;" [src]="photoUri"/>
   </div>

@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IdCardScanResultsPage } from './idcard-scan-results.page';
+import { GenericDocumentRecognizerResultsPage } from './generic-document-recognizer-results.page';
 
-describe('IdCardScanResultsPage', () => {
-  let component: IdCardScanResultsPage;
-  let fixture: ComponentFixture<IdCardScanResultsPage>;
+describe('GenericDocumentRecognizerResultsPage', () => {
+  let component: GenericDocumentRecognizerResultsPage;
+  let fixture: ComponentFixture<GenericDocumentRecognizerResultsPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IdCardScanResultsPage ],
+      declarations: [ GenericDocumentRecognizerResultsPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IdCardScanResultsPage);
+    fixture = TestBed.createComponent(GenericDocumentRecognizerResultsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
