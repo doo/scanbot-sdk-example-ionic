@@ -62,7 +62,10 @@ export class ScanbotSdkDemoService {
             storageImageFormat: ScanbotSdkDemoService.IMAGE_FILE_FORMAT,
             storageImageQuality: ScanbotSdkDemoService.JPG_IMAGE_QUALITY,
             storageBaseDirectory: this.getDemoStorageBaseDirectory(), // optional storageBaseDirectory, see comments below
-            documentDetectorMode: 'ML_BASED'
+            documentDetectorMode: 'ML_BASED',
+            useCameraX: true,
+            allowXnnpackAcceleration: false,
+            allowGpuAcceleration: false,
         };
 
         if (ScanbotSdkDemoService.ENCRYPTION_ENABLED) {

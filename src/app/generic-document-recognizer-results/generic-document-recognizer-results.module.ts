@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { IdCardScanResultsPage } from './idcard-scan-results.page';
+import { GenericDocumentRecognizerResultsPage } from './generic-document-recognizer-results.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: IdCardScanResultsPage
+    component: GenericDocumentRecognizerResultsPage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [IdCardScanResultsPage]
+  declarations: [GenericDocumentRecognizerResultsPage]
 })
-export class IdCardScanResultsPageModule {}
+export class GenericDocumentRecognizerResultsPageModule {}
