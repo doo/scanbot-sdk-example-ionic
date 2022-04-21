@@ -69,7 +69,8 @@ export class ImageViewPage implements OnInit {
                 topBarBackgroundColor: '#c8193c',
                 bottomBarBackgroundColor: '#c8193c',
                 hintTitle: 'Custom hint:\nDrag the dots to the document edges.',
-                hintTitleColor: '#0000ff'
+                hintTitleColor: '#0000ff',
+                topAndBottomButtonsSwapped: false,
                 // ...
             }
         });
