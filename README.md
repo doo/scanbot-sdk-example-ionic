@@ -16,7 +16,7 @@ For more details visit our website https://scanbot.io
 
 
 ## How to run this app
-
+ 
 Install the latest versions of [Cordova](https://cordova.apache.org) and [Ionic](https://ionicframework.com).
 Fetch this repository and navigate to the project directory.
 
