@@ -170,7 +170,7 @@ export class HomePage {
         const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({uiConfigs: config});
 
         console.log(JSON.stringify(result));
-        
+
         if (result.status === 'OK') {
             GenericDocumentRecognizerResultsService.fields = result.fields;
             GenericDocumentRecognizerResultsService.documentType = result.documentType;
@@ -251,7 +251,10 @@ export class HomePage {
             imageQuality: 85
         });
 
+        console.log('Picker Result: ' + pickerResult);
+
         if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
+            await this.dialogsService.showAlert('Unexpected error while loading the chosen image');
             return;
         }
 
@@ -265,6 +268,11 @@ export class HomePage {
             imageFileUri: imageUri,
             barcodeFormats: BarcodeListService.getAcceptedTypes()
         });
+
+        if (result.status !== 'OK') {
+            await loading.dismiss();
+            await this.dialogsService.showAlert('ERROR: ' + result.message, 'ERROR');
+        }
 
         BarcodeListService.detectedBarcodes = [{
             barcodes: result.barcodes || [],
