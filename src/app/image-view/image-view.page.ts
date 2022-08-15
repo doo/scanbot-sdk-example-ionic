@@ -65,7 +65,7 @@ export class ImageViewPage implements OnInit {
             uiConfigs: {
                 // Customize colors, text resources, behavior, etc..
                 doneButtonTitle: 'Save',
-                orientationLockMode: 'PORTRAIT',
+                interfaceOrientation: 'PORTRAIT',
                 topBarBackgroundColor: '#c8193c',
                 bottomBarBackgroundColor: '#c8193c',
                 hintTitle: 'Custom hint:\nDrag the dots to the document edges.',
