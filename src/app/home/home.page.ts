@@ -34,7 +34,7 @@ export class HomePage {
         private platform: Platform,
         private router: Router
     ) {
-        document.addEventListener('deviceready', function() {
+        document.addEventListener('deviceready', function () {
             /*
             * Register a vanilla javascript callback, as setLicenseFailure registers a continuous callback
             * that does not adhere to the standards of promisified API.
@@ -56,7 +56,7 @@ export class HomePage {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
         const configs = this.scanbotService.globalDocScannerConfigs();
-        const result = await this.scanbotService.SDK.UI.startDocumentScanner({uiConfigs: configs});
+        const result = await this.scanbotService.SDK.UI.startDocumentScanner({ uiConfigs: configs });
 
         if (result.status === 'CANCELED') {
             // user has canceled the scanning operation
@@ -84,9 +84,9 @@ export class HomePage {
             await loading.present();
 
             // First create a new SDK page with the selected original image file:
-            const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri});
+            const createResult = await this.scanbotService.SDK.createPage({ originalImageFileUri });
             // and then run auto document detection and cropping on this new page:
-            const docResult = await this.scanbotService.SDK.detectDocumentOnPage({page: createResult.page});
+            const docResult = await this.scanbotService.SDK.detectDocumentOnPage({ page: createResult.page });
 
             await this.imageResultsRepository.addPages([docResult.page]);
             await this.gotoImageResults();
@@ -147,7 +147,7 @@ export class HomePage {
             // see further configs ...
         };
 
-        const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({uiConfigs: configs});
+        const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({ uiConfigs: configs });
 
         if (result.status === 'OK') {
             BarcodeListService.detectedBarcodes = [{
@@ -167,7 +167,7 @@ export class HomePage {
                 fieldLicenseCategoriesTitle: "NEW TITLE"
             }
         };
-        const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({uiConfigs: config});
+        const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({ uiConfigs: config });
 
         console.log(JSON.stringify(result));
 
@@ -194,7 +194,7 @@ export class HomePage {
             config.finderHeight = widthPx * 0.18;
         }
 
-        const result = await this.scanbotService.SDK.UI.startMrzScanner({uiConfigs: config});
+        const result = await this.scanbotService.SDK.UI.startMrzScanner({ uiConfigs: config });
         if (result.status === 'OK') {
             const fields = result.mrzResult.fields.map(f => `<div>${f.name}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
             await this.dialogsService.showAlert(fields.join(''), 'MRZ Result');
@@ -212,7 +212,7 @@ export class HomePage {
             orientationLockMode: 'PORTRAIT',
             // see further configs ...
         };
-        const result = await this.scanbotService.SDK.UI.startEHICScanner({uiConfigs: config});
+        const result = await this.scanbotService.SDK.UI.startEHICScanner({ uiConfigs: config });
         if (result.status === 'OK') {
             const fields = result.ehicResult.fields.map(f => `<div>${f.type}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
             await this.dialogsService.showAlert(fields.join(''), 'EHIC Result');
@@ -247,21 +247,23 @@ export class HomePage {
     }
 
     async importAndDetectBarcodes() {
+
+        if (!(await this.scanbotService.checkLicense())) { return; }
+
         const pickerResult = await ScanbotImagePicker.pickImage({
             imageQuality: 85
         });
 
-        console.log('Picker Result: ' + pickerResult);
-
         if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
-            await this.dialogsService.showAlert('Unexpected error while loading the chosen image');
+            var errorMessage = 'Unexpected error while loading the chosen image';
+            if (pickerResult.message && pickerResult.message.length > 0) {
+                errorMessage = pickerResult.message;
+            }
+            await this.dialogsService.showAlert(errorMessage);
             return;
         }
 
         const imageUri = pickerResult.imageFileUri as string;
-
-        if (!(await this.scanbotService.checkLicense())) { return; }
-
         const loading = await this.dialogsService.createLoading('Detecting barcodes...');
         await loading.present();
         const result = await this.scanbotService.SDK.detectBarcodesOnImage({
@@ -283,19 +285,30 @@ export class HomePage {
         await this.router.navigateByUrl('/barcode-result-list');
     }
 
+    /**
+     * 
+     * @returns Import Images from gallery and send to SDK for detecting barcode results, which is displayed on next page.
+     */
     async importImagesAndDetectBarcodes() {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
         // Shows Image Picker and retrieves Image URI(s)
         const pickerLoading = await this.dialogsService.createLoading('');
         await pickerLoading.present();
-        const result = await ScanbotImagePicker.pickImages({
+        const pickerResult = await ScanbotImagePicker.pickImages({
             maxImages: 10,
             imageQuality: 85
         });
         await pickerLoading.dismiss();
+        
+        // If status is cancelled OR There are no Uris received from Library
+        if (!pickerResult || pickerResult.status != 'OK' || !pickerResult.imageFilesUris || pickerResult.imageFilesUris.length == 0) {
+            
+            // If there are no uris but error message is available.
+            if (pickerResult.message && pickerResult.message.length > 0) { 
+                await this.dialogsService.showAlert(pickerResult.message, 'ERROR');
+            }
 
-        if (!result || result.status !== 'OK') {
             return;
         }
 
@@ -303,23 +316,25 @@ export class HomePage {
         const loading = await this.dialogsService.createLoading('Detecting barcodes...');
         await loading.present();
         const scanResult = await this.scanbotService.SDK.detectBarcodesOnImages({
-            imageFilesUris: result.imageFilesUris,
+            imageFilesUris: pickerResult.imageFilesUris,
             barcodeFormats: BarcodeListService.getAcceptedTypes()
         });
 
         await loading.dismiss();
 
-        const results = scanResult.results;
-
-        if (!results) {
+        const barcodeResults = scanResult.results;
+        if (!barcodeResults) {
             await this.dialogsService.showAlert('No barcodes detected', 'Results');
             return;
+            
+            // The message will be shwon on next page rather than conflicting with any other UI item on screen.
+        } else if (pickerResult.message && pickerResult.message.length > 0) { 
+            await this.dialogsService.showAlert(pickerResult.message, 'ERROR');
         }
 
         BarcodeListService.detectedBarcodes = [];
-
-        for (let i = 0; i < results.length; ++i) {
-            const barcodeResult = results[i];
+        for (let i = 0; i < barcodeResults.length; ++i) {
+            const barcodeResult = barcodeResults[i];
             BarcodeListService.detectedBarcodes.push({
                 snappedImage: barcodeResult.imageFileUri,
                 barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text }))
@@ -350,7 +365,7 @@ export class HomePage {
             // see further configs...
         };
 
-        const result = await this.scanbotService.SDK.UI.startLicensePlateScanner({uiConfigs: config});
+        const result = await this.scanbotService.SDK.UI.startLicensePlateScanner({ uiConfigs: config });
 
         if (result.status === 'OK') {
             await this.dialogsService.showAlert(
@@ -379,10 +394,9 @@ export class HomePage {
             textFilterStrategy: 'LC_DOT_MATRIX_DISPLAY',
         };
 
-        const result = await this.scanbotService.SDK.UI.startDataScanner({uiConfigs, scannerStep});
+        const result = await this.scanbotService.SDK.UI.startDataScanner({ uiConfigs, scannerStep });
         if (result.status === 'OK') {
             await this.dialogsService.showAlert(`Value: ${result.dataResult.textValue}`, 'Scanner Result');
         }
     }
-
 }
