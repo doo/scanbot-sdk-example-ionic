@@ -314,7 +314,7 @@ export class HomePage {
             const barcodeResult = results[i];
             BarcodeListService.detectedBarcodes.push({
                 snappedImage: barcodeResult.imageFileUri,
-                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text }))
+                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text, textWithExtension: item.textWithExtension }))
             });
         }
 
