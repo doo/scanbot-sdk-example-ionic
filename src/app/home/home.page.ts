@@ -112,12 +112,12 @@ export class HomePage {
                 finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
                 barcodeFormats: BarcodeListService.getAcceptedTypes(),
                 acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
-                barcodeImageGenerationType: 'VIDEO_FRAME',
-                interfaceOrientation: 'LANDSCAPE',
+                barcodeImageGenerationType: 'NONE',
                 finderLineColor: '#0000ff',
                 finderAspectRatio: { width: 2, height: 1 },
                 topBarBackgroundColor: '#c8193c',
                 useButtonsAllCaps: false,
+                barcodeFilter: 'WithExtension'
                 // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
                 // see further configs ...
             }
@@ -143,6 +143,7 @@ export class HomePage {
             finderAspectRatio: { width: 1, height: 1 },
             interfaceOrientation: 'ALL',
             useButtonsAllCaps: false,
+            barcodeFilter: 'WithExtension'
             // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
             // see further configs ...
         };
