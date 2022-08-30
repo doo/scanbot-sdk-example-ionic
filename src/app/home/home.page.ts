@@ -112,12 +112,12 @@ export class HomePage {
                 finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
                 barcodeFormats: BarcodeListService.getAcceptedTypes(),
                 acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
-                barcodeImageGenerationType: 'VIDEO_FRAME',
-                orientationLockMode: 'PORTRAIT',
+                barcodeImageGenerationType: 'NONE',
                 finderLineColor: '#0000ff',
                 finderAspectRatio: { width: 2, height: 1 },
                 topBarBackgroundColor: '#c8193c',
                 useButtonsAllCaps: false,
+                barcodeFilter: 'WithExtension'
                 // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
                 // see further configs ...
             }
@@ -141,8 +141,9 @@ export class HomePage {
             barcodeFormats: BarcodeListService.getAcceptedTypes(),
             acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
             finderAspectRatio: { width: 1, height: 1 },
-            orientationLockMode: 'PORTRAIT',
+            interfaceOrientation: 'ALL',
             useButtonsAllCaps: false,
+            barcodeFilter: 'WithExtension'
             // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
             // see further configs ...
         };
@@ -184,7 +185,7 @@ export class HomePage {
         const config: MrzScannerConfiguration = {
             // Customize colors, text resources, etc..
             finderTextHint: 'Please hold your phone over the 2- or 3-line MRZ code at the front of your passport.',
-            orientationLockMode: 'PORTRAIT',
+            interfaceOrientation: 'PORTRAIT',
             // see further configs ...
         };
 
@@ -209,7 +210,7 @@ export class HomePage {
 
         const config: HealthInsuranceCardScannerConfiguration = {
             finderTextHint: 'Please hold your phone over the back of your Health Insurance Card.',
-            orientationLockMode: 'PORTRAIT',
+            interfaceOrientation: 'PORTRAIT',
             // see further configs ...
         };
         const result = await this.scanbotService.SDK.UI.startEHICScanner({uiConfigs: config});
@@ -314,7 +315,7 @@ export class HomePage {
             const barcodeResult = results[i];
             BarcodeListService.detectedBarcodes.push({
                 snappedImage: barcodeResult.imageFileUri,
-                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text }))
+                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text, textWithExtension: item.textWithExtension }))
             });
         }
 
@@ -337,7 +338,7 @@ export class HomePage {
             finderLineColor: '#c8193c',
             finderLineWidth: 5,
             guidanceText: 'Place the whole license plate in the frame to scan it',
-            orientationLockMode: 'PORTRAIT',
+            interfaceOrientation: 'PORTRAIT',
             confirmationDialogConfirmButtonFilled: true,
             // see further configs...
         };
@@ -362,7 +363,7 @@ export class HomePage {
             topBarBackgroundColor: '#c8193c',
             topBarButtonsColor: '#ffffff',
             finderLineColor: '#c8193c',
-            orientationLockMode: 'PORTRAIT',
+            interfaceOrientation: 'PORTRAIT',
             // see further configs...
         };
 

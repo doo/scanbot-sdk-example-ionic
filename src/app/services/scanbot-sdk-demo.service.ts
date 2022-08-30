@@ -124,7 +124,7 @@ export class ScanbotSdkDemoService {
         return {
             // Customize colors, text resources, behavior, etc..
             cameraPreviewMode: 'FIT_IN',
-            orientationLockMode: 'PORTRAIT',
+            interfaceOrientation: 'PORTRAIT',
             pageCounterButtonTitle: '%d Page(s)',
             multiPageEnabled: true,
             ignoreBadAspectRatio: true,
