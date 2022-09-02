@@ -58,7 +58,7 @@
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.2.1",
-    "cordova-plugin-scanbot-image-picker": "^1.0.0",
+    "cordova-plugin-scanbot-image-picker": "1.1.0",
     "cordova-plugin-scanbot-sdk": "4.15.0-beta1",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-statusbar": "^2.4.3",
