@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK for Cordova version 4.14.0:
+Open Source libraries used in the Scanbot SDK for Cordova version 4.15.0:
 
 Adm-zip
 
@@ -117,8 +117,7 @@ END OF TERMS AND CONDITIONS
 ------------------------------------------------------------------------------------------------------------------------
 
 
-
-Open Source libraries used in the Scanbot SDK for Android version 1.93.0
+Open Source libraries used in the Scanbot SDK for Android version 1.94.0:
 
 Apache Commons Codec
 
@@ -2302,17 +2301,16 @@ Version 1.1.0
    See the License for the specific language governing permissions and
    limitations under the License.
 
+
 ------------------------------------------------------------------------------------------------------------------------
 
-Open Source libraries used in the Scanbot SDK for iOS version 1.26.0:
-
-Open Source libraries used in the Scanbot SDK for iOS version 1.26.2:
+Open Source libraries used in the Scanbot SDK for iOS version 1.28.1:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 Boost C++
 
-Version 1.75.0
+Version 1.79.0
 (https://github.com/boostorg/boost)
 
 Boost Software License - Version 1.0 - August 17th, 2003
@@ -3431,7 +3429,7 @@ and users must comply to its license: https://github.com/fmtlib/fmt/blob/master/
 
 Tensorflow
 
-Version 2.6.1
+Version v2.6.1
 (https://github.com/tensorflow/tensorflow)
 
                                  Apache License
