@@ -38,7 +38,15 @@
                     <ion-label style="margin-left: 0.5em; font-size: 1em; font-weight: 400; white-space: pre-wrap">
                         {{barcode.text ? barcode.textWithExtension : "" }}
                     </ion-label>
-                </div>            
+                </div>          
+                <div style="flex: 1; flex-direction: row">
+                    <ion-label style="margin-left: 0.5em; font-size: 1em; font-weight: 600;">
+                        {{"RawBytes"}}
+                    </ion-label>
+                    <ion-label style="margin-left: 0.5em; font-size: 1em; font-weight: 400; white-space: pre-wrap">
+                        {{barcode.rawBytesString}}
+                    </ion-label>
+                </div>
             </li>
         </div>
     </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {BarcodeListService, BarcodesDetectionViewModel} from '../services/barcode-list.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ByteArrayUtils } from 'src/utils/byte-array-utils';
 
 @Component({
   selector: 'app-barcode-result-list',
@@ -19,6 +20,9 @@ export class BarcodeResultListPage {
         item.snappedImage = this.sanitizeFileUri(item.snappedImage);
       }
 
+    item.barcodes.forEach(element => {
+      element.rawBytesString = ByteArrayUtils.toString(element.rawBytes);
+    });
       return item;
     })
 

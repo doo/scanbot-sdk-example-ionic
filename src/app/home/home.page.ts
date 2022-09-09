@@ -20,6 +20,7 @@ import { BarcodeListService } from '../services/barcode-list.service';
 import { GenericDocumentRecognizerResultsService } from '../services/generic-document-recognizer-results.service';
 import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
 import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
+import { ByteArrayUtils } from 'src/utils/byte-array-utils';
 
 @Component({
     selector: 'app-home',
@@ -117,7 +118,6 @@ export class HomePage {
                 finderAspectRatio: { width: 2, height: 1 },
                 topBarBackgroundColor: '#c8193c',
                 useButtonsAllCaps: false,
-                barcodeFilter: 'WithExtension'
                 // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
                 // see further configs ...
             }
@@ -143,7 +143,6 @@ export class HomePage {
             finderAspectRatio: { width: 1, height: 1 },
             interfaceOrientation: 'ALL',
             useButtonsAllCaps: false,
-            barcodeFilter: 'WithExtension'
             // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
             // see further configs ...
         };
@@ -338,7 +337,7 @@ export class HomePage {
             const barcodeResult = barcodeResults[i];
             BarcodeListService.detectedBarcodes.push({
                 snappedImage: barcodeResult.imageFileUri,
-                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text, textWithExtension: item.textWithExtension }))
+                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text, textWithExtension: item.textWithExtension, rawBytes: item.rawBytes }))
             });
         }
 
