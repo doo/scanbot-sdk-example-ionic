@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+import { ByteArrayUtils } from 'src/utils/byte-array-utils';
 
 export interface BarcodesDetectionViewModel {
     snappedImage?: string;
     barcodes: {
         text: string,
-        type: string
+        type: string,
+        rawBytes: number[]
+        rawBytesString?: string
     }[];
 }
 
