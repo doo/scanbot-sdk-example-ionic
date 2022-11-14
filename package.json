@@ -28,7 +28,7 @@
     "@ionic/angular": "^4.1.0",
     "@ionic/storage": "2.2.0",
     "core-js": "^2.5.4",
-    "node-sass": "^4.14.1",
+    "node-sass": "^8.0.0",
     "rxjs": "~6.5.0",
     "sass": "^1.36.0",
     "source-map": "^0.7.3",
