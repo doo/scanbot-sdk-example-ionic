@@ -184,7 +184,6 @@ export class HomePage {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
         const config: CheckRecognizerConfiguration = {
-            // TODO:
         };
         const result = await this.scanbotService.SDK.UI.startCheckRecognizer({ uiConfigs: config });
 
@@ -193,6 +192,8 @@ export class HomePage {
         if (result.status === 'SUCCESS') {
             CheckRecognizerResultsService.checkRecognizerResult = result;
             await this.router.navigateByUrl('/check-recognizer-results');
+        } else {
+            await this.dialogsService.showAlert(result.status, 'Check Recognition Failed');
         }
     }
 
