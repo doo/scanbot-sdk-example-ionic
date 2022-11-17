@@ -6,7 +6,6 @@ import { CheckRecognizerResultsService } from '../services/check-recognizer-resu
 @Component({
     selector: 'app-check-recognizer-results',
     templateUrl: './check-recognizer-results.page.html',
-    styleUrls: ['./check-recognizer-results.page.scss'],
 })
 export class CheckRecognizerResultsPage {
     checkResult: CheckRecognizerResult;
