@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'barcode-result-list', loadChildren: './barcode-result-list/barcode-result-list.module#BarcodeResultListPageModule' },
   { path: 'html5-camera', loadChildren: './html5-camera/html5-camera.module#Html5CameraPageModule' },
   { path: 'generic-document-recognizer-results', loadChildren: './generic-document-recognizer-results/generic-document-recognizer-results.module#GenericDocumentRecognizerResultsPageModule' },
+  { path: 'check-recognizer-results', loadChildren: './check-recognizer-results/check-recognizer-results.module#CheckRecognizerResultsPageModule' },
 ];
 
 @NgModule({

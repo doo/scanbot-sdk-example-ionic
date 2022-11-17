@@ -24,7 +24,7 @@ export class ScanbotSdkDemoService {
      * the app identifier "io.scanbot.example.sdk.cordova.ionic" of this example app
      * or of your app (see config.xml <widget id="your.app.id" ...>).
      */
-    static readonly SDK_LICENSE_KEY: string = '';
+    static readonly SDK_LICENSE_KEY: string = "";
 
     /* Optional image format & quality parameters */
     static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';
@@ -40,8 +40,8 @@ export class ScanbotSdkDemoService {
     private readonly sdkReady: Promise<any>;
 
     constructor(private platform: Platform,
-                private dialogsService: DialogsService,
-                private file: File) {
+        private dialogsService: DialogsService,
+        private file: File) {
         this.sdkReady = new Promise<any>((resolve, reject) => {
             this.platform.ready().then(() => {
                 this.initScanbotSdk()
@@ -137,7 +137,7 @@ export class ScanbotSdkDemoService {
     }
 
     public async fetchDataFromUri(path: string): Promise<string> {
-        const result = await this.SDK.getImageData({imageFileUri: path});
+        const result = await this.SDK.getImageData({ imageFileUri: path });
         const extension = ScanbotSdkDemoService.IMAGE_FILE_FORMAT === 'JPG' ? 'jpeg' : 'png';
         // ScanbotSDK return the raw base64 data. Add prefix to convert it to a dataUri
         return `data:image/${extension};base64,` + result.base64ImageData;
