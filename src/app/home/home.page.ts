@@ -10,7 +10,8 @@ import ScanbotSdk, {
     MrzScannerConfiguration,
     TextDataScannerStep,
     GenericDocumentRecognizerConfiguration,
-    BatchBarcodeScannerConfiguration
+    BatchBarcodeScannerConfiguration,
+    CheckRecognizerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
@@ -20,7 +21,7 @@ import { BarcodeListService } from '../services/barcode-list.service';
 import { GenericDocumentRecognizerResultsService } from '../services/generic-document-recognizer-results.service';
 import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
 import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
-import { ByteArrayUtils } from 'src/utils/byte-array-utils';
+import { CheckRecognizerResultsService } from '../services/check-recognizer-results.service';
 
 @Component({
     selector: 'app-home',
@@ -29,7 +30,8 @@ import { ByteArrayUtils } from 'src/utils/byte-array-utils';
 })
 export class HomePage {
 
-    constructor(private scanbotService: ScanbotSdkDemoService,
+    constructor(
+        private scanbotService: ScanbotSdkDemoService,
         private imageResultsRepository: ImageResultsRepository,
         private dialogsService: DialogsService,
         private platform: Platform,
@@ -178,6 +180,23 @@ export class HomePage {
         }
     }
 
+    async startCheckRecognizer() {
+        if (!(await this.scanbotService.checkLicense())) { return; }
+
+        const config: CheckRecognizerConfiguration = {
+        };
+        const result = await this.scanbotService.SDK.UI.startCheckRecognizer({ uiConfigs: config });
+
+        console.log(JSON.stringify(result));
+
+        if (result.status === 'SUCCESS') {
+            CheckRecognizerResultsService.checkRecognizerResult = result;
+            await this.router.navigateByUrl('/check-recognizer-results');
+        } else {
+            await this.dialogsService.showAlert(result.status, 'Check Recognition Failed');
+        }
+    }
+
     async startMrzScanner() {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
@@ -300,12 +319,12 @@ export class HomePage {
             imageQuality: 85
         });
         await pickerLoading.dismiss();
-        
+
         // If status is cancelled OR There are no Uris received from Library
         if (!pickerResult || pickerResult.status != 'OK' || !pickerResult.imageFilesUris || pickerResult.imageFilesUris.length == 0) {
-            
+
             // If there are no uris but error message is available.
-            if (pickerResult.message && pickerResult.message.length > 0) { 
+            if (pickerResult.message && pickerResult.message.length > 0) {
                 await this.dialogsService.showAlert(pickerResult.message, 'ERROR');
             }
 
@@ -326,9 +345,9 @@ export class HomePage {
         if (!barcodeResults) {
             await this.dialogsService.showAlert('No barcodes detected', 'Results');
             return;
-            
+
             // The message will be shwon on next page rather than conflicting with any other UI item on screen.
-        } else if (pickerResult.message && pickerResult.message.length > 0) { 
+        } else if (pickerResult.message && pickerResult.message.length > 0) {
             await this.dialogsService.showAlert(pickerResult.message, 'ERROR');
         }
 
