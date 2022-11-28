@@ -381,7 +381,7 @@ export class HomePage {
         }
 
         const imageUri = pickerResult.imageFileUri as string;
-        const loading = await this.dialogsService.createLoading('Detecting barcodes...');
+        const loading = await this.dialogsService.createLoading('Recognizing check...');
         await loading.present();
         const result = await this.scanbotService.SDK.recognizeCheckOnImage({
             imageFileUri: imageUri
