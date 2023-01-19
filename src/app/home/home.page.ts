@@ -363,6 +363,39 @@ export class HomePage {
         await this.router.navigateByUrl('/barcode-result-list');
     }
 
+    async importAndRecognizeCheck() {
+
+        if (!(await this.scanbotService.checkLicense())) { return; }
+
+        const pickerResult = await ScanbotImagePicker.pickImage({
+            imageQuality: 85
+        });
+
+        if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
+            var errorMessage = 'Unexpected error while loading the chosen image';
+            if (pickerResult.message && pickerResult.message.length > 0) {
+                errorMessage = pickerResult.message;
+            }
+            await this.dialogsService.showAlert(errorMessage);
+            return;
+        }
+
+        const imageUri = pickerResult.imageFileUri as string;
+        const loading = await this.dialogsService.createLoading('Recognizing check...');
+        await loading.present();
+        const result = await this.scanbotService.SDK.recognizeCheckOnImage({
+            imageFileUri: imageUri
+        });
+
+        await loading.dismiss();
+
+        if (result.status === 'SUCCESS') {
+            CheckRecognizerResultsService.checkRecognizerResult = result;
+            await this.router.navigateByUrl('/check-recognizer-results');
+        } else {
+            await this.dialogsService.showAlert(result.status, 'Check Recognition Failed');
+        }
+    }
 
     hasHtml5CameraSupport() {
         return this.platform.is('android');

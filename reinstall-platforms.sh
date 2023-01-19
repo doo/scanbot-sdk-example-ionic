@@ -5,7 +5,7 @@
 #
 
 DEFAULT_IOS_PLATFORM_VERSION=6.2.0
-DEFAULT_ANDROID_PLATFORM_VERSION=9.0.0
+DEFAULT_ANDROID_PLATFORM_VERSION=11.0.0
 
 read -p "iOS Platform Version (press ENTER for $DEFAULT_IOS_PLATFORM_VERSION): " ios_platform_version
 read -p "Android Platform Version (press ENTER for $DEFAULT_ANDROID_PLATFORM_VERSION): " android_platform_version
