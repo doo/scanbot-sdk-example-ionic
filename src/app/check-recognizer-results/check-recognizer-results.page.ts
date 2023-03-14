@@ -20,7 +20,7 @@ export class CheckRecognizerResultsPage {
 
     private setupProperties() {
         // Setup Photo Image URI from result Fields
-        const photoImageUri = this.checkResult.imageUri;
+        const photoImageUri = this.checkResult.imageFileUri;
         if (photoImageUri) {
             this.photoUri = this.sanitizeFileUri(photoImageUri);
         }
