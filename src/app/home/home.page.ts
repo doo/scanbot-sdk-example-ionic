@@ -304,65 +304,6 @@ export class HomePage {
         await this.router.navigateByUrl('/barcode-result-list');
     }
 
-    /**
-     * 
-     * @returns Import Images from gallery and send to SDK for detecting barcode results, which is displayed on next page.
-     */
-    async importImagesAndDetectBarcodes() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
-
-        // Shows Image Picker and retrieves Image URI(s)
-        const pickerLoading = await this.dialogsService.createLoading('');
-        await pickerLoading.present();
-        const pickerResult = await ScanbotImagePicker.pickImages({
-            maxImages: 10,
-            imageQuality: 85
-        });
-        await pickerLoading.dismiss();
-
-        // If status is cancelled OR There are no Uris received from Library
-        if (!pickerResult || pickerResult.status != 'OK' || !pickerResult.imageFilesUris || pickerResult.imageFilesUris.length == 0) {
-
-            // If there are no uris but error message is available.
-            if (pickerResult.message && pickerResult.message.length > 0) {
-                await this.dialogsService.showAlert(pickerResult.message, 'ERROR');
-            }
-
-            return;
-        }
-
-        // Detects Barcodes on the given images
-        const loading = await this.dialogsService.createLoading('Detecting barcodes...');
-        await loading.present();
-        const scanResult = await this.scanbotService.SDK.detectBarcodesOnImages({
-            imageFilesUris: pickerResult.imageFilesUris,
-            barcodeFormats: BarcodeListService.getAcceptedTypes()
-        });
-
-        await loading.dismiss();
-
-        const barcodeResults = scanResult.results;
-        if (!barcodeResults) {
-            await this.dialogsService.showAlert('No barcodes detected', 'Results');
-            return;
-
-            // The message will be shwon on next page rather than conflicting with any other UI item on screen.
-        } else if (pickerResult.message && pickerResult.message.length > 0) {
-            await this.dialogsService.showAlert(pickerResult.message, 'ERROR');
-        }
-
-        BarcodeListService.detectedBarcodes = [];
-        for (let i = 0; i < barcodeResults.length; ++i) {
-            const barcodeResult = barcodeResults[i];
-            BarcodeListService.detectedBarcodes.push({
-                snappedImage: barcodeResult.imageFileUri,
-                barcodes: barcodeResult.barcodeResults.map(item => ({ type: item.type, text: item.text, textWithExtension: item.textWithExtension, rawBytes: item.rawBytes }))
-            });
-        }
-
-        await this.router.navigateByUrl('/barcode-result-list');
-    }
-
     async importAndRecognizeCheck() {
 
         if (!(await this.scanbotService.checkLicense())) { return; }
