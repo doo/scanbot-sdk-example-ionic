@@ -38,8 +38,20 @@ Check installed platforms and plugins:
 
 You should see *android* and *ios* as installed platforms and *cordova-plugin-scanbot-sdk* as installed plugins.
 
+## Important
+When using Node 17+ you might face this known Ionic issue: 
 
-Connect a device via USB and run the app.
+```
+Error: error:0308010C:digital envelope routines::unsupported
+```
+
+Before proceeding, please execute this in your terminal to prevent the issue from happening:
+
+```bash
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+
+Finally, connect a device via USB and run the app:
 
 **Android:**
 

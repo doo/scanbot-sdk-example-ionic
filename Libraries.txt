@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK for Cordova version 4.16.1:
+Open Source libraries used in the Scanbot SDK for Cordova version 4.16.2:
 
 Adm-zip
 

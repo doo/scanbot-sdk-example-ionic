@@ -26,6 +26,8 @@
             <application android:largeHeap="true" mode="merge" />
         </edit-config>
         <preference name="android-minSdkVersion" value="22" />
+        <preference name="android-maxSdkVersion" value="31" />
+        <preference name="android-targetSdkVersion" value="31" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
