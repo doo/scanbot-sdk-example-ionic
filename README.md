@@ -15,6 +15,13 @@ It contains modules which are individually licensable as license packages.
 For more details visit our website https://scanbot.io
 
 
+## Free Developer Support
+
+We provide free "no-strings-attached" developer support for the implementation & testing of the Scanbot SDK.
+If you encounter technical issues with integrating the Scanbot SDK or need advice on choosing the appropriate
+framework or features, please visit our [Support Page](https://docs.scanbot.io/support/).
+
+
 ## How to run this app
 
 Install the latest versions of [Cordova](https://cordova.apache.org) and [Ionic](https://ionicframework.com).
