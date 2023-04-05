@@ -6,7 +6,7 @@ The Scanbot SDK Cordova Plugin is available as [npm package](https://www.npmjs.c
 
 For more details about the Plugin please see this [documentation](https://docs.scanbot.io/document-scanner-sdk/cordova/introduction/).
 
-## What is Scanbot SDK?
+## What is the Scanbot SDK?
 
 The Scanbot SDK lets you integrate barcode & document scanning, as well as data extraction functionalities, into your mobile apps and website. It contains different modules that are licensable for an annual fixed price. For more details, visit our website https://scanbot.io.
 
