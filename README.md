@@ -1,19 +1,23 @@
-# Scanbot SDK Example App for Cordova with Ionic
+# Scanbot Barcode & Document Scanning Example App for Cordova with Ionic
 
-This example app demonstrates how to integrate the **Scanbot SDK Cordova Plugin** 
-in a [Cordova](https://cordova.apache.org) app using the [Ionic Framework](https://ionicframework.com).
+This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/developer/android-barcode-scanner/), [Scanbot Document Scanner SDK](https://scanbot.io/developer/android-document-scanner-sdk/), and [Scanbot Data Capture SDK](https://scanbot.io/developer/android-data-capture/) for Cordova.
 
 The Scanbot SDK Cordova Plugin is available as [npm package](https://www.npmjs.com/package/cordova-plugin-scanbot-sdk).
 
 For more details about the Plugin please see this [documentation](https://docs.scanbot.io/document-scanner-sdk/cordova/introduction/).
 
-
 ## What is Scanbot SDK?
 
-The Scanbot SDK brings scanning and document creation capabilities to your mobile apps.
-It contains modules which are individually licensable as license packages.
-For more details visit our website https://scanbot.io
+The Scanbot SDK lets you integrate barcode & document scanning, as well as data extraction functionalities, into your mobile apps and website. It contains different modules that are licensable for an annual fixed price. For more details, visit our website https://scanbot.io.
 
+
+## Trial License
+
+The Scanbot SDK will run without a license for one minute per session!
+
+After the trial period has expired, all SDK functions and UI components will stop working. You have to restart the app to get another one-minute trial period.
+
+To test the Scanbot SDK without crashing, you can get a free “no-strings-attached” trial license. Please submit the [Trial License Form](https://scanbot.io/trial/) on our website.
 
 ## Free Developer Support
 
@@ -21,6 +25,8 @@ We provide free "no-strings-attached" developer support for the implementation &
 If you encounter technical issues with integrating the Scanbot SDK or need advice on choosing the appropriate
 framework or features, please visit our [Support Page](https://docs.scanbot.io/support/).
 
+## Documentation
+👉 [Scanbot SDK documentation](https://docs.scanbot.io/document-scanner-sdk/cordova/introduction/)
 
 ## How to run this app
 
@@ -73,13 +79,3 @@ Open the project `platforms/ios/Scanbot SDK Example Ionic.xcworkspace` in Xcode 
 - Make sure the `ScanbotSDK.framework` was properly added as **Embedded Binary**
 
 Then build and run the app in Xcode.
-
-
-## Please note
-
-The Scanbot SDK will run without a license for one minute per session!
-
-After the trial period has expired all Scanbot SDK functions as well as the UI components (like Document Scanner UI) will stop working or may be terminated.
-You have to restart the app to get another trial period.
-
-To get a free "no-strings-attached" trial license, please submit the [Trial License Form](https://scanbot.io/trial/) on our website.
