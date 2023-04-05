@@ -51,7 +51,7 @@ Check installed platforms and plugins:
 
 You should see *android* and *ios* as installed platforms and *cordova-plugin-scanbot-sdk* as installed plugins.
 
-## Important
+### Important
 When using Node 17+ you might face this known Ionic issue: 
 
 ```
