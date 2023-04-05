@@ -1,6 +1,6 @@
 # Scanbot Barcode & Document Scanning Example App for Cordova with Ionic
 
-This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/developer/android-barcode-scanner/), [Scanbot Document Scanner SDK](https://scanbot.io/developer/android-document-scanner-sdk/), and [Scanbot Data Capture SDK](https://scanbot.io/developer/android-data-capture/) for Cordova.
+This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/developer/ionic-barcode-scanner/), [Scanbot Document Scanner SDK](https://scanbot.io/developer/ionic-document-scanner/), and [Scanbot Data Capture SDK](https://scanbot.io/developer/ionic-data-capture/) for Cordova.
 
 The Scanbot SDK Cordova Plugin is available as [npm package](https://www.npmjs.com/package/cordova-plugin-scanbot-sdk).
 
