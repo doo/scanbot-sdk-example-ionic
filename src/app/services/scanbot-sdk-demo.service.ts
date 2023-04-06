@@ -24,7 +24,7 @@ export class ScanbotSdkDemoService {
      * the app identifier "io.scanbot.example.sdk.cordova.ionic" of this example app
      * or of your app (see config.xml <widget id="your.app.id" ...>).
      */
-    static readonly SDK_LICENSE_KEY: string = "";
+    static readonly SDK_LICENSE_KEY: string = '';
 
     /* Optional image format & quality parameters */
     static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';
@@ -39,9 +39,11 @@ export class ScanbotSdkDemoService {
 
     private readonly sdkReady: Promise<any>;
 
-    constructor(private platform: Platform,
-        private dialogsService: DialogsService,
-        private file: File) {
+    constructor(
+        private file: File,
+        private platform: Platform,
+        private dialogsService: DialogsService
+    ) {
         this.sdkReady = new Promise<any>((resolve, reject) => {
             this.platform.ready().then(() => {
                 this.initScanbotSdk()
