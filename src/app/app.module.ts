@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { File } from '@ionic-native/file/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { IonicStorageModule } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,7 +16,6 @@ import { ImageResultsRepository } from './services/image-results.repository';
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -28,7 +28,8 @@ import { ImageResultsRepository } from './services/image-results.repository';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DialogsService,
     ScanbotSdkDemoService,
-    ImageResultsRepository
+    ImageResultsRepository,
+    File
   ],
   bootstrap: [AppComponent]
 })

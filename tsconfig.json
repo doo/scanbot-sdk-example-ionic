@@ -5,18 +5,18 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2015",
+    "module": "es2022",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es6",
+    "target": "es2022",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
-    ]
+    ],
   }
 }
