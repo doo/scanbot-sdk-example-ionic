@@ -30,10 +30,14 @@ framework or features, please visit our [Support Page](https://docs.scanbot.io/s
 
 ## How to run this app
 
-Install the latest versions of [Cordova](https://cordova.apache.org) and [Ionic](https://ionicframework.com).
-Fetch this repository and navigate to the project directory.
+### Requirements
 
-`cd scanbot-sdk-example-ionic/`
+- [NodeJS 16+](https://nodejs.org) (installation via [nvm](https://github.com/nvm-sh/nvm) recommended )
+- [Cordova CLI](https://cordova.apache.org)
+- [Ionic CLI](https://ionicframework.com)
+- [native-run CLI](https://www.npmjs.com/package/native-run)
+- [Android Studio](https://developer.android.com/studio) and [Xcode](https://developer.apple.com/xcode/)
+
 
 Install node modules:
 
@@ -74,8 +78,5 @@ Finally, connect a device via USB and run the app:
 
 `ionic cordova prepare ios`
 
-Open the project `platforms/ios/Scanbot SDK Example Ionic.xcworkspace` in Xcode and check/adjust the following settings:
-- *Provisioning* and *Code Signing* - see [Cordova docs](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html)
-- Make sure the `ScanbotSDK.framework` was properly added as **Embedded Binary**
-
-Then build and run the app in Xcode.
+Open the workspace `platforms/ios/Scanbot SDK Example Ionic.xcworkspace` in Xcode and adjust the *"Signing"* 
+settings accordingly. Then build and run the app in Xcode.
