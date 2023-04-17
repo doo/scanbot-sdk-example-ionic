@@ -50,7 +50,7 @@
     "@types/node": "^18.15.11",
     "codelyzer": "^6.0.2",
     "compare-func": "^2.0.0",
-    "cordova-android": "^10.1.2",
+    "cordova-android": "^11.0.0",
     "cordova-ios": "^6.2.0",
     "cordova-plugin-androidx": "^3.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.3",
