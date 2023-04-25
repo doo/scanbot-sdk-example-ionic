@@ -28,6 +28,10 @@
         <preference name="android-minSdkVersion" value="22" />
         <preference name="android-maxSdkVersion" value="31" />
         <preference name="android-targetSdkVersion" value="31" />
+        <preference name="AndroidXEnabled" value="true" />
+        <preference name="GradlePluginKotlinEnabled" value="true" />
+        <preference name="GradlePluginKotlinCodeStyle" value="official" />
+        <preference name="GradlePluginKotlinVersion" value="1.3.50" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
