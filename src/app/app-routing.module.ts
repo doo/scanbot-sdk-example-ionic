@@ -3,15 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: './home/home.module#HomePageModule' },
-  { path: 'image-results', loadChildren: './image-results/image-results.module#ImageResultsPageModule' },
-  { path: 'image-view/:pageId', loadChildren: './image-view/image-view.module#ImageViewPageModule' },
-  { path: 'barcode-list', loadChildren: './barcode-list/barcode-list.module#BarcodeListModule' },
-  { path: 'barcode-document-list', loadChildren: './barcode-document-list/barcode-document-list.module#BarcodeDocumentListModule' },
-  { path: 'barcode-result-list', loadChildren: './barcode-result-list/barcode-result-list.module#BarcodeResultListPageModule' },
-  { path: 'html5-camera', loadChildren: './html5-camera/html5-camera.module#Html5CameraPageModule' },
-  { path: 'generic-document-recognizer-results', loadChildren: './generic-document-recognizer-results/generic-document-recognizer-results.module#GenericDocumentRecognizerResultsPageModule' },
-  { path: 'check-recognizer-results', loadChildren: './check-recognizer-results/check-recognizer-results.module#CheckRecognizerResultsPageModule' },
+  { path: 'home', loadChildren: () => import('./home/home.module').then(x => x.HomePageModule) },
+  { path: 'image-results', loadChildren: () => import('./image-results/image-results.module').then(x => x.ImageResultsPageModule)},
+  { path: 'image-view/:pageId', loadChildren: () => import('.//image-view/image-view.module').then(x => x.ImageViewPageModule)},
+  { path: 'barcode-list', loadChildren: () => import('./barcode-list/barcode-list.module').then(x => x.BarcodeListModule)},
+  { path: 'barcode-document-list', loadChildren: () => import('./barcode-document-list/barcode-document-list.module').then(x => x.BarcodeDocumentListModule)},
+  { path: 'barcode-result-list', loadChildren: () => import('./barcode-result-list/barcode-result-list.module').then(x => x.BarcodeResultListPageModule)},
+  { path: 'html5-camera', loadChildren: () => import('./html5-camera/html5-camera.module').then(x => x.Html5CameraPageModule)},
+  { path: 'generic-document-recognizer-results', loadChildren: () => import('./generic-document-recognizer-results/generic-document-recognizer-results.module').then(x => x.GenericDocumentRecognizerResultsPageModule)},
+  { path: 'check-recognizer-results', loadChildren: () => import('./check-recognizer-results/check-recognizer-results.module').then(x => x.CheckRecognizerResultsPageModule)},
 ];
 
 @NgModule({
