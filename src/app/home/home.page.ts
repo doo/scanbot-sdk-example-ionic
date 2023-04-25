@@ -70,6 +70,21 @@ export class HomePage {
         await this.gotoImageResults();
     }
 
+    async startFinderDocumentScanner() {
+        if (!(await this.scanbotService.checkLicense())) { return; }
+
+        const configs = this.scanbotService.globalFinderDocScannerConfigs();
+        const result = await this.scanbotService.SDK.UI.startFinderDocumentScanner({ uiConfigs: configs });
+
+        if (result.status === 'CANCELED') {
+            // user has canceled the scanning operation
+            return;
+        }
+
+        await this.imageResultsRepository.updatePage(result.page);
+        await this.gotoImageResults();
+    }
+
     async pickImageFromPhotoLibrary() {
         // Import an image from Photo Library and run auto document detection on it.
 

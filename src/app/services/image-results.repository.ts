@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Platform } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 
 import { Page } from 'cordova-plugin-scanbot-sdk';
 import { ScanbotSdkDemoService } from './scanbot-sdk-demo.service';
@@ -9,14 +9,21 @@ import { ScanbotSdkDemoService } from './scanbot-sdk-demo.service';
 
 @Injectable()
 export class ImageResultsRepository {
-
     private pages: Page[] = [];
 
     constructor(private sanitizer: DomSanitizer,
                 private storage: Storage,
                 private platform: Platform,
                 private scanbotService: ScanbotSdkDemoService) {
+
+        this.init().then(r => console.log('local storage created'));
+
         this.platform.ready().then(() => this.loadPagesFromStorage());
+    }
+
+    async init() {
+        // create storage.
+        await this.storage.create();
     }
 
     private async loadPagesFromStorage() {
