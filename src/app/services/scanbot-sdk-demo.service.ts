@@ -5,6 +5,7 @@ import { File } from '@ionic-native/file/ngx';
 import ScanbotSdk, {
     CameraImageFormat,
     DocumentScannerConfiguration,
+    FinderDocumentScannerConfiguration,
     FileEncryptionMode,
     ScanbotSDKConfiguration
 } from 'cordova-plugin-scanbot-sdk';
@@ -65,6 +66,7 @@ export class ScanbotSdkDemoService {
             storageImageQuality: ScanbotSdkDemoService.JPG_IMAGE_QUALITY,
             storageBaseDirectory: this.getDemoStorageBaseDirectory(), // optional storageBaseDirectory, see comments below
             documentDetectorMode: 'ML_BASED',
+            imageProcessorType: 'ML_BASED',
             useCameraX: true,
             allowXnnpackAcceleration: false,
             allowGpuAcceleration: false,
@@ -134,6 +136,19 @@ export class ScanbotSdkDemoService {
             bottomBarBackgroundColor: '#c8193c',
             // maxNumberOfPages: 3,
             // documentImageSizeLimit: { width: 2000, height: 3000 },
+            // see further configs ...
+        };
+    }
+
+    public globalFinderDocScannerConfigs(): FinderDocumentScannerConfiguration {
+        return {
+            // Customize colors, text resources, behavior, etc..
+            cameraPreviewMode: 'FILL_IN',
+            interfaceOrientation: 'PORTRAIT',
+            ignoreBadAspectRatio: true,
+            topBarBackgroundColor: '#c8193c',
+            finderEnabled: true,
+            finderAspectRatio: { width: 4, height: 3 }
             // see further configs ...
         };
     }
