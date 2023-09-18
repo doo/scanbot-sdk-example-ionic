@@ -1,0 +1,50 @@
+ScanbotSDK: Trial mode activated. You can now test all features for 60 seconds.
+[SceneConfiguration] Info.plist contained no UIScene configuration dictionary (looking for configuration named "(no name)")
+[SceneConfiguration] Info.plist contained no UIScene configuration dictionary (looking for configuration named "(no name)")
+Apache Cordova iOS platform version 7.0.1 is starting.
+CDVWKWebViewEngine: trying to inject XHR polyfill
+The preference key "KeyboardResize" is not defined and will default to "TRUE"
+The preference key "AutoInjectCordova" is not defined and will default to "FALSE"
+The preference key "AudioCanMix" is not defined and will default to "FALSE"
+The preference key "WKSuspendInBackground" is not defined and will default to "TRUE"
+The preference key "MediaPlaybackAllowsAirPlay" is not defined and will default to "TRUE"
+The preference key "KeyboardAppearanceDark" is not defined and will default to "FALSE"
+The preference key "AllowLinkPreview" is not defined and will default to "FALSE"
+The preference key "AllowBackForwardNavigationGestures" is not defined and will default to "FALSE"
+CDVWKWebViewEngine will reload WKWebView if required on resume
+Using Ionic WKWebView
+[CDVTimer][console] 0.019073ms
+[CDVTimer][handleopenurl] 0.018954ms
+[CDVTimer][intentandnavigationfilter] 0.818014ms
+[CDVTimer][gesturehandler] 0.023007ms
+[CDVTimer][file] 0.880003ms
+191019 The preference key "KeyboardResize" is not defined and will default to "TRUE"
+191035 CDVIonicKeyboard: resize mode 1
+191048 The preference key "HideKeyboardFormAccessoryBar" is not defined and will default to "TRUE"
+191189 The preference key "KeyboardAppearanceDark" is not defined and will default to "FALSE"
+191223 [CDVTimer][cdvionickeyboard] 0.244975ms
+192408 [CDVTimer][statusbar] 1.164079ms
+193315 [CDVTimer][diagnostic] 0.885010ms
+194238 [CDVTimer][diagnostic_location] 0.898004ms
+194587 [CDVTimer][diagnostic_bluetooth] 0.327945ms
+194629 [CDVTimer][diagnostic_wifi] 0.018954ms
+194658 [CDVTimer][diagnostic_camera] 0.012994ms
+194697 [CDVTimer][diagnostic_notifications] 0.021935ms
+194743 [CDVTimer][diagnostic_microphone] 0.028968ms
+196403 [CDVTimer][diagnostic_contacts] 1.641989ms
+196440 [CDVTimer][diagnostic_calendar] 0.011086ms
+196474 [CDVTimer][diagnostic_reminders] 0.018954ms
+197711 [CDVTimer][diagnostic_motion] 1.222014ms
+197733 [CDVTimer][TotalPluginStartup] 8.633018ms
+308406 [Sandbox] Could not enable Mach bootstrap, errno = 1.
+308472 [Sandbox] Could not enable Mach bootstrap, errno = 1.
+598035 The preference key "AutoHideSplashScreen" is not defined and will default to "TRUE"
+776156 Ionic Native: deviceready event fired after 131 ms
+853150 THREAD WARNING: ['LaunchScreen'] took '76.785889' ms. Plugin should use a background thread.
+856441 ScanbotSDK: INFO - Installing resources of type OCR
+857250 ScanbotSDK: INFO - Resources already installed: OCR
+857279 Using custom storage base directory: file:///var/mobile/Containers/Data/Application/44ECA781-C1CD-4DA1-9A45-3D4D9327567C/Documents/my-custom-storage
+911230 THREAD WARNING: ['ScanbotSdk'] took '55.430908' ms. Plugin should use a background thread.
+912595 void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+979317 {"status":"OK","message":"Scanbot SDK initialized. Trial mode activated. You can now test all features for 60 seconds."}
+[TraitCollection] Class CKBrowserSwitcherViewController overrides the -traitCollection getter, which is not supported. If you're trying to override traits, you must use the appropriate API.

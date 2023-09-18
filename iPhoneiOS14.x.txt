@@ -1,0 +1,65 @@
+Apache Cordova iOS platform version 7.0.1 is starting.
+CDVWKWebViewEngine: trying to inject XHR polyfill
+The preference key "KeyboardResize" is not defined and will default to "TRUE"
+The preference key "AutoInjectCordova" is not defined and will default to "FALSE"
+The preference key "AudioCanMix" is not defined and will default to "FALSE"
+The preference key "WKSuspendInBackground" is not defined and will default to "TRUE"
+The preference key "MediaPlaybackAllowsAirPlay" is not defined and will default to "TRUE"
+The preference key "KeyboardAppearanceDark" is not defined and will default to "FALSE"
+The preference key "AllowLinkPreview" is not defined and will default to "FALSE"
+The preference key "AllowBackForwardNavigationGestures" is not defined and will default to "FALSE"
+CDVWKWebViewEngine will reload WKWebView if required on resume
+Using Ionic WKWebView
+[CDVTimer][console] 0.110030ms
+[CDVTimer][handleopenurl] 0.061035ms
+[CDVTimer][intentandnavigationfilter] 1.726985ms
+[CDVTimer][gesturehandler] 0.072002ms
+[CDVTimer][file] 2.520919ms
+The preference key "KeyboardResize" is not defined and will default to "TRUE"
+CDVIonicKeyboard: resize mode 1
+The preference key "HideKeyboardFormAccessoryBar" is not defined and will default to "TRUE"
+ 194841 The preference key "KeyboardAppearanceDark" is not defined and will default to "FALSE"
+ 194989 [CDVTimer][cdvionickeyboard] 0.761986ms
+ 197575 [CDVTimer][statusbar] 2.501965ms
+ 198434 [CDVTimer][diagnostic] 0.729084ms
+ 199987 [CDVTimer][diagnostic_location] 1.430988ms
+ 200119 [CDVTimer][diagnostic_bluetooth] 0.069022ms
+ 200195 [CDVTimer][diagnostic_wifi] 0.028014ms
+ 200700 [CDVTimer][diagnostic_camera] 0.460982ms
+ 200771 [CDVTimer][diagnostic_notifications] 0.024915ms
+ 200888 [CDVTimer][diagnostic_microphone] 0.073075ms
+ 203383 [CDVTimer][diagnostic_contacts] 2.444983ms
+ 203540 [CDVTimer][diagnostic_calendar] 0.070930ms
+ 203637 [CDVTimer][diagnostic_reminders] 0.048995ms
+ 203918 [CDVTimer][diagnostic_motion] 0.194073ms
+ 204100 [CDVTimer][TotalPluginStartup] 14.863014ms
+ 310512 WF: === Starting WebFilter logging for process Scanbot SDK Example Ionic
+ 310575 WF: _userSettingsForUser mobile: {
+    filterBlacklist =     (
+    );
+    filterWhitelist =     (
+    );
+    restrictWeb = 1;
+    useContentFilter = 0;
+    useContentFilterOverrides = 0;
+    whitelistEnabled = 0;
+}
+ 310622 WF: _WebFilterIsActive returning: NO
+ 763212 The preference key "AutoHideSplashScreen" is not defined and will default to "TRUE"
+ScanbotSDK: Trial mode activated. You can now test all features for 60 seconds.
+ 300203 Ionic Native: deviceready event fired after 508 ms
+ 325221 THREAD WARNING: ['LaunchScreen'] took '20.507080' ms. Plugin should use a background thread.
+ 326542 ScanbotSDK: INFO - Installing resources of type OCR
+ 336872 ScanbotSDK: INFO - Installing resources from (
+    "file:///var/containers/Bundle/Application/514783F6-752A-44DF-8990-647DC74EBE36/Scanbot SDK Example Ionic.app/Frameworks/ScanbotSDK.framework/ScanbotSDK.bundle/SBSDKPDFData/",
+    "file:///var/containers/Bundle/Application/514783F6-752A-44DF-8990-647DC74EBE36/Scanbot SDK Example Ionic.app/ScanbotSDKOCRData.bundle/"
+)
+ 337331 ScanbotSDK: INFO - 
+ 338263 ScanbotSDK: INFO - 
+ 339099 ScanbotSDK: INFO - 
+ 339869 ScanbotSDK: INFO - 
+ 340522 ScanbotSDK: INFO - 
+ 341856 ScanbotSDK: INFO - Resources successfully installed.
+ 341944 Using custom storage base directory: file:///var/mobile/Containers/Data/Application/DBEC547D-B335-435D-9534-D5BE6F9F32B4/Documents/my-custom-storage
+ 345314 THREAD WARNING: ['ScanbotSdk'] took '19.568115' ms. Plugin should use a background thread.
+ 351458 {"status":"OK","message":"Scanbot SDK initialized. Trial mode activated. You can now test all features for 60 seconds."}
