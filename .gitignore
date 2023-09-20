@@ -1,7 +1,9 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-www/
+www/*
+!www/.gitkeep
+
 *~
 *.sw[mnpcod]
 *.log
