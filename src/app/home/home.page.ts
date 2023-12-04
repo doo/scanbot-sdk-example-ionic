@@ -181,7 +181,7 @@ export class HomePage {
         const config: GenericDocumentRecognizerConfiguration = {
             shouldSavePhotoImageInStorage: true,
             detailsFieldConfiguration: {
-                fieldLicenseCategoriesTitle: "NEW TITLE"
+                fieldLicenseCategoriesTitle: 'NEW TITLE'
             }
         };
         const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({ uiConfigs: config });
@@ -289,7 +289,7 @@ export class HomePage {
         });
 
         if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
-            var errorMessage = 'Unexpected error while loading the chosen image';
+            let errorMessage = 'Unexpected error while loading the chosen image';
             if (pickerResult.message && pickerResult.message.length > 0) {
                 errorMessage = pickerResult.message;
             }
@@ -328,7 +328,7 @@ export class HomePage {
         });
 
         if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
-            var errorMessage = 'Unexpected error while loading the chosen image';
+            let errorMessage = 'Unexpected error while loading the chosen image';
             if (pickerResult.message && pickerResult.message.length > 0) {
                 errorMessage = pickerResult.message;
             }
