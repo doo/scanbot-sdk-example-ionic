@@ -45,7 +45,7 @@ Install node modules:
 
 Install Cordova platforms and plugins (defined in the config.xml of this app):
 
-`cordova prepare`
+`ionic cordova prepare`
 
 Check installed platforms and plugins:
 
