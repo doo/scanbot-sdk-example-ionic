@@ -19,9 +19,9 @@ export class ScanbotSdkDemoService {
     /*
      * TODO add the license key here.
      * Please note: The Scanbot SDK will run without a license key for one minute per session!
-     * After the trial period is over all Scanbot SDK functions as well as the UI components will stop working
-     * or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
-     * Please submit the trial license form (https://scanbot.io/sdk/trial.html) on our website by using
+     * After the trial period has expired, all SDK functions and UI components will stop working.
+     * You can get a free "no-strings-attached" trial license.
+     * Please submit the trial license form (https://scanbot.io/trial/) on our website using
      * the app identifier "io.scanbot.example.sdk.cordova.ionic" of this example app
      * or of your app (see config.xml <widget id="your.app.id" ...>).
      */
