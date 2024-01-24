@@ -25,7 +25,7 @@ export class ScanbotSdkDemoService {
      * the app identifier "io.scanbot.example.sdk.cordova.ionic" of this example app
      * or of your app (see config.xml <widget id="your.app.id" ...>).
      */
-    static readonly SDK_LICENSE_KEY: string = '';
+    static readonly SDK_LICENSE_KEY: string = "";
 
     /* Optional image format & quality parameters */
     static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';
@@ -126,14 +126,19 @@ export class ScanbotSdkDemoService {
 
     public globalDocScannerConfigs(): DocumentScannerConfiguration {
         return {
-            // Customize colors, text resources, behavior, etc..
             cameraPreviewMode: 'FIT_IN',
-            interfaceOrientation: 'PORTRAIT',
-            pageCounterButtonTitle: '%d Page(s)',
-            multiPageEnabled: true,
-            ignoreBadAspectRatio: true,
+            acceptedSizeScore: 86,
+            acceptedAngleScore: 86,
+            pageCounterButtonTitle: '%d Dokument(e)',
+            multiPageEnabled: false,
+            multiPageButtonHidden: true,
+            cancelButtonTitle: 'Abbrechen',
+            multiPageButtonTitle: 'Multi An/Aus',
+            bottomBarButtonsColor: '#c8193c',
+            polygonColor: '#c8193c',
             topBarBackgroundColor: '#c8193c',
-            bottomBarBackgroundColor: '#c8193c',
+            autoSnappingButtonTitle: 'Auto',
+            flashButtonTitle: 'Blitz',
             // maxNumberOfPages: 3,
             // documentImageSizeLimit: { width: 2000, height: 3000 },
             // see further configs ...

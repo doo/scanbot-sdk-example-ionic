@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { IonModal, Platform } from '@ionic/angular';
 
 import ScanbotSdk, {
     DataScannerConfiguration,
@@ -11,7 +11,8 @@ import ScanbotSdk, {
     TextDataScannerStep,
     GenericDocumentRecognizerConfiguration,
     BatchBarcodeScannerConfiguration,
-    CheckRecognizerConfiguration
+    CheckRecognizerConfiguration,
+    CroppingScreenConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
@@ -55,8 +56,23 @@ export class HomePage {
         });
     }
 
-    async startDocumentScanner() {
+    async startDocumentScanner(modal: any) {
         if (!(await this.scanbotService.checkLicense())) { return; }
+
+        const cropConfigs: CroppingScreenConfiguration = {
+            doneButtonTitle: 'Speichern',
+            bottomBarBackgroundColor: '#000000',
+            bottomBarButtonsColor: '#c8193c',
+            cancelButtonTitle: 'Abbrechen',
+            topBarTitle: 'Bearbeiten',
+            topBarBackgroundColor: '#c8193c',
+            resetButtonTitle: 'Rückgängig',
+            rotateButtonTitle: 'Drehen',
+            detectResetButtonHidden: true,
+            backgroundColor: '#000000',
+            detectButtonTitle: 'Erkennen',
+            // see further configs ...
+        };
 
         const configs = this.scanbotService.globalDocScannerConfigs();
         const result = await this.scanbotService.SDK.UI.startDocumentScanner({ uiConfigs: configs });
@@ -65,9 +81,27 @@ export class HomePage {
             // user has canceled the scanning operation
             return;
         }
+        else {
+            await modal.dismiss();
 
-        await this.imageResultsRepository.addPages(result.pages);
-        await this.gotoImageResults();
+            const cropResult = await this.scanbotService.SDK.UI.startCroppingScreen({
+                page: result.pages[0],
+                uiConfigs: cropConfigs
+            });
+
+            if (cropResult.status === 'CANCELED') {
+                // user has canceled the cropping operation
+                return;
+            }
+            else if (cropResult.page) {
+                await this.imageResultsRepository.addPages([cropResult.page]);
+                console.time();
+                await this.gotoImageResults();
+                console.timeEnd()
+            }
+        }
+        //await this.imageResultsRepository.addPages(result.pages);
+        //await this.gotoImageResults();
     }
 
     async startFinderDocumentScanner() {
