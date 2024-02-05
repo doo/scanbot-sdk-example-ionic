@@ -13,37 +13,37 @@ export class CheckRecognizerResultsPage {
     photoUri: string;
 
     constructor(public sanitizer: DomSanitizer, ) {
-        this.checkResult = CheckRecognizerResultsService.checkRecognizerResult;
+        // this.checkResult = CheckRecognizerResultsService.checkRecognizerResult;
         this.displayFields = {};
         this.setupProperties();
     }
 
     private setupProperties() {
         // Setup Photo Image URI from result Fields
-        const photoImageUri = this.checkResult.imageFileUri;
-        if (photoImageUri) {
-            this.photoUri = this.sanitizeFileUri(photoImageUri);
-        }
-
-        // Setup Key - Value entries from result Fields
-        Object.keys(this.checkResult.fields).forEach((key) => {
-            const value = this.checkResult.fields[key].value;
-            let out;
-
-            if (value["text"]) {
-                out = value["text"];
-                if (value["confidence"]) {
-                    let percentage = Math.round(value["confidence"] * 100);
-                    out += "\n(confidence: " + percentage + "%)";
-                }
-            } else if (typeof value === 'string' || value instanceof String) {
-                out = value;
-            }
-
-            if (out) {
-                this.displayFields[key] = out;
-            }
-        });
+        // const photoImageUri = this.checkResult.imageFileUri;
+        // if (photoImageUri) {
+        //     this.photoUri = this.sanitizeFileUri(photoImageUri);
+        // }
+        //
+        // // Setup Key - Value entries from result Fields
+        // Object.keys(this.checkResult.fields).forEach((key) => {
+        //     const value = this.checkResult.fields[key].value;
+        //     let out;
+        //
+        //     if (value["text"]) {
+        //         out = value["text"];
+        //         if (value["confidence"]) {
+        //             let percentage = Math.round(value["confidence"] * 100);
+        //             out += "\n(confidence: " + percentage + "%)";
+        //         }
+        //     } else if (typeof value === 'string' || value instanceof String) {
+        //         out = value;
+        //     }
+        //
+        //     if (out) {
+        //         this.displayFields[key] = out;
+        //     }
+        // });
     }
 
     private sanitizeFileUri(fileUri: string): string {

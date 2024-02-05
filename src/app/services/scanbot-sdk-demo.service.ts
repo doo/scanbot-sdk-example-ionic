@@ -3,11 +3,11 @@ import { Platform } from '@ionic/angular';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 
 import ScanbotSdk, {
-    CameraImageFormat,
     DocumentScannerConfiguration,
     FinderDocumentScannerConfiguration,
     FileEncryptionMode,
-    ScanbotSDKConfiguration
+    StorageImageFormat,
+    ScanbotSdkConfiguration,
 } from 'cordova-plugin-scanbot-sdk';
 
 import { environment } from '../../environments/environment';
@@ -28,7 +28,7 @@ export class ScanbotSdkDemoService {
     static readonly SDK_LICENSE_KEY: string = '';
 
     /* Optional image format & quality parameters */
-    static readonly IMAGE_FILE_FORMAT: CameraImageFormat = 'JPG';
+    static readonly IMAGE_FILE_FORMAT: StorageImageFormat = 'JPG';
     static readonly JPG_IMAGE_QUALITY = 80;
 
     public static readonly ENCRYPTION_ENABLED: boolean = false;
@@ -59,14 +59,13 @@ export class ScanbotSdkDemoService {
     }
 
     private initScanbotSdk() {
-        const config: ScanbotSDKConfiguration = {
+        const config: ScanbotSdkConfiguration = {
             loggingEnabled: !environment.production, // Disable logging in production builds for security and performance reasons!
             licenseKey: ScanbotSdkDemoService.SDK_LICENSE_KEY,
             storageImageFormat: ScanbotSdkDemoService.IMAGE_FILE_FORMAT,
             storageImageQuality: ScanbotSdkDemoService.JPG_IMAGE_QUALITY,
             storageBaseDirectory: this.getDemoStorageBaseDirectory(), // optional storageBaseDirectory, see comments below
             documentDetectorMode: 'ML_BASED',
-            imageProcessorType: 'ML_BASED',
             useCameraX: true,
             allowXnnpackAcceleration: false,
             allowGpuAcceleration: false,
@@ -77,15 +76,14 @@ export class ScanbotSdkDemoService {
             config.fileEncryptionMode = ScanbotSdkDemoService.FILE_ENCRYPTION_MODE;
         }
 
-        return this.SDK.initializeSdk(config).then(result => {
+        return this.SDK.initializeSdk(config).then((result: any) => {
             console.log(JSON.stringify(result));
-        }).catch(err => {
+        }).catch((err:any) => {
             console.error(JSON.stringify(err));
         });
     }
 
     private getDemoStorageBaseDirectory(): string {
-        // tslint:disable:max-line-length
         // !! Please note !!
         // It is strongly recommended to use the default (secure) storage location of the Scanbot SDK.
         // However, for demo purposes we overwrite the "storageBaseDirectory" of the Scanbot SDK by a custom storage directory.
@@ -111,12 +109,12 @@ export class ScanbotSdkDemoService {
         } else if (this.platform.is('ios')) {
             return this.file.documentsDirectory + 'my-custom-storage';
         }
-        return null;
+        return '';
     }
 
     public async checkLicense() {
         const result = await this.SDK.getLicenseInfo();
-        if (result.info.isLicenseValid) {
+        if (result.isLicenseValid) {
             // OK - we have a trial session, a valid trial license or valid production license.
             return true;
         }
@@ -128,7 +126,7 @@ export class ScanbotSdkDemoService {
         return {
             // Customize colors, text resources, behavior, etc..
             cameraPreviewMode: 'FIT_IN',
-            interfaceOrientation: 'PORTRAIT',
+            orientationLockMode: 'PORTRAIT',
             pageCounterButtonTitle: '%d Page(s)',
             multiPageEnabled: true,
             ignoreBadAspectRatio: true,
@@ -144,7 +142,7 @@ export class ScanbotSdkDemoService {
         return {
             // Customize colors, text resources, behavior, etc..
             cameraPreviewMode: 'FILL_IN',
-            interfaceOrientation: 'PORTRAIT',
+            orientationLockMode: 'PORTRAIT',
             ignoreBadAspectRatio: true,
             topBarBackgroundColor: '#c8193c',
             finderEnabled: true,

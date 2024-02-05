@@ -5,5 +5,5 @@ import { CheckRecognizerResult } from 'cordova-plugin-scanbot-sdk';
     providedIn: 'root',
 })
 export class CheckRecognizerResultsService {
-    public static checkRecognizerResult: CheckRecognizerResult = {};
+    public static checkRecognizerResult = {};
 }

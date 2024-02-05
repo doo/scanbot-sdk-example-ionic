@@ -2,41 +2,38 @@ import { Injectable } from '@angular/core';
 import { BarcodeDocumentFormat } from 'cordova-plugin-scanbot-sdk';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class BarcodeDocumentListService {
 
-    public static isFilteringEnabled = false;
+  public static isFilteringEnabled = false;
 
-    public static list = [
-      {key: 'AAMVA', value: true},
-      {key: 'BOARDING_PASS', value: true},
-      {key: 'DE_MEDICAL_PLAN', value: true},
-      {key: 'MEDICAL_CERTIFICATE', value: true},
-      {key: 'ID_CARD_PDF_417', value: true},
-      {key: 'SEPA', value: true},
-      {key: 'SWISS_QR', value: true},
-      {key: 'VCARD', value: true},
-    ];
+  public static list: Array<{ key: BarcodeDocumentFormat, value: boolean }> = [
+    { key: "AAMVA", value: true },
+    { key: "BOARDING_PASS", value: true },
+    { key: "DE_MEDICAL_PLAN", value: true },
+    { key: "MEDICAL_CERTIFICATE", value: true },
+    { key: "ID_CARD_PDF_417", value: true },
+    { key: "SEPA", value: true },
+    { key: "SWISS_QR", value: true },
+    { key: "VCARD", value: true },
+    { key: "GS1", value: true },
+  ];
 
-    public static getAcceptedFormats(): BarcodeDocumentFormat[] {
-        if (!BarcodeDocumentListService.isFilteringEnabled) {
-          return [];
-        }
+  public static getAcceptedFormats(): BarcodeDocumentFormat[] {
+    if (!BarcodeDocumentListService.isFilteringEnabled) {
+      return [];
+    }
 
-        const result: BarcodeDocumentFormat[] = [];
-        BarcodeDocumentListService.list.forEach((format) => {
-          if (format.value) {
-            result.push(<BarcodeDocumentFormat>format.key);
-          }
-        });
-        return result;
-      }
-      public static update(updated: any) {
-        BarcodeDocumentListService.list.forEach((original) => {
-          if (original.key === updated.key) {
-            original.value = updated.value;
-          }
-        });
-      }
+    return BarcodeDocumentListService.list
+      .filter(item => item.value)
+      .map(item => item.key)
+  }
+
+  public static update(format: BarcodeDocumentFormat, isChecked: boolean) {
+    const index = BarcodeDocumentListService.list.findIndex(item => item.key === format)
+    if (index) {
+      BarcodeDocumentListService.list[index].value = isChecked
+    }
+  }
 }
