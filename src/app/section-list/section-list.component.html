@@ -1,0 +1,23 @@
+<ion-content style="padding-bottom: 8%;" class="ion-padding,">
+
+    <div class="section-container" *ngFor="let item of sectionListData">
+        <h3 class="section-header">{{item.title}}</h3>
+        <div *ngFor="let data of item.data">
+            <div class="section-item-container" *ngIf="data.value !== undefined">
+                <p style="font-weight: bold" class="section-item">{{data.key}}</p>
+                <p class="section-item">{{data.value}}</p>
+            </div>
+            <ion-item class="section-item-container" *ngIf="data.image !== undefined">
+                <ion-img style="width: 100%;height: auto" *ngIf="data.image" [src]="data.image" alt="check image"/>
+            </ion-item>
+            <div class="section-item-container" *ngIf="data.field !== undefined">
+                <p style="font-weight: bold" class="section-item" *ngIf="data.key">{{data.key}}</p>
+                <p class="section-item" *ngIf="data.field.value.text">{{data.field.value.text}}</p>
+                <p class="section-item" *ngIf="data.field.value.confidence">{{data.field.value.confidence}}</p>
+                <p class="section-item" *ngIf="data.field.validationStatus">{{data.field.validationStatus}}</p>
+            </div>
+        </div>
+    </div>
+
+
+</ion-content>

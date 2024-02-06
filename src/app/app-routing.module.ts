@@ -23,6 +23,10 @@ const routes: Routes = [
         path: 'check-recognizer-results',
         loadChildren: () => import('./check-recognizer-results/check-recognizer-results.module').then(x => x.CheckRecognizerResultsPageModule)
     },
+    {
+      path: 'mrz-scanner-results',
+      loadChildren: () => import('./mrz-scanner-results/mrz-scanner-results.module').then( m => m.MrzScannerResultsPageModule)
+    },
 ];
 
 @NgModule({
