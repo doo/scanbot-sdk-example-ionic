@@ -8,9 +8,11 @@ import {
     GenericDocumentRecognizerConfiguration,
     HealthInsuranceCardScannerConfiguration,
     LicensePlateScannerConfiguration,
-    LicensePlateScanStrategy, MedicalCertificateRecognizerConfiguration,
+    LicensePlateScanStrategy,
+    MedicalCertificateRecognizerConfiguration,
     MrzScannerConfiguration,
-    TextDataScannerConfiguration, VinScannerConfiguration
+    TextDataScannerConfiguration,
+    VinScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
@@ -96,6 +98,38 @@ export class HomePage {
 
             await this.imageResultsRepository.addPages([docResult]);
             await this.gotoImageResults();
+        } catch (e: any) {
+            console.error('Unable to process selected image.', e);
+            await this.dialogsService.showAlert(e.message, 'ERROR', 'Unable to process selected image.');
+        } finally {
+            await loading.dismiss();
+        }
+    }
+
+    async detectDocumentOnImage() {
+        const result = await ScanbotImagePicker.pickImage();
+        if (result.status !== 'OK' || !result.imageFileUri) {
+            return;
+        }
+
+        const imageFileUri = result.imageFileUri;
+
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
+
+        const loading = await this.dialogsService.createLoading('Detecting...');
+        try {
+            await loading.present();
+
+            // Detect document on selected image
+            const result = await this.scanbotService.SDK.detectDocument({imageFileUri});
+            // Analyze document quality on selected image
+            const quality = await this.scanbotService.SDK.documentQualityAnalyzer({imageFileUri});
+
+            await this.dialogsService.showAlert(`Detected Document result: ${JSON.stringify(result, null, 2)}\n` +
+                `Document Quality result: ${JSON.stringify(quality, null, 2)}`, "Document detection");
+
         } catch (e: any) {
             console.error('Unable to process selected image.', e);
             await this.dialogsService.showAlert(e.message, 'ERROR', 'Unable to process selected image.');
