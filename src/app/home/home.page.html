@@ -35,7 +35,7 @@
         <ion-label>Scan QR-/Barcode</ion-label>
       </ion-item>
       <ion-item (click)="startBatchBarcodeScanner()">
-        <ion-label>Scan a Batch of Barcodes</ion-label>
+        <ion-label>Scan Batch of QR-/Barcodes</ion-label>
       </ion-item>
       <ion-item (click)="importAndDetectBarcodes()">
         <ion-label>Import Image & Detect Barcodes</ion-label>
@@ -55,6 +55,15 @@
       <ion-item (click)="startMrzScanner()">
         <ion-label>Scan MRZ on ID Card</ion-label>
       </ion-item>
+<!--      <ion-item (click)="start()">-->
+<!--        <ion-label>Scan Medical Certificate</ion-label>-->
+<!--      </ion-item>-->
+      <ion-item (click)="startGenericDocumentRecognizer()">
+        <ion-label>Scan Generic Documents</ion-label>
+      </ion-item>
+      <ion-item (click)="startCheckRecognizer()">
+        <ion-label>Scan Checks</ion-label>
+      </ion-item>
       <ion-item (click)="startEHICScanner()">
         <ion-label>Scan Health Insurance Card</ion-label>
       </ion-item>
@@ -64,14 +73,11 @@
       <ion-item (click)="startLicensePlateScanner('CLASSIC')">
         <ion-label>Scan License Plate (CLASSIC)</ion-label>
       </ion-item>
-      <ion-item (click)="startLcDisplayScanner()">
-        <ion-label>Scan LC Dot-Matrix Display</ion-label>
+      <ion-item (click)="startTextDataScanner()">
+        <ion-label>Start Text Data Scanner</ion-label>
       </ion-item>
-      <ion-item (click)="startGenericDocumentRecognizer()">
-        <ion-label>Scan Generic Documents</ion-label>
-      </ion-item>
-      <ion-item (click)="startCheckRecognizer()">
-        <ion-label>Scan Checks</ion-label>
+      <ion-item (click)="startVINScanner()">
+        <ion-label>Start VIN Scanner</ion-label>
       </ion-item>
       <ion-item (click)="importAndRecognizeCheck()">
         <ion-label>Import Image & Recognize Check</ion-label>

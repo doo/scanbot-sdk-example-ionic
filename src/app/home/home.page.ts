@@ -8,9 +8,9 @@ import {
     GenericDocumentRecognizerConfiguration,
     HealthInsuranceCardScannerConfiguration,
     LicensePlateScannerConfiguration,
-    LicensePlateScanStrategy,
+    LicensePlateScanStrategy, MedicalCertificateRecognizerConfiguration,
     MrzScannerConfiguration,
-    TextDataScannerConfiguration
+    TextDataScannerConfiguration, VinScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
 import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
@@ -255,15 +255,6 @@ export class HomePage {
         await this.dialogsService.showAlert(JSON.stringify(result), 'OCR Configs');
     }
 
-    async openHTMLCameraPage() {
-        if (this.platform.is('ios')) {
-            await this.dialogsService.showAlert('HTML5 Camera is an Android-only feature');
-            return;
-        }
-
-        await this.router.navigateByUrl('/html5-camera');
-    }
-
     async importAndDetectBarcodes() {
 
         if (!(await this.scanbotService.checkLicense())) {
@@ -341,10 +332,6 @@ export class HomePage {
         }
     }
 
-    hasHtml5CameraSupport() {
-        return this.platform.is('android');
-    }
-
     async startLicensePlateScanner(mode: LicensePlateScanStrategy) {
         if (!(await this.scanbotService.checkLicense())) {
             return;
@@ -374,7 +361,7 @@ export class HomePage {
         }
     }
 
-    async startLcDisplayScanner() {
+    async startTextDataScanner() {
         if (!(await this.scanbotService.checkLicense())) {
             return;
         }
@@ -392,6 +379,65 @@ export class HomePage {
 
         if (result.status === 'OK') {
             await this.dialogsService.showAlert(`Value: ${result.result?.text}`, 'Scanner Result');
+        }
+    }
+
+    // async startMedicalCertificateScanner() {
+    //     try {
+    //         if (!(await this.scanbotService.checkLicense())) {
+    //             return;
+    //         }
+    //
+    //         const config: MedicalCertificateRecognizerConfiguration = {
+    //             topBarBackgroundColor: '#c8193c',
+    //             userGuidanceStrings: {
+    //                 capturing: 'Capturing',
+    //                 scanning: 'Recognizing',
+    //                 processing: 'Processing',
+    //                 startScanning: 'Scanning Started',
+    //                 paused: 'Paused',
+    //                 energySaving: 'Energy Saving',
+    //             },
+    //             errorDialogMessage: 'Oops, something went wrong! Please, try again.',
+    //             errorDialogOkButton: 'OK',
+    //             errorDialogTitle: 'ERROR',
+    //             cancelButtonHidden: false,
+    //             recognizePatientInfo: true,
+    //         };
+    //         const result = await this.scanbotService.SDK.UI.startMedicalCertificateRecognizer({uiConfigs: config});
+    //
+    //         if (result.status === 'OK') {
+    //         }
+    //
+    //     } catch (e: any) {
+    //         await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
+    //     }
+    // }
+
+    async startVINScanner() {
+        try {
+            if (!(await this.scanbotService.checkLicense())) {
+                return;
+            }
+
+            const config: VinScannerConfiguration = {
+                topBarBackgroundColor: '#c8193c',
+            };
+            const result = await this.scanbotService.SDK.UI.startVinScanner({uiConfigs: config});
+
+            if (result.status === 'OK') {
+                const message = [
+                    `- Raw Text: ${result.rawText}`,
+                    result.confidenceValue &&
+                    `- Confidence: ${(result.confidenceValue * 100).toFixed(0)}%`,
+                    `- Validation: ${
+                        result.validationSuccessful ? 'SUCCESSFUL' : 'NOT SUCCESSFUL'
+                    }`,
+                ].join('\n\n');
+                await this.dialogsService.showAlert(message, 'VIN Scanner Result');
+            }
+        } catch (e: any) {
+            await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
         }
     }
 }
