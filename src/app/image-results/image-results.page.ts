@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { ActionSheetController, Platform } from '@ionic/angular';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {ActionSheetController, Platform} from '@ionic/angular';
+import {Router} from '@angular/router';
 
-import { Page } from 'cordova-plugin-scanbot-sdk';
+import {Page} from 'cordova-plugin-scanbot-sdk';
 
-import { DialogsService } from '../services/dialogs.service';
-import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
-import { ImageResultsRepository } from '../services/image-results.repository';
+import {DialogsService} from '../services/dialogs.service';
+import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
+import {ImageResultsRepository} from '../services/image-results.repository';
 
 @Component({
     selector: 'app-image-results',
@@ -20,11 +20,11 @@ export class ImageResultsPage {
     public sanitizedPreviewImages = new Map<string, string>();
 
     constructor(private scanbotService: ScanbotSdkDemoService,
-        private imageResultsRepository: ImageResultsRepository,
-        private dialogsService: DialogsService,
-        private platform: Platform,
-        private router: Router,
-        private actionSheetController: ActionSheetController) { }
+                private imageResultsRepository: ImageResultsRepository,
+                private dialogsService: DialogsService,
+                private router: Router,
+                private actionSheetController: ActionSheetController) {
+    }
 
     ionViewWillEnter() {
         this.reloadPages();
@@ -34,8 +34,8 @@ export class ImageResultsPage {
         this.pages = this.imageResultsRepository.getPages();
         // build sanitizes preview image file URIs
         for (const page of this.pages) {
-            // this.sanitizedPreviewImages.set(page.pageId,
-            //     this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
+            this.sanitizedPreviewImages.set(page.pageId,
+                this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
 
             const data = await this.scanbotService.fetchDataFromUri(page.originalImageFileUri);
             this.sanitizedPreviewImages.set(page.pageId, this.imageResultsRepository.sanitizeBase64(data));
@@ -43,7 +43,7 @@ export class ImageResultsPage {
         // build rows
         this.rows = [];
         for (let i = 0; i < this.pages.length; i += 3) {
-            this.rows.push({ pages: this.pages.slice(i, i + 3) });
+            this.rows.push({pages: this.pages.slice(i, i + 3)});
         }
     }
 
@@ -161,29 +161,29 @@ export class ImageResultsPage {
 
 
     private checkImages(): boolean {
-        if (this.pages.length > 0) {
-            return true;
-        }
-        this.dialogsService.showAlert(
-            'Please scan some images via Document Scanner or import from Photo Library.',
-            'Images Required');
-        return false;
+    if (this.pages.length > 0) {
+        return true;
+    }
+    this.dialogsService.showAlert(
+        'Please scan some images via Document Scanner or import from Photo Library.',
+        'Images Required');
+    return false;
     }
 
     async addScan() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+            if (!(await this.scanbotService.checkLicense())) { return; }
 
-        const configs = this.scanbotService.globalDocScannerConfigs();
-        // for demo purposes we want to add only one page here.
-        configs.multiPageEnabled = false;
-        configs.multiPageButtonHidden = true;
+            const configs = this.scanbotService.globalDocScannerConfigs();
+            // for demo purposes we want to add only one page here.
+            configs.multiPageEnabled = false;
+            configs.multiPageButtonHidden = true;
 
-        const result = await this.scanbotService.SDK.UI.startDocumentScanner({ uiConfigs: configs });
+            const result = await this.scanbotService.SDK.UI.startDocumentScanner({ uiConfigs: configs });
 
-        if (result.status === 'CANCELED') { return; }
+            if (result.status === 'CANCELED') { return; }
 
-        await this.imageResultsRepository.addPages(result.pages);
-        this.reloadPages();
+            await this.imageResultsRepository.addPages(result.pages);
+            this.reloadPages();
     }
 
     async removeAll() {
