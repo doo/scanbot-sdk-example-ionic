@@ -9,6 +9,7 @@ import { ImageFilterType, Page } from 'cordova-plugin-scanbot-sdk';
 import { DialogsService } from '../services/dialogs.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
 import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
+import {IMAGE_FILTER_LIST} from '../../utils/image-filters';
 
 @Component({
     selector: 'app-image-view',
@@ -18,23 +19,6 @@ export class ImageViewPage implements OnInit {
 
     public page: Page | undefined;
     public sanitizedPreviewImage: string | undefined;
-
-    private imageFilterList: ImageFilterType[] = [
-        'BACKGROUND_CLEAN',
-        'BINARIZED',
-        'BLACK_AND_WHITE',
-        'COLOR',
-        'COLOR_DOCUMENT',
-        'DEEP_BINARIZATION',
-        'EDGE_HIGHLIGHT',
-        'GRAYSCALE',
-        'LOW_LIGHT_BINARIZATION',
-        'LOW_LIGHT_BINARIZATION_2',
-        'NONE',
-        'OTSU_BINARIZATION',
-        'PURE_BINARIZED',
-        'PURE_GRAY',
-    ];
 
     constructor(private scanbotService: ScanbotSdkDemoService,
         private imageResultsRepository: ImageResultsRepository,
@@ -99,7 +83,7 @@ export class ImageViewPage implements OnInit {
 
     async showFilterSelection() {
         const buttons = [];
-        this.imageFilterList.forEach(f => {
+        IMAGE_FILTER_LIST.forEach(f => {
             buttons.push({
                 text: f,
                 handler: () => { this.applyImageFilter(f); }
