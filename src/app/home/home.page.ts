@@ -382,37 +382,39 @@ export class HomePage {
         }
     }
 
-    // async startMedicalCertificateScanner() {
-    //     try {
-    //         if (!(await this.scanbotService.checkLicense())) {
-    //             return;
-    //         }
-    //
-    //         const config: MedicalCertificateRecognizerConfiguration = {
-    //             topBarBackgroundColor: '#c8193c',
-    //             userGuidanceStrings: {
-    //                 capturing: 'Capturing',
-    //                 scanning: 'Recognizing',
-    //                 processing: 'Processing',
-    //                 startScanning: 'Scanning Started',
-    //                 paused: 'Paused',
-    //                 energySaving: 'Energy Saving',
-    //             },
-    //             errorDialogMessage: 'Oops, something went wrong! Please, try again.',
-    //             errorDialogOkButton: 'OK',
-    //             errorDialogTitle: 'ERROR',
-    //             cancelButtonHidden: false,
-    //             recognizePatientInfo: true,
-    //         };
-    //         const result = await this.scanbotService.SDK.UI.startMedicalCertificateRecognizer({uiConfigs: config});
-    //
-    //         if (result.status === 'OK') {
-    //         }
-    //
-    //     } catch (e: any) {
-    //         await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
-    //     }
-    // }
+    async startMedicalCertificateScanner() {
+        try {
+            if (!(await this.scanbotService.checkLicense())) {
+                return;
+            }
+
+            const config: MedicalCertificateRecognizerConfiguration = {
+                topBarBackgroundColor: '#c8193c',
+                userGuidanceStrings: {
+                    capturing: 'Capturing',
+                    scanning: 'Recognizing',
+                    processing: 'Processing',
+                    startScanning: 'Scanning Started',
+                    paused: 'Paused',
+                    energySaving: 'Energy Saving',
+                },
+                errorDialogMessage: 'Oops, something went wrong! Please, try again.',
+                errorDialogOkButton: 'OK',
+                errorDialogTitle: 'ERROR',
+                cancelButtonHidden: false,
+                recognizePatientInfo: true,
+            };
+            const result = await this.scanbotService.SDK.UI.startMedicalCertificateRecognizer({uiConfigs: config});
+
+            if (result.status === 'OK') {
+                ScannerResultsService.medicalCertificateScannerResult = result;
+                await this.router.navigateByUrl('/medical-certificate-scanner-results');
+            }
+
+        } catch (e: any) {
+            await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
+        }
+    }
 
     async startVINScanner() {
         try {

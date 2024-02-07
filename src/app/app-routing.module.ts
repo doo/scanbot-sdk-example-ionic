@@ -24,8 +24,12 @@ const routes: Routes = [
         loadChildren: () => import('./check-recognizer-results/check-recognizer-results.module').then(x => x.CheckRecognizerResultsPageModule)
     },
     {
-      path: 'mrz-scanner-results',
-      loadChildren: () => import('./mrz-scanner-results/mrz-scanner-results.module').then( m => m.MrzScannerResultsPageModule)
+        path: 'mrz-scanner-results',
+        loadChildren: () => import('./mrz-scanner-results/mrz-scanner-results.module').then(m => m.MrzScannerResultsPageModule)
+    },
+    {
+        path: 'medical-certificate-scanner-results',
+        loadChildren: () => import('./medical-certificate-scanner-results/medical-certificate-scanner-results.module').then(m => m.MedicalCertificateScannerResultsPageModule)
     },
 ];
 

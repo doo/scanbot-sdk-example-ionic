@@ -15,7 +15,7 @@ export class MrzScannerResultsPage {
     mrzScannerResult: MrzScannerResult;
     displayFields: ScanResultSectionList;
 
-    constructor(public sanitizer: DomSanitizer,) {
+    constructor() {
         this.mrzScannerResult = ScannerResultsService.mrzScannerResult;
         this.displayFields = this.setupProperties();
     }
