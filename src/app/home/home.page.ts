@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {Platform} from '@ionic/angular';
+import {ActionSheetController, Platform} from '@ionic/angular';
 
 import {
     BatchBarcodeScannerConfiguration,
     CheckRecognizerConfiguration,
     GenericDocumentRecognizerConfiguration,
-    HealthInsuranceCardScannerConfiguration,
+    HealthInsuranceCardScannerConfiguration, ImageFilterType,
     LicensePlateScannerConfiguration,
     LicensePlateScanStrategy,
     MedicalCertificateRecognizerConfiguration,
@@ -22,6 +22,7 @@ import {DialogsService} from '../services/dialogs.service';
 import {ImageResultsRepository} from '../services/image-results.repository';
 import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
 import {ScannerResultsService} from '../services/scanner-results.service';
+import {IMAGE_FILTER_LIST} from '../../utils/image-filters';
 
 @Component({
     selector: 'app-home',
@@ -34,7 +35,7 @@ export class HomePage {
         private scanbotService: ScanbotSdkDemoService,
         private imageResultsRepository: ImageResultsRepository,
         private dialogsService: DialogsService,
-        private platform: Platform,
+        private actionSheetController: ActionSheetController,
         private router: Router
     ) {
     }
@@ -128,7 +129,7 @@ export class HomePage {
             const quality = await this.scanbotService.SDK.documentQualityAnalyzer({imageFileUri});
 
             await this.dialogsService.showAlert(`Detected Document result: ${JSON.stringify(result, null, 2)}\n` +
-                `Document Quality result: ${JSON.stringify(quality, null, 2)}`, "Document detection");
+                `Document Quality result: ${JSON.stringify(quality, null, 2)}`, 'Document detection');
 
         } catch (e: any) {
             console.error('Unable to process selected image.', e);
@@ -476,4 +477,36 @@ export class HomePage {
             await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
         }
     }
+
+    async applyImageFilter() {
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
+
+        const result = await ScanbotImagePicker.pickImage();
+        if (result.status !== 'OK' || !result.imageFileUri) {
+            return;
+        }
+        const imageFileUri = result.imageFileUri;
+
+        const buttons = IMAGE_FILTER_LIST.map(imageFilter => ({
+            text: imageFilter,
+            handler: async () => {
+                const result = await this.scanbotService.SDK.applyImageFilter({imageFileUri, imageFilter});
+                if(result.imageFileUri){
+                    const page = await this.scanbotService.SDK.createPage({originalImageFileUri:result.imageFileUri})
+                    const documentPage = await this.scanbotService.SDK.detectDocumentOnPage({page});
+                    await this.imageResultsRepository.addPages([documentPage]);
+                    await this.router.navigate(['/image-view', documentPage.pageId]);
+                }
+            }
+        }));
+
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Image Filters',
+            buttons: buttons
+        });
+        await actionSheet.present();
+    }
+
 }
