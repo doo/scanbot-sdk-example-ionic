@@ -134,28 +134,18 @@ export class ImageViewPage implements OnInit {
         }
     }
 
-    async estimateBlurriness() {
-        // if (!(await this.scanbotService.checkLicense())) { return; }
+    async documentQualityAnalyzer() {
+        if (!(await this.scanbotService.checkLicense())) { return; }
 
-        // const loading = await this.dialogsService.createLoading('Estimating blurriness ...');
-        // try {
-        //     await loading.present();
-        //     /**
-        //      * Estimates image blurriness. Less is sharper, more is blurred.
-        //      *
-        //      * In board terms, consider blur values as follows:
-        //      * • 0.0-0.3: This image isn't blurry at all
-        //      * • 0.3-0.6: Somewhat blurry, should be ok
-        //      * • 0.6-1.0: I'm skeptical of the usefulness of the image
-        //      *
-        //      * However, this isn't that black and white. If a scanned document has a lot white background,
-        //      * that will be considered a very blurred image.
-        //      */
-        //     const blurResult = await this.scanbotService.SDK.estimateBlur({imageFileUri: this.page.documentImageFileUri});
-        //     await this.dialogsService.showAlert('Estimated blurriness on image: ' + blurResult.blur);
-        // }
-        // finally {
-        //     await loading.dismiss();
-        // }
+        const loading = await this.dialogsService.createLoading('Analyzing document ...');
+        try {
+            await loading.present();
+
+            const scanResult = await this.scanbotService.SDK.documentQualityAnalyzer({imageFileUri: this.page.documentImageFileUri});
+            await this.dialogsService.showAlert('Document Quality Analyzer result ' + scanResult.result);
+        }
+        finally {
+            await loading.dismiss();
+        }
     }
 }
