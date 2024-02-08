@@ -1,33 +1,39 @@
-import {Component} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
+import {Component, OnInit} from '@angular/core';
 import {CheckRecognizerResult} from 'cordova-plugin-scanbot-sdk';
-import {GenericDocumentUtils} from 'src/utils/gdr-utils';
 import {ScanResultSection, ScanResultSectionList} from '../section-list/section-list.component';
-import {sanitizeFileUri} from '../../utils/sanitizeFileUri';
 import {ScannerResultsService} from '../services/scanner-results.service';
+import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
+import {ImageResultsRepository} from '../services/image-results.repository';
+import {GenericDocumentUtils} from '../../utils/gdr-utils';
 
 
 @Component({
     selector: 'app-check-recognizer-results',
     templateUrl: './check-recognizer-results.page.html',
 })
-export class CheckRecognizerResultsPage {
+export class CheckRecognizerResultsPage implements OnInit {
     checkResult: CheckRecognizerResult;
     displayFields: ScanResultSectionList;
 
-    constructor(public sanitizer: DomSanitizer,) {
-        this.checkResult = ScannerResultsService.checkRecognizerResult;
-        this.displayFields = this.setupProperties();
+    constructor(
+        private scanbotService: ScanbotSdkDemoService,
+        private imageResultsRepository: ImageResultsRepository,
+    ) {
     }
 
-    private setupProperties(): ScanResultSectionList {
+    async ngOnInit() {
+        this.checkResult = ScannerResultsService.checkRecognizerResult;
+        this.displayFields = await this.setupProperties();
+    }
+
+    private async setupProperties(): Promise<ScanResultSectionList> {
 
         const commonSection: ScanResultSection = {
             title: 'Check Result',
             data: [
                 {
                     key: 'Check Image',
-                    image: sanitizeFileUri(this.checkResult.imageFileUri, this.sanitizer),
+                    image: await this.sanitizeImage(this.checkResult.imageFileUri),
                 },
                 {
                     key: 'Recognition Status',
@@ -53,5 +59,10 @@ export class CheckRecognizerResultsPage {
             commonSection,
             checkFieldsSection
         ];
+    }
+
+    private async sanitizeImage(imageUri: string) {
+        const data = await this.scanbotService.fetchDataFromUri(imageUri);
+        return this.imageResultsRepository.sanitizeBase64(data);
     }
 }

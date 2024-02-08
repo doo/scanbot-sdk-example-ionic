@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ScanResultSection, ScanResultSectionData, ScanResultSectionList} from '../section-list/section-list.component';
 import {MedicalCertificateScannerResult} from '../../../../scanbot-sdk-cordova-plugin';
 import {ScannerResultsService} from '../services/scanner-results.service';
+import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
+import {ImageResultsRepository} from '../services/image-results.repository';
 
 type PatientDataKeys = keyof MedicalCertificateScannerResult['patientData'];
 type DatesKeys = keyof MedicalCertificateScannerResult['dates'];
@@ -17,21 +19,24 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
     displayFields: ScanResultSectionList;
     medicalCertificateScannerResult: MedicalCertificateScannerResult;
 
-    constructor() {
+    constructor(
+        private scanbotService: ScanbotSdkDemoService,
+        private imageResultsRepository: ImageResultsRepository,
+    ) {
+    }
+
+    async ngOnInit() {
         this.medicalCertificateScannerResult = ScannerResultsService.medicalCertificateScannerResult;
-        this.displayFields = this.setupProperties();
+        this.displayFields = await this.setupProperties();
     }
 
-    ngOnInit() {
-    }
-
-    setupProperties(): ScanResultSectionList {
+   private async setupProperties(): Promise<ScanResultSectionList> {
         const commonData: ScanResultSection = {
             title: 'Medical Certificate Result',
             data: [
                 {
                     key: 'Snapped Image',
-                    image: this.medicalCertificateScannerResult.imageFileUri,
+                    image: await this.sanitizeImage(this.medicalCertificateScannerResult.imageFileUri),
                 },
                 {
                     key: 'Form Type',
@@ -161,5 +166,10 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
             };
         });
     };
+
+    private async sanitizeImage(imageUri: string) {
+        const data = await this.scanbotService.fetchDataFromUri(imageUri);
+        return this.imageResultsRepository.sanitizeBase64(data);
+    }
 
 }
