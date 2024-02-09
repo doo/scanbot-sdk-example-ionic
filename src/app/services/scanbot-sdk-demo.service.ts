@@ -146,7 +146,6 @@ export class ScanbotSdkDemoService {
             ignoreBadAspectRatio: true,
             topBarBackgroundColor: '#c8193c',
             finderEnabled: true,
-            finderAspectRatio: { width: 4, height: 3 }
             // see further configs ...
         };
     }

@@ -12,8 +12,8 @@
             </ion-item>
             <div class="section-item-container" *ngIf="data.field !== undefined">
                 <p style="font-weight: bold" class="section-item" *ngIf="data.key">{{data.key}}</p>
-                <p class="section-item" *ngIf="data.field.value.text">{{data.field.value.text}}</p>
-                <p class="section-item" *ngIf="data.field.value.confidence">{{data.field.value.confidence}}</p>
+                <p class="section-item" *ngIf="data.field.value.text">Value: {{data.field.value.text}}</p>
+                <p class="section-item" *ngIf="data.field.value.confidence">Confidence: {{data.field.value.confidence}}</p>
                 <p class="section-item" *ngIf="data.field.validationStatus">{{data.field.validationStatus}}</p>
             </div>
         </div>

@@ -86,7 +86,7 @@ export class ImageResultsPage {
                 imageFileUris: this.pages.map(p => p.originalImageFileUri),
                 languages: ['en'],
                 options: {
-                    outputFormat: 'FULL_OCR_RESULT',
+                    outputFormat: 'PDF_FILE',
                 }
             });
 
