@@ -1,23 +1,27 @@
-<ion-content style="padding-bottom: 8%;" class="ion-padding,">
-
-    <div class="section-container" *ngFor="let item of sectionListData">
-        <h3 class="section-header">{{item.title}}</h3>
-        <div *ngFor="let data of item.data">
-            <div class="section-item-container" *ngIf="data.value !== undefined">
-                <p style="font-weight: bold" class="section-item">{{data.key}}</p>
-                <p class="section-item">{{data.value}}</p>
-            </div>
-            <ion-item class="section-item-container" *ngIf="data.image !== undefined">
-                <img style="width: 100%;height: auto" [src]="data.image" alt="Image Result"/>
+<ion-content >
+    <ion-item-group *ngFor="let section of sectionListData">
+        <ion-item class="section-header">
+            <ion-label>
+                <h2>{{section.title}}</h2>
+            </ion-label>
+        </ion-item>
+        <ion-item *ngFor="let data of section.data">
+            <ion-col class="section-item" *ngIf="data.value !== undefined" >
+                <p style="font-weight: bold">{{data.key}}</p>
+                <p>{{data.value}}</p>
+            </ion-col>
+            <ion-item class="section-item-container" *ngIf="data.image !== undefined" >
+                <ion-img style="width: 100%;height: auto" [src]="data.image" alt="Image Result"/>
             </ion-item>
-            <div class="section-item-container" *ngIf="data.field !== undefined">
-                <p style="font-weight: bold" class="section-item" *ngIf="data.key">{{data.key}}</p>
-                <p class="section-item" *ngIf="data.field.value.text">Value: {{data.field.value.text}}</p>
-                <p class="section-item" *ngIf="data.field.value.confidence">Confidence: {{data.field.value.confidence}}</p>
-                <p class="section-item" *ngIf="data.field.validationStatus">{{data.field.validationStatus}}</p>
-            </div>
-        </div>
-    </div>
-
-
+            <ion-col class="section-item" *ngIf="data.field !== undefined">
+                <p style="font-weight: bold" *ngIf="data.key">{{data.key}}</p>
+                <p *ngIf="data.field?.value?.text !== undefined">
+                    Value: {{data.field!.value!.text}}</p>
+                <p *ngIf="data.field?.value?.confidence !== undefined">
+                    Confidence: {{data.field!.value!.confidence}}</p>
+                <p *ngIf="data.field?.validationStatus !== undefined">
+                    {{data.field!.validationStatus}}</p>
+            </ion-col>
+        </ion-item>
+    </ion-item-group>
 </ion-content>
