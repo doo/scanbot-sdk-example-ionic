@@ -92,7 +92,12 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
             )
             .map(mapKey => ({
                 key: displayTitleMap[mapKey as PatientDataKeys],
-                value: this.medicalCertificateScannerResult.patientData[mapKey as PatientDataKeys] as string,
+                value: `${
+                    this.medicalCertificateScannerResult.patientData[mapKey as PatientDataKeys]!.value
+                } (confidence: ${Math.round(
+                    this.medicalCertificateScannerResult.patientData[mapKey as PatientDataKeys]!
+                        .recognitionConfidence * 100,
+                )} %)`,
             }));
     }
 

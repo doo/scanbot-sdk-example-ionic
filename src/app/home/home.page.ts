@@ -154,7 +154,6 @@ export class HomePage {
                 finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
                 barcodeFormats: BarcodeListService.getAcceptedTypes(),
                 acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
-                barcodeImageGenerationType: 'NONE',
                 finderLineColor: '#0000ff',
                 finderAspectRatio: {width: 2, height: 1},
                 topBarBackgroundColor: '#c8193c',
