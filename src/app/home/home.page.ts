@@ -492,8 +492,8 @@ export class HomePage {
             text: imageFilter,
             handler: async () => {
                 const result = await this.scanbotService.SDK.applyImageFilter({imageFileUri, imageFilter});
-                if(result.imageFileUri){
-                    const page = await this.scanbotService.SDK.createPage({originalImageFileUri:result.imageFileUri})
+                if (result.imageFileUri) {
+                    const page = await this.scanbotService.SDK.createPage({originalImageFileUri: result.imageFileUri});
                     const documentPage = await this.scanbotService.SDK.detectDocumentOnPage({page});
                     await this.imageResultsRepository.addPages([documentPage]);
                     await this.router.navigate(['/image-view', documentPage.pageId]);

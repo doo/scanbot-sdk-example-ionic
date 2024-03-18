@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ScanResultSection, ScanResultSectionData, ScanResultSectionList} from '../section-list/section-list.component';
+import {ScanResultSection, ScanResultSectionList} from '../section-list/section-list.component';
 import {MedicalCertificateScannerResult} from '../../../../scanbot-sdk-cordova-plugin';
 import {ScannerResultsService} from '../services/scanner-results.service';
-import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
-import {ImageResultsRepository} from '../services/image-results.repository';
+import {DomSanitizer} from '@angular/platform-browser';
 
 type PatientDataKeys = keyof MedicalCertificateScannerResult['patientData'];
 type DatesKeys = keyof MedicalCertificateScannerResult['dates'];
@@ -20,8 +19,7 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
     medicalCertificateScannerResult: MedicalCertificateScannerResult;
 
     constructor(
-        private scanbotService: ScanbotSdkDemoService,
-        private imageResultsRepository: ImageResultsRepository,
+        private sanitizer: DomSanitizer,
     ) {
     }
 
@@ -36,7 +34,7 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
             data: [
                 {
                     key: 'Snapped Image',
-                    image: await this.sanitizeImage(this.medicalCertificateScannerResult.imageFileUri),
+                    image: await this.sanitizeFileUri(this.medicalCertificateScannerResult.imageFileUri),
                 },
                 {
                     key: 'Form Type',
@@ -44,8 +42,6 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
                 },
             ],
         };
-
-        console.log(JSON.stringify(this.medicalCertificateScannerResult));
 
         return [
             commonData,
@@ -159,7 +155,6 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
         };
 
         return Object.keys(checkboxes).flatMap(key => {
-            console.log('key')
             const value = checkboxes[key as CheckBoxKeys]?.isChecked;
             let confidence = checkboxes[key as CheckBoxKeys]?.confidence ?? 0;
             confidence = Math.round(confidence * 100);
@@ -172,9 +167,11 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
         });
     };
 
-    private async sanitizeImage(imageUri: string) {
-        const data = await this.scanbotService.fetchDataFromUri(imageUri);
-        return this.imageResultsRepository.sanitizeBase64(data);
+    private sanitizeFileUri(fileUri: string): string {
+        // see https://ionicframework.com/docs/building/webview/#file-protocol
+        const convertedUri = (window as any).Ionic.WebView.convertFileSrc(fileUri);
+        // see https://angular.io/guide/security#bypass-security-apis
+        return this.sanitizer.bypassSecurityTrustUrl(convertedUri) as string;
     }
 
 }

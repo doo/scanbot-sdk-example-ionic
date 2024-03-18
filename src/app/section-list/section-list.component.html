@@ -11,7 +11,7 @@
                 <p>{{data.value}}</p>
             </ion-col>
             <ion-item class="section-item-container" *ngIf="data.image !== undefined" >
-                <ion-img style="width: 100%;height: auto" [src]="data.image" alt="Image Result"/>
+                <img style="width: 100%;height: auto" [src]="data.image" alt="Image Result"/>
             </ion-item>
             <ion-col class="section-item" *ngIf="data.field !== undefined">
                 <p style="font-weight: bold" *ngIf="data.key">{{data.key}}</p>
