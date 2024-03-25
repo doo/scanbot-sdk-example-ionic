@@ -1,27 +1,28 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {ActionSheetController, Platform} from '@ionic/angular';
 
-import ScanbotSdk, {
-    DataScannerConfiguration,
-    HealthInsuranceCardScannerConfiguration,
-    LicensePlateDetectorMode,
-    LicensePlateScannerConfiguration,
-    MrzScannerConfiguration,
-    TextDataScannerStep,
-    GenericDocumentRecognizerConfiguration,
+import {
     BatchBarcodeScannerConfiguration,
-    CheckRecognizerConfiguration
+    CheckRecognizerConfiguration,
+    GenericDocumentRecognizerConfiguration,
+    HealthInsuranceCardScannerConfiguration, ImageFilterType,
+    LicensePlateScannerConfiguration,
+    LicensePlateScanStrategy,
+    MedicalCertificateRecognizerConfiguration,
+    MrzScannerConfiguration,
+    TextDataScannerConfiguration,
+    VinScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
-import { DialogsService } from '../services/dialogs.service';
-import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
-import { ImageResultsRepository } from '../services/image-results.repository';
-import { BarcodeListService } from '../services/barcode-list.service';
-import { GenericDocumentRecognizerResultsService } from '../services/generic-document-recognizer-results.service';
-import { BarcodeDocumentListService } from '../services/barcode-document-list.service';
 import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
-import { CheckRecognizerResultsService } from '../services/check-recognizer-results.service';
+import {BarcodeDocumentListService} from '../services/barcode-document-list.service';
+import {BarcodeListService} from '../services/barcode-list.service';
+import {DialogsService} from '../services/dialogs.service';
+import {ImageResultsRepository} from '../services/image-results.repository';
+import {ScanbotSdkDemoService} from '../services/scanbot-sdk-demo.service';
+import {ScannerResultsService} from '../services/scanner-results.service';
+import {IMAGE_FILTER_LIST} from '../../utils/image-filters';
 
 @Component({
     selector: 'app-home',
@@ -34,32 +35,18 @@ export class HomePage {
         private scanbotService: ScanbotSdkDemoService,
         private imageResultsRepository: ImageResultsRepository,
         private dialogsService: DialogsService,
-        private platform: Platform,
+        private actionSheetController: ActionSheetController,
         private router: Router
     ) {
-        document.addEventListener('deviceready', function () {
-            /*
-            * Register a vanilla javascript callback, as setLicenseFailure registers a continuous callback
-            * that does not adhere to the standards of promisified API.
-            * All other Scanbot features are also a part of the normal, non-promisified API
-            *
-            * Note that, as is, license failure handler is never called, because in this example
-            * we always check license validity before calling any Scanbot API.
-            */
-            ScanbotSdk.setLicenseFailureHandler(async callback => {
-                const status = callback.licenseStatus;
-                const feature = callback.licenseFeature;
-                const errorMessage = callback.licenseErrorMessage;
-                console.log('Feature ' + feature + ' is not available because license is ' + status + ' \n' + errorMessage);
-            });
-        });
     }
 
     async startDocumentScanner() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const configs = this.scanbotService.globalDocScannerConfigs();
-        const result = await this.scanbotService.SDK.UI.startDocumentScanner({ uiConfigs: configs });
+        const result = await this.scanbotService.SDK.UI.startDocumentScanner({uiConfigs: configs});
 
         if (result.status === 'CANCELED') {
             // user has canceled the scanning operation
@@ -71,17 +58,19 @@ export class HomePage {
     }
 
     async startFinderDocumentScanner() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const configs = this.scanbotService.globalFinderDocScannerConfigs();
-        const result = await this.scanbotService.SDK.UI.startFinderDocumentScanner({ uiConfigs: configs });
+        const result = await this.scanbotService.SDK.UI.startFinderDocumentScanner({uiConfigs: configs});
 
         if (result.status === 'CANCELED') {
             // user has canceled the scanning operation
             return;
         }
 
-        await this.imageResultsRepository.updatePage(result.page);
+        await this.imageResultsRepository.updatePage(result.pages[0]);
         await this.gotoImageResults();
     }
 
@@ -95,24 +84,57 @@ export class HomePage {
 
         const originalImageFileUri = result.imageFileUri;
 
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const loading = await this.dialogsService.createLoading('Auto-detecting and cropping...');
         try {
             await loading.present();
 
             // First create a new SDK page with the selected original image file:
-            const createResult = await this.scanbotService.SDK.createPage({ originalImageFileUri });
+            const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri});
             // and then run auto document detection and cropping on this new page:
-            const docResult = await this.scanbotService.SDK.detectDocumentOnPage({ page: createResult.page });
+            const docResult = await this.scanbotService.SDK.detectDocumentOnPage({page: createResult});
 
-            await this.imageResultsRepository.addPages([docResult.page]);
+            await this.imageResultsRepository.addPages([docResult]);
             await this.gotoImageResults();
-        } catch (e) {
+        } catch (e: any) {
             console.error('Unable to process selected image.', e);
             await this.dialogsService.showAlert(e.message, 'ERROR', 'Unable to process selected image.');
+        } finally {
+            await loading.dismiss();
         }
-        finally {
+    }
+
+    async detectDocumentOnImage() {
+        const result = await ScanbotImagePicker.pickImage();
+        if (result.status !== 'OK' || !result.imageFileUri) {
+            return;
+        }
+
+        const imageFileUri = result.imageFileUri;
+
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
+
+        const loading = await this.dialogsService.createLoading('Detecting...');
+        try {
+            await loading.present();
+
+            // Detect document on selected image
+            const result = await this.scanbotService.SDK.detectDocument({imageFileUri});
+            // Analyze document quality on selected image
+            const quality = await this.scanbotService.SDK.documentQualityAnalyzer({imageFileUri});
+
+            await this.dialogsService.showAlert(`Detected Document result: ${JSON.stringify(result, null, 2)}\n` +
+                `Document Quality result: ${JSON.stringify(quality, null, 2)}`, 'Document detection');
+
+        } catch (e: any) {
+            console.error('Unable to process selected image.', e);
+            await this.dialogsService.showAlert(e.message, 'ERROR', 'Unable to process selected image.');
+        } finally {
             await loading.dismiss();
         }
     }
@@ -122,7 +144,9 @@ export class HomePage {
     }
 
     async startBarcodeScanner() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const result = await this.scanbotService.SDK.UI.startBarcodeScanner({
             uiConfigs: {
@@ -130,9 +154,8 @@ export class HomePage {
                 finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
                 barcodeFormats: BarcodeListService.getAcceptedTypes(),
                 acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
-                barcodeImageGenerationType: 'NONE',
                 finderLineColor: '#0000ff',
-                finderAspectRatio: { width: 2, height: 1 },
+                finderAspectRatio: {width: 2, height: 1},
                 topBarBackgroundColor: '#c8193c',
                 useButtonsAllCaps: false,
                 // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
@@ -143,69 +166,68 @@ export class HomePage {
         if (result.status === 'OK') {
             BarcodeListService.detectedBarcodes = [{
                 barcodes: result.barcodes || [],
-                snappedImage: result.imageFileUri
             }];
             await this.router.navigateByUrl('/barcode-result-list');
         }
     }
 
     async startBatchBarcodeScanner() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const configs: BatchBarcodeScannerConfiguration = {
             // Customize colors, text resources, behavior, etc..
             finderTextHint: 'Please align the barcode or QR code in the frame above to scan it.',
             barcodeFormats: BarcodeListService.getAcceptedTypes(),
             acceptedDocumentFormats: BarcodeDocumentListService.getAcceptedFormats(),
-            finderAspectRatio: { width: 1, height: 1 },
-            interfaceOrientation: 'ALL',
+            finderAspectRatio: {width: 1, height: 1},
+            orientationLockMode: 'NONE',
             useButtonsAllCaps: false,
             // msiPlesseyChecksumAlgorithm: 'Mod1110NCR',
             // see further configs ...
         };
 
-        const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({ uiConfigs: configs });
+        const result = await this.scanbotService.SDK.UI.startBatchBarcodeScanner({uiConfigs: configs});
 
         if (result.status === 'OK') {
             BarcodeListService.detectedBarcodes = [{
                 barcodes: result.barcodes || [],
-                snappedImage: result.imageFileUri
             }];
             await this.router.navigateByUrl('/barcode-result-list');
         }
     }
 
     async startGenericDocumentRecognizer() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const config: GenericDocumentRecognizerConfiguration = {
-            shouldSavePhotoImageInStorage: true,
-            detailsFieldConfiguration: {
-                fieldLicenseCategoriesTitle: 'NEW TITLE'
-            }
+            finderLineColor: '#ff0000',
         };
-        const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({ uiConfigs: config });
+        const result = await this.scanbotService.SDK.UI.startGenericDocumentRecognizer({uiConfigs: config});
 
         console.log(JSON.stringify(result));
 
         if (result.status === 'OK') {
-            GenericDocumentRecognizerResultsService.fields = result.fields;
-            GenericDocumentRecognizerResultsService.documentType = result.documentType;
+            ScannerResultsService.genericDocumentRecognizerResult = result;
             await this.router.navigateByUrl('/generic-document-recognizer-results');
         }
     }
 
     async startCheckRecognizer() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
-        const config: CheckRecognizerConfiguration = {
-        };
-        const result = await this.scanbotService.SDK.UI.startCheckRecognizer({ uiConfigs: config });
+        const config: CheckRecognizerConfiguration = {};
+        const result = await this.scanbotService.SDK.UI.startCheckRecognizer({uiConfigs: config});
 
         console.log(JSON.stringify(result));
 
-        if (result.status === 'SUCCESS') {
-            CheckRecognizerResultsService.checkRecognizerResult = result;
+        if (result.status === 'OK') {
+            ScannerResultsService.checkRecognizerResult = result;
             await this.router.navigateByUrl('/check-recognizer-results');
         } else {
             await this.dialogsService.showAlert(result.status, 'Check Recognition Failed');
@@ -213,25 +235,21 @@ export class HomePage {
     }
 
     async startMrzScanner() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const config: MrzScannerConfiguration = {
             // Customize colors, text resources, etc..
             finderTextHint: 'Please hold your phone over the 2- or 3-line MRZ code at the front of your passport.',
-            interfaceOrientation: 'PORTRAIT',
+            orientationLockMode: 'PORTRAIT',
             // see further configs ...
         };
 
-        if (this.platform.is('ios')) {
-            const widthPx = window.screen.width;
-            config.finderWidth = widthPx * 0.9;
-            config.finderHeight = widthPx * 0.18;
-        }
-
-        const result = await this.scanbotService.SDK.UI.startMrzScanner({ uiConfigs: config });
+        const result = await this.scanbotService.SDK.UI.startMrzScanner({uiConfigs: config});
         if (result.status === 'OK') {
-            const fields = result.mrzResult.fields.map(f => `<div>${f.name}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
-            await this.dialogsService.showAlert(fields.join(''), 'MRZ Result');
+            ScannerResultsService.mrzScannerResult = result;
+            await this.router.navigateByUrl('/mrz-scanner-results');
         }
     }
 
@@ -243,12 +261,12 @@ export class HomePage {
 
         const config: HealthInsuranceCardScannerConfiguration = {
             finderTextHint: 'Please hold your phone over the back of your Health Insurance Card.',
-            interfaceOrientation: 'PORTRAIT',
+            orientationLockMode: 'PORTRAIT',
             // see further configs ...
         };
-        const result = await this.scanbotService.SDK.UI.startEHICScanner({ uiConfigs: config });
+        const result = await this.scanbotService.SDK.UI.startEHICScanner({uiConfigs: config});
         if (result.status === 'OK') {
-            const fields = result.ehicResult.fields.map(f => `<div>${f.type}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
+            const fields = result.fields.map(f => `<div>${f.type}: ${f.value} (${f.confidence.toFixed(2)})</div>`);
             await this.dialogsService.showAlert(fields.join(''), 'EHIC Result');
         }
     }
@@ -263,7 +281,7 @@ export class HomePage {
 
     async viewLicenseInfo() {
         const result = await this.scanbotService.SDK.getLicenseInfo();
-        await this.dialogsService.showAlert(JSON.stringify(result.info), 'License Info');
+        await this.dialogsService.showAlert(JSON.stringify(result), 'License Info');
     }
 
     async viewOcrConfigs() {
@@ -271,18 +289,11 @@ export class HomePage {
         await this.dialogsService.showAlert(JSON.stringify(result), 'OCR Configs');
     }
 
-    async openHTMLCameraPage() {
-        if (this.platform.is('ios')) {
-            await this.dialogsService.showAlert('HTML5 Camera is an Android-only feature');
-            return;
-        }
-
-        await this.router.navigateByUrl('/html5-camera');
-    }
-
     async importAndDetectBarcodes() {
 
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const pickerResult = await ScanbotImagePicker.pickImage({
             imageQuality: 85
@@ -307,7 +318,7 @@ export class HomePage {
 
         if (result.status !== 'OK') {
             await loading.dismiss();
-            await this.dialogsService.showAlert('ERROR: ' + result.message, 'ERROR');
+            await this.dialogsService.showAlert('ERROR', '');
         }
 
         BarcodeListService.detectedBarcodes = [{
@@ -321,7 +332,9 @@ export class HomePage {
 
     async importAndRecognizeCheck() {
 
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const pickerResult = await ScanbotImagePicker.pickImage({
             imageQuality: 85
@@ -345,66 +358,154 @@ export class HomePage {
 
         await loading.dismiss();
 
-        if (result.status === 'SUCCESS') {
-            CheckRecognizerResultsService.checkRecognizerResult = result;
+        if (result.status === 'OK') {
+            ScannerResultsService.checkRecognizerResult = result;
             await this.router.navigateByUrl('/check-recognizer-results');
         } else {
             await this.dialogsService.showAlert(result.status, 'Check Recognition Failed');
         }
     }
 
-    hasHtml5CameraSupport() {
-        return this.platform.is('android');
-    }
-
-    async startLicensePlateScanner(mode: LicensePlateDetectorMode) {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+    async startLicensePlateScanner(mode: LicensePlateScanStrategy) {
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
         const config: LicensePlateScannerConfiguration = {
-            detectorMode: mode,
+            scanStrategy: mode,
             topBarBackgroundColor: '#c8193c',
-            topBarButtonsColor: '#ffffff',
+            topBarButtonsActiveColor: '#ffffff',
             cancelButtonTitle: 'Cancel',
             finderLineColor: '#c8193c',
             finderLineWidth: 5,
-            guidanceText: 'Place the whole license plate in the frame to scan it',
-            interfaceOrientation: 'PORTRAIT',
+            finderTextHint: 'Place the whole license plate in the frame to scan it',
+            orientationLockMode: 'PORTRAIT',
             confirmationDialogConfirmButtonFilled: true,
             // see further configs...
         };
 
-        const result = await this.scanbotService.SDK.UI.startLicensePlateScanner({ uiConfigs: config });
+        const result = await this.scanbotService.SDK.UI.startLicensePlateScanner({uiConfigs: config});
 
         if (result.status === 'OK') {
             await this.dialogsService.showAlert(
-                `Country Code: ${result.licensePlateResult.countryCode}<br>` +
-                `License Plate: ${result.licensePlateResult.licensePlate}<br><br>` +
-                `Confidence: ${result.licensePlateResult.confidence}<br>` +
-                `Raw Text: ${result.licensePlateResult.rawText}`,
+                `Country Code: ${result.countryCode}<br>` +
+                `License Plate: ${result.licensePlate}<br><br>` +
+                `Confidence: ${result.confidence}<br>` +
                 'License Plate Result');
         }
     }
 
-    async startLcDisplayScanner() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+    async startTextDataScanner() {
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
 
-        const uiConfigs: DataScannerConfiguration = {
+        const uiConfigs: TextDataScannerConfiguration = {
             cancelButtonTitle: 'Cancel',
             topBarBackgroundColor: '#c8193c',
-            topBarButtonsColor: '#ffffff',
+            topBarButtonsActiveColor: '#ffffff',
             finderLineColor: '#c8193c',
-            interfaceOrientation: 'PORTRAIT',
+            orientationLockMode: 'PORTRAIT',
             // see further configs...
         };
 
-        const scannerStep: TextDataScannerStep = {
-            guidanceText: 'Place the LC display in the frame to scan it',
-            textFilterStrategy: 'LC_DOT_MATRIX_DISPLAY',
-        };
+        const result = await this.scanbotService.SDK.UI.startTextDataScanner({uiConfigs});
 
-        const result = await this.scanbotService.SDK.UI.startDataScanner({ uiConfigs, scannerStep });
         if (result.status === 'OK') {
-            await this.dialogsService.showAlert(`Value: ${result.dataResult.textValue}`, 'Scanner Result');
+            await this.dialogsService.showAlert(`Value: ${result.result?.text}`, 'Scanner Result');
         }
     }
+
+    async startMedicalCertificateScanner() {
+        try {
+            if (!(await this.scanbotService.checkLicense())) {
+                return;
+            }
+
+            const config: MedicalCertificateRecognizerConfiguration = {
+                topBarBackgroundColor: '#c8193c',
+                userGuidanceStrings: {
+                    capturing: 'Capturing',
+                    scanning: 'Recognizing',
+                    processing: 'Processing',
+                    startScanning: 'Scanning Started',
+                    paused: 'Paused',
+                    energySaving: 'Energy Saving',
+                },
+                errorDialogMessage: 'Oops, something went wrong! Please, try again.',
+                errorDialogOkButton: 'OK',
+                errorDialogTitle: 'ERROR',
+                cancelButtonHidden: false,
+                recognizePatientInfo: true,
+            };
+            const result = await this.scanbotService.SDK.UI.startMedicalCertificateRecognizer({uiConfigs: config});
+
+            if (result.status === 'OK') {
+                ScannerResultsService.medicalCertificateScannerResult = result;
+                await this.router.navigateByUrl('/medical-certificate-scanner-results');
+            }
+
+        } catch (e: any) {
+            await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
+        }
+    }
+
+    async startVINScanner() {
+        try {
+            if (!(await this.scanbotService.checkLicense())) {
+                return;
+            }
+
+            const config: VinScannerConfiguration = {
+                topBarBackgroundColor: '#c8193c',
+            };
+            const result = await this.scanbotService.SDK.UI.startVinScanner({uiConfigs: config});
+
+            if (result.status === 'OK') {
+                const message = [
+                    `- Raw Text: ${result.rawText}`,
+                    result.confidenceValue &&
+                    `- Confidence: ${(result.confidenceValue * 100).toFixed(0)}%`,
+                    `- Validation: ${
+                        result.validationSuccessful ? 'SUCCESSFUL' : 'NOT SUCCESSFUL'
+                    }`,
+                ].join('\n\n');
+                await this.dialogsService.showAlert(message, 'VIN Scanner Result');
+            }
+        } catch (e: any) {
+            await this.dialogsService.showAlert(e.message || 'An unexpected error has occurred', 'Error');
+        }
+    }
+
+    async applyImageFilter() {
+        if (!(await this.scanbotService.checkLicense())) {
+            return;
+        }
+
+        const result = await ScanbotImagePicker.pickImage();
+        if (result.status !== 'OK' || !result.imageFileUri) {
+            return;
+        }
+        const imageFileUri = result.imageFileUri;
+
+        const buttons = IMAGE_FILTER_LIST.map(imageFilter => ({
+            text: imageFilter,
+            handler: async () => {
+                const result = await this.scanbotService.SDK.applyImageFilter({imageFileUri, imageFilter});
+                if (result.imageFileUri) {
+                    const page = await this.scanbotService.SDK.createPage({originalImageFileUri: result.imageFileUri});
+                    const documentPage = await this.scanbotService.SDK.detectDocumentOnPage({page});
+                    await this.imageResultsRepository.addPages([documentPage]);
+                    await this.router.navigate(['/image-view', documentPage.pageId]);
+                }
+            }
+        }));
+
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Image Filters',
+            buttons: buttons
+        });
+        await actionSheet.present();
+    }
+
 }

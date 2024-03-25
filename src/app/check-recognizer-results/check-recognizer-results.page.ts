@@ -1,49 +1,62 @@
-import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { CheckRecognizerResult } from 'cordova-plugin-scanbot-sdk';
-import { CheckRecognizerResultsService } from '../services/check-recognizer-results.service';
+import {Component, OnInit} from '@angular/core';
+import {CheckRecognizerResult} from 'cordova-plugin-scanbot-sdk';
+import {ScanResultSection, ScanResultSectionList} from '../section-list/section-list.component';
+import {ScannerResultsService} from '../services/scanner-results.service';
+import {GenericDocumentUtils} from '../../utils/gdr-utils';
+import {DomSanitizer} from '@angular/platform-browser';
+
 
 @Component({
     selector: 'app-check-recognizer-results',
     templateUrl: './check-recognizer-results.page.html',
 })
-export class CheckRecognizerResultsPage {
+export class CheckRecognizerResultsPage implements OnInit {
     checkResult: CheckRecognizerResult;
-    displayFields: {};
-    photoUri: string;
+    displayFields: ScanResultSectionList;
 
-    constructor(public sanitizer: DomSanitizer, ) {
-        this.checkResult = CheckRecognizerResultsService.checkRecognizerResult;
-        this.displayFields = {};
-        this.setupProperties();
+    constructor(
+        private sanitizer: DomSanitizer,
+    ) {
     }
 
-    private setupProperties() {
-        // Setup Photo Image URI from result Fields
-        const photoImageUri = this.checkResult.imageFileUri;
-        if (photoImageUri) {
-            this.photoUri = this.sanitizeFileUri(photoImageUri);
-        }
+    async ngOnInit() {
+        this.checkResult = ScannerResultsService.checkRecognizerResult;
+        this.displayFields = await this.setupProperties();
+    }
 
-        // Setup Key - Value entries from result Fields
-        Object.keys(this.checkResult.fields).forEach((key) => {
-            const value = this.checkResult.fields[key].value;
-            let out;
+    private async setupProperties(): Promise<ScanResultSectionList> {
 
-            if (value["text"]) {
-                out = value["text"];
-                if (value["confidence"]) {
-                    let percentage = Math.round(value["confidence"] * 100);
-                    out += "\n(confidence: " + percentage + "%)";
-                }
-            } else if (typeof value === 'string' || value instanceof String) {
-                out = value;
-            }
+        const commonSection: ScanResultSection = {
+            title: 'Check Result',
+            data: [
+                {
+                    key: 'Check Image',
+                    image:  this.sanitizeFileUri(this.checkResult.imageFileUri),
+                },
+                {
+                    key: 'Recognition Status',
+                    value: this.checkResult.checkStatus,
+                },
+                {
+                    key: 'Check Type',
+                    value: this.checkResult.checkType,
+                },
+                {
+                    key: 'Recognition confidence',
+                    value: this.checkResult.check.confidence.toString(),
+                },
+            ]
+        };
 
-            if (out) {
-                this.displayFields[key] = out;
-            }
-        });
+        const checkFieldsSection: ScanResultSection = {
+            title: this.checkResult.check.type.name,
+            data: GenericDocumentUtils.gdrFields(this.checkResult.check)
+        };
+
+        return [
+            commonSection,
+            checkFieldsSection
+        ];
     }
 
     private sanitizeFileUri(fileUri: string): string {

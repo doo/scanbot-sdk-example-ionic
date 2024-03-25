@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BarcodeListService } from '../services/barcode-list.service';
+import { BarcodeFormat } from 'cordova-plugin-scanbot-sdk';
 
 @Component({
     selector: 'app-barcode-list',
@@ -7,7 +8,7 @@ import { BarcodeListService } from '../services/barcode-list.service';
 })
 export class BarcodeListPage {
 
-    barcodes = [];
+    barcodes: Array<{ key: BarcodeFormat, value: boolean }>  = [];
 
     constructor() {
         this.barcodes = BarcodeListService.items;

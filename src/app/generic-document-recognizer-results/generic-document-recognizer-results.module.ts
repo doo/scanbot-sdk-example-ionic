@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { GenericDocumentRecognizerResultsPage } from './generic-document-recognizer-results.page';
+import {SectionListComponent} from '../section-list/section-list.component';
 
 const routes: Routes = [
   {
@@ -15,12 +16,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        SectionListComponent
+    ],
   declarations: [GenericDocumentRecognizerResultsPage]
 })
 export class GenericDocumentRecognizerResultsPageModule {}

@@ -4,13 +4,13 @@
             <ion-back-button defaultHref="home"></ion-back-button>
         </ion-buttons>
         <ion-title>
-            Check Recognizer Results
+            MRZ Scanner Results
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-    <app-section-list [sectionListData]=displayFields />
+<ion-content [fullscreen]="true" padding>
+    <app-section-list [sectionListData]=displayFields/>
 </ion-content>
 
 <ion-footer>

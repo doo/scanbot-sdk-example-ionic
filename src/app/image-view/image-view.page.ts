@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
-import { ImageFilter, Page } from 'cordova-plugin-scanbot-sdk';
+import { ImageFilterType, Page } from 'cordova-plugin-scanbot-sdk';
 
 import { DialogsService } from '../services/dialogs.service';
-import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
 import { ImageResultsRepository } from '../services/image-results.repository';
+import { ScanbotSdkDemoService } from '../services/scanbot-sdk-demo.service';
+import {IMAGE_FILTER_LIST} from '../../utils/image-filters';
 
 @Component({
     selector: 'app-image-view',
@@ -16,56 +17,43 @@ import { ImageResultsRepository } from '../services/image-results.repository';
 })
 export class ImageViewPage implements OnInit {
 
-    public page: Page;
-    public sanitizedPreviewImage: string;
-
-    private imageFilterList: ImageFilter[] = [
-        'NONE',
-        'COLOR_ENHANCED',
-        'GRAYSCALE',
-        'BINARIZED',
-        'COLOR_DOCUMENT',
-        'PURE_BINARIZED',
-        'BACKGROUND_CLEAN',
-        'BLACK_AND_WHITE',
-        'OTSU_BINARIZATION',
-        'DEEP_BINARIZATION',
-        'EDGE_HIGHLIGHT',
-        'LOW_LIGHT_BINARIZATION',
-        'LOW_LIGHT_BINARIZATION_2',
-        'SENSITIVE_BINARIZATION'
-    ];
+    public page: Page | undefined;
+    public sanitizedPreviewImage: string | undefined;
 
     constructor(private scanbotService: ScanbotSdkDemoService,
-                private imageResultsRepository: ImageResultsRepository,
-                private dialogsService: DialogsService,
-                private router: Router,
-                private route: ActivatedRoute,
-                private actionSheetController: ActionSheetController) { }
+        private imageResultsRepository: ImageResultsRepository,
+        private dialogsService: DialogsService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private actionSheetController: ActionSheetController) { }
 
     ngOnInit() {
         this.route.paramMap.pipe(
             switchMap((params: ParamMap) => of(params.get('pageId')))
         ).subscribe(pageId => {
-            this.page = this.imageResultsRepository.getPageById(pageId);
+            if (pageId) {
+                this.page = this.imageResultsRepository.getPageById(pageId);
+            }
             this.sanitizePreviewImage();
         });
     }
 
     private async sanitizePreviewImage() {
-        const data = await this.scanbotService.fetchDataFromUri(this.page.documentPreviewImageFileUri);
-        this.sanitizedPreviewImage = this.imageResultsRepository.sanitizeBase64(data);
+        if (this.page && this.page.documentPreviewImageFileUri) {
+            const data = await this.scanbotService.fetchDataFromUri(this.page.documentPreviewImageFileUri);
+            this.sanitizedPreviewImage = this.imageResultsRepository.sanitizeBase64(data);
+        }
     }
 
     async startCroppingScreen() {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+        if (!(await this.scanbotService.checkLicense()) || this.page === undefined) { return; }
 
         const result = await this.scanbotService.SDK.UI.startCroppingScreen({
             page: this.page,
             uiConfigs: {
                 // Customize colors, text resources, behavior, etc..
                 doneButtonTitle: 'Save',
-                interfaceOrientation: 'PORTRAIT',
+                orientationLockMode: 'PORTRAIT',
                 topBarBackgroundColor: '#c8193c',
                 bottomBarBackgroundColor: '#c8193c',
                 hintTitle: 'Custom hint:\nDrag the dots to the document edges.',
@@ -74,15 +62,17 @@ export class ImageViewPage implements OnInit {
             }
         });
 
-        if (result.status === 'CANCELED') { return; }
+        if (result.status === 'CANCELED' || result.page === undefined) { return; }
 
         await this.updatePage(result.page);
     }
 
     async deletePage() {
-        await this.scanbotService.SDK.removePage({page: this.page});
-        await this.imageResultsRepository.removePage(this.page);
-        await this.router.navigate(['/image-results']);
+        if (this.page) {
+            await this.scanbotService.SDK.removePage({ page: this.page });
+            await this.imageResultsRepository.removePage(this.page);
+            await this.router.navigate(['/image-results']);
+        }
     }
 
     private async updatePage(page: Page) {
@@ -93,7 +83,7 @@ export class ImageViewPage implements OnInit {
 
     async showFilterSelection() {
         const buttons = [];
-        this.imageFilterList.forEach(f => {
+        IMAGE_FILTER_LIST.forEach(f => {
             buttons.push({
                 text: f,
                 handler: () => { this.applyImageFilter(f); }
@@ -114,39 +104,29 @@ export class ImageViewPage implements OnInit {
         await actionSheet.present();
     }
 
-    private async applyImageFilter(filter: ImageFilter) {
-        if (!(await this.scanbotService.checkLicense())) { return; }
+    private async applyImageFilter(filter: ImageFilterType) {
+        if (!(await this.scanbotService.checkLicense()) || this.page === undefined) { return; }
 
         const loading = await this.dialogsService.createLoading('Applying image filter ...');
         try {
             await loading.present();
-            const result = await this.scanbotService.SDK.applyImageFilterOnPage({page: this.page, imageFilter: filter});
-            await this.updatePage(result.page);
+            const result = await this.scanbotService.SDK.applyImageFilterOnPage({ page: this.page, imageFilter: filter });
+            await this.updatePage(result);
         }
         finally {
             await loading.dismiss();
         }
     }
 
-    async estimateBlurriness() {
+    async documentQualityAnalyzer() {
         if (!(await this.scanbotService.checkLicense())) { return; }
 
-        const loading = await this.dialogsService.createLoading('Estimating blurriness ...');
+        const loading = await this.dialogsService.createLoading('Analyzing document ...');
         try {
             await loading.present();
-            /**
-             * Estimates image blurriness. Less is sharper, more is blurred.
-             *
-             * In board terms, consider blur values as follows:
-             * • 0.0-0.3: This image isn't blurry at all
-             * • 0.3-0.6: Somewhat blurry, should be ok
-             * • 0.6-1.0: I'm skeptical of the usefulness of the image
-             *
-             * However, this isn't that black and white. If a scanned document has a lot white background,
-             * that will be considered a very blurred image.
-             */
-            const blurResult = await this.scanbotService.SDK.estimateBlur({imageFileUri: this.page.documentImageFileUri});
-            await this.dialogsService.showAlert('Estimated blurriness on image: ' + blurResult.blur);
+
+            const scanResult = await this.scanbotService.SDK.documentQualityAnalyzer({imageFileUri: this.page.documentImageFileUri});
+            await this.dialogsService.showAlert('Document Quality Analyzer result ' + scanResult.result);
         }
         finally {
             await loading.dismiss();

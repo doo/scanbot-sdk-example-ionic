@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { CheckRecognizerResultsPage } from './check-recognizer-results.page';
+import { SectionListComponent } from '../section-list/section-list.component';
 
 const routes: Routes = [
   {
@@ -19,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SectionListComponent
   ],
-  declarations: [CheckRecognizerResultsPage]
+    declarations: [CheckRecognizerResultsPage]
 })
 export class CheckRecognizerResultsPageModule {}
