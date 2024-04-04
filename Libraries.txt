@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK for Cordova version 4.17.3:
+Open Source libraries used in the Scanbot SDK for Cordova version 4.18.0:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 Open Source libraries used in the Scanbot SDK for Android version 4.2.0
