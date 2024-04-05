@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {BarcodeListService, BarcodesDetectionViewModel} from '../services/barcode-list.service';
-import {DomSanitizer} from '@angular/platform-browser';
 import {ByteArrayUtils} from 'src/utils/byte-array-utils';
+import {ImageResultsRepository} from '../services/image-results.repository';
 
 @Component({
     selector: 'app-barcode-result-list',
@@ -12,12 +12,12 @@ export class BarcodeResultListPage {
 
     detectedBarcodes: BarcodesDetectionViewModel[];
 
-    constructor(public sanitizer: DomSanitizer) {
+    constructor(private imageResultsRepository: ImageResultsRepository,) {
         let detectedBarcodes = BarcodeListService.detectedBarcodes || [];
 
         detectedBarcodes = detectedBarcodes.map((item) => {
             if (item.snappedImage) {
-                item.snappedImage = this.sanitizeFileUri(item.snappedImage);
+                item.snappedImage = this.imageResultsRepository.sanitizeFileUri(item.snappedImage);
             }
 
             item.barcodes.forEach(element => {
@@ -27,12 +27,5 @@ export class BarcodeResultListPage {
         });
 
         this.detectedBarcodes = detectedBarcodes;
-    }
-
-    private sanitizeFileUri(fileUri: string): string {
-        // see https://ionicframework.com/docs/building/webview/#file-protocol
-        const convertedUri = (window as any).Ionic.WebView.convertFileSrc(fileUri);
-        // see https://angular.io/guide/security#bypass-security-apis
-        return this.sanitizer.bypassSecurityTrustUrl(convertedUri) as string;
     }
 }

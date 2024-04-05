@@ -34,10 +34,7 @@ export class ImageResultsPage {
         this.pages = this.imageResultsRepository.getPages();
         // build sanitizes preview image file URIs
         for (const page of this.pages) {
-            // this.sanitizedPreviewImages.set(page.pageId,
-            //     this.imageResultsRepository.sanitizeFileUri(page.documentPreviewImageFileUri));
-
-            const data = await this.scanbotService.fetchDataFromUri(page.originalImageFileUri);
+            const data = await this.scanbotService.fetchDataFromUri(page.documentPreviewImageFileUri);
             this.sanitizedPreviewImages.set(page.pageId, this.imageResultsRepository.sanitizeBase64(data));
         }
         // build rows

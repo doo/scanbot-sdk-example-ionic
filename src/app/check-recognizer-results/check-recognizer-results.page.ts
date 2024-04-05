@@ -3,7 +3,7 @@ import {CheckRecognizerResult} from 'cordova-plugin-scanbot-sdk';
 import {ScanResultSection, ScanResultSectionList} from '../section-list/section-list.component';
 import {ScannerResultsService} from '../services/scanner-results.service';
 import {GenericDocumentUtils} from '../../utils/gdr-utils';
-import {DomSanitizer} from '@angular/platform-browser';
+import {ImageResultsRepository} from '../services/image-results.repository';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class CheckRecognizerResultsPage implements OnInit {
     displayFields: ScanResultSectionList;
 
     constructor(
-        private sanitizer: DomSanitizer,
+        private imageResultsRepository: ImageResultsRepository,
     ) {
     }
 
@@ -31,7 +31,7 @@ export class CheckRecognizerResultsPage implements OnInit {
             data: [
                 {
                     key: 'Check Image',
-                    image:  this.sanitizeFileUri(this.checkResult.imageFileUri),
+                    image: this.imageResultsRepository.sanitizeFileUri(this.checkResult.imageFileUri),
                 },
                 {
                     key: 'Recognition Status',
@@ -57,12 +57,5 @@ export class CheckRecognizerResultsPage implements OnInit {
             commonSection,
             checkFieldsSection
         ];
-    }
-
-    private sanitizeFileUri(fileUri: string): string {
-        // see https://ionicframework.com/docs/building/webview/#file-protocol
-        const convertedUri = (window as any).Ionic.WebView.convertFileSrc(fileUri);
-        // see https://angular.io/guide/security#bypass-security-apis
-        return this.sanitizer.bypassSecurityTrustUrl(convertedUri) as string;
     }
 }

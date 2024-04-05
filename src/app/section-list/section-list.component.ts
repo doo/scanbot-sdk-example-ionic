@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Field} from '../../../../scanbot-sdk-cordova-plugin/types';
+import {Field} from 'cordova-plugin-scanbot-sdk';
 import {IonicModule} from '@ionic/angular';
 import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {SafeUrl} from '@angular/platform-browser';

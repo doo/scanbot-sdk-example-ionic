@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ScanResultSection, ScanResultSectionList} from '../section-list/section-list.component';
-import {MedicalCertificateScannerResult} from '../../../../scanbot-sdk-cordova-plugin';
+import {MedicalCertificateScannerResult} from 'cordova-plugin-scanbot-sdk';
 import {ScannerResultsService} from '../services/scanner-results.service';
-import {DomSanitizer} from '@angular/platform-browser';
+import {ImageResultsRepository} from '../services/image-results.repository';
 
 type PatientDataKeys = keyof MedicalCertificateScannerResult['patientData'];
 type DatesKeys = keyof MedicalCertificateScannerResult['dates'];
@@ -19,7 +19,7 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
     medicalCertificateScannerResult: MedicalCertificateScannerResult;
 
     constructor(
-        private sanitizer: DomSanitizer,
+        private imageResultsRepository: ImageResultsRepository,
     ) {
     }
 
@@ -28,13 +28,13 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
         this.displayFields = await this.setupProperties();
     }
 
-   private async setupProperties(): Promise<ScanResultSectionList> {
+    private async setupProperties(): Promise<ScanResultSectionList> {
         const commonData: ScanResultSection = {
             title: 'Medical Certificate Result',
             data: [
                 {
                     key: 'Snapped Image',
-                    image: await this.sanitizeFileUri(this.medicalCertificateScannerResult.imageFileUri),
+                    image: this.imageResultsRepository.sanitizeFileUri(this.medicalCertificateScannerResult.imageFileUri),
                 },
                 {
                     key: 'Form Type',
@@ -166,12 +166,4 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
             };
         });
     };
-
-    private sanitizeFileUri(fileUri: string): string {
-        // see https://ionicframework.com/docs/building/webview/#file-protocol
-        const convertedUri = (window as any).Ionic.WebView.convertFileSrc(fileUri);
-        // see https://angular.io/guide/security#bypass-security-apis
-        return this.sanitizer.bypassSecurityTrustUrl(convertedUri) as string;
-    }
-
 }

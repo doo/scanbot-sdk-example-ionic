@@ -1,4 +1,4 @@
-import {ImageFilterType} from '../../../scanbot-sdk-cordova-plugin/types';
+import {ImageFilterType} from 'cordova-plugin-scanbot-sdk';
 
 export const IMAGE_FILTER_LIST: ImageFilterType[] = [
     'BINARIZED',
