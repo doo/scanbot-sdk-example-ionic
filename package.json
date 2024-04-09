@@ -23,11 +23,12 @@
     "@awesome-cordova-plugins/core": "^6.4.0",
     "@awesome-cordova-plugins/file": "^6.4.0",
     "@awesome-cordova-plugins/status-bar": "^6.4.0",
+    "@ionic-native/camera": "^5.36.0",
     "@ionic/angular": "6.7.5",
     "@ionic/cordova-builders": "^9.0.0",
     "@ionic/storage-angular": "^3.0.6",
     "core-js": "^3.30.0",
-    "rxjs": "7.8.1",
+    "rxjs": "6.6.0",
     "sass": "^1.60.0",
     "sharp": "^0.32.0",
     "source-map": "^0.7.4",
@@ -55,8 +56,7 @@
     "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
-    "cordova-plugin-scanbot-image-picker": "^1.1.0",
-    "cordova-plugin-scanbot-sdk": "",
+    "cordova-plugin-scanbot-sdk": "file:../scanbot-sdk-cordova-plugin",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-statusbar": "^2.4.3",
     "cordova-sqlite-storage": "^6.1.0",
@@ -77,10 +77,7 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-camera": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+",
-        "ANDROIDX_CORE_VERSION": "1.6.+"
-      },
+      "cordova-plugin-camera": {},
       "cordova-plugin-file": {
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
       },
@@ -89,9 +86,6 @@
       },
       "cordova-sqlite-storage": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-scanbot-image-picker": {
-        "PHOTOLIBRARY_USAGE_DESCRIPTION": "This app needs to access your photo library in order to import images"
-      },
       "cordova.plugins.diagnostic": {
         "ANDROIDX_VERSION": "[1.0, 1.4]",
         "ANDROIDX_APPCOMPAT_VERSION": "1.3.1"

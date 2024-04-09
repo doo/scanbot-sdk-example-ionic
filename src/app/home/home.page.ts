@@ -15,7 +15,7 @@ import {
     VinScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
-import ScanbotImagePicker from 'cordova-plugin-scanbot-image-picker';
+import {Camera} from '@ionic-native/camera';
 import {BarcodeDocumentListService} from '../services/barcode-document-list.service';
 import {BarcodeListService} from '../services/barcode-list.service';
 import {DialogsService} from '../services/dialogs.service';
@@ -85,12 +85,9 @@ export class HomePage {
     async pickImageFromPhotoLibrary() {
         // Import an image from Photo Library and run auto document detection on it.
 
-        const result = await ScanbotImagePicker.pickImage();
-        if (result.status !== 'OK' || !result.imageFileUri) {
-            return;
-        }
-
-        const originalImageFileUri = result.imageFileUri;
+        const imageFileUri = await Camera.getPicture({
+            sourceType: 0
+        });
 
         if (!(await this.scanbotService.checkLicense())) {
             return;
@@ -101,7 +98,7 @@ export class HomePage {
             await loading.present();
 
             // First create a new SDK page with the selected original image file:
-            const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri});
+            const createResult = await this.scanbotService.SDK.createPage({originalImageFileUri: imageFileUri});
             // and then run auto document detection and cropping on this new page:
             const docResult = await this.scanbotService.SDK.detectDocumentOnPage({page: createResult});
 
@@ -116,12 +113,9 @@ export class HomePage {
     }
 
     async detectDocumentOnImage() {
-        const result = await ScanbotImagePicker.pickImage();
-        if (result.status !== 'OK' || !result.imageFileUri) {
-            return;
-        }
-
-        const imageFileUri = result.imageFileUri;
+        const imageFileUri = await Camera.getPicture({
+            sourceType: 0
+        });
 
         if (!(await this.scanbotService.checkLicense())) {
             return;
@@ -326,24 +320,14 @@ export class HomePage {
                 return;
             }
 
-            const pickerResult = await ScanbotImagePicker.pickImage({
-                imageQuality: 85
+            const imageFileUri = await Camera.getPicture({
+                sourceType: 0
             });
 
-            if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
-                let errorMessage = 'Unexpected error while loading the chosen image';
-                if (pickerResult.message && pickerResult.message.length > 0) {
-                    errorMessage = pickerResult.message;
-                }
-                await this.dialogsService.showAlert(errorMessage);
-                return;
-            }
-
-            const imageUri = pickerResult.imageFileUri as string;
             const loading = await this.dialogsService.createLoading('Detecting barcodes...');
             await loading.present();
             const result = await this.scanbotService.SDK.detectBarcodesOnImage({
-                imageFileUri: imageUri,
+                imageFileUri,
                 barcodeFormats: BarcodeListService.getAcceptedTypes()
             });
 
@@ -354,7 +338,7 @@ export class HomePage {
 
             BarcodeListService.detectedBarcodes = [{
                 barcodes: result.barcodes || [],
-                snappedImage: imageUri
+                snappedImage: imageFileUri
             }];
 
             await loading.dismiss();
@@ -370,24 +354,14 @@ export class HomePage {
                 return;
             }
 
-            const pickerResult = await ScanbotImagePicker.pickImage({
-                imageQuality: 85
+            const imageFileUri = await Camera.getPicture({
+                sourceType: 0
             });
 
-            if (pickerResult.status !== 'OK' || !pickerResult.imageFileUri) {
-                let errorMessage = 'Unexpected error while loading the chosen image';
-                if (pickerResult.message && pickerResult.message.length > 0) {
-                    errorMessage = pickerResult.message;
-                }
-                await this.dialogsService.showAlert(errorMessage);
-                return;
-            }
-
-            const imageUri = pickerResult.imageFileUri as string;
             const loading = await this.dialogsService.createLoading('Recognizing check...');
             await loading.present();
             const result = await this.scanbotService.SDK.recognizeCheckOnImage({
-                imageFileUri: imageUri
+                imageFileUri,
             });
 
             await loading.dismiss();
@@ -528,11 +502,9 @@ export class HomePage {
                 return;
             }
 
-            const result = await ScanbotImagePicker.pickImage();
-            if (result.status !== 'OK' || !result.imageFileUri) {
-                return;
-            }
-            const imageFileUri = result.imageFileUri;
+            const imageFileUri = await Camera.getPicture({
+                sourceType: 0
+            });
 
             const buttons = IMAGE_FILTER_LIST.map(imageFilter => ({
                 text: imageFilter,
