@@ -64,7 +64,7 @@ export class ScanbotSdkDemoService {
             licenseKey: ScanbotSdkDemoService.SDK_LICENSE_KEY,
             storageImageFormat: ScanbotSdkDemoService.IMAGE_FILE_FORMAT,
             storageImageQuality: ScanbotSdkDemoService.JPG_IMAGE_QUALITY,
-            storageBaseDirectory: this.getDemoStorageBaseDirectory(), // optional storageBaseDirectory, see comments below
+            //storageBaseDirectory: this.getDemoStorageBaseDirectory(),  //optional storageBaseDirectory, see comments below
             documentDetectorMode: 'ML_BASED',
             useCameraX: true,
             allowXnnpackAcceleration: false,
@@ -113,13 +113,17 @@ export class ScanbotSdkDemoService {
     }
 
     public async checkLicense() {
-        const result = await this.SDK.getLicenseInfo();
-        if (result.isLicenseValid) {
-            // OK - we have a trial session, a valid trial license or valid production license.
-            return true;
+        try {
+            const result = await this.SDK.getLicenseInfo();
+            if (result.isLicenseValid) {
+                // OK - we have a trial session, a valid trial license or valid production license.
+                return true;
+            }
+            await this.dialogsService.showAlert('Scanbot SDK (trial) license has expired!');
+            return false;
+        } catch (e) {
+            await this.dialogsService.showAlert(e.message);
         }
-        await this.dialogsService.showAlert('Scanbot SDK (trial) license has expired!');
-        return false;
     }
 
     public globalDocScannerConfigs(): DocumentScannerConfiguration {

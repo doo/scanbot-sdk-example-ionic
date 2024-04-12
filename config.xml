@@ -94,6 +94,5 @@
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-sqlite-storage" spec="6.1.0" />
-    <plugin name="cordova-plugin-scanbot-image-picker" spec="1.1.0" />
-<!--    <plugin name="cordova-plugin-scanbot-sdk" spec="4.17.3" />-->
+    <plugin name="cordova-plugin-scanbot-sdk" spec="4.18.0-beta.1" />
 </widget>
