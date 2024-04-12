@@ -15,7 +15,7 @@ import {
     VinScannerConfiguration
 } from 'cordova-plugin-scanbot-sdk';
 
-import {Camera} from '@ionic-native/camera';
+import {Camera, PictureSourceType} from '@ionic-native/camera';
 import {BarcodeDocumentListService} from '../services/barcode-document-list.service';
 import {BarcodeListService} from '../services/barcode-list.service';
 import {DialogsService} from '../services/dialogs.service';
@@ -86,7 +86,7 @@ export class HomePage {
         // Import an image from Photo Library and run auto document detection on it.
 
         const imageFileUri = await Camera.getPicture({
-            sourceType: 0
+            sourceType: PictureSourceType.PHOTOLIBRARY
         });
 
         if (!(await this.scanbotService.checkLicense())) {
@@ -114,7 +114,7 @@ export class HomePage {
 
     async detectDocumentOnImage() {
         const imageFileUri = await Camera.getPicture({
-            sourceType: 0
+            sourceType: PictureSourceType.PHOTOLIBRARY
         });
 
         if (!(await this.scanbotService.checkLicense())) {
@@ -321,7 +321,7 @@ export class HomePage {
             }
 
             const imageFileUri = await Camera.getPicture({
-                sourceType: 0
+                sourceType: PictureSourceType.PHOTOLIBRARY
             });
 
             const loading = await this.dialogsService.createLoading('Detecting barcodes...');
@@ -355,7 +355,7 @@ export class HomePage {
             }
 
             const imageFileUri = await Camera.getPicture({
-                sourceType: 0
+                sourceType: PictureSourceType.PHOTOLIBRARY
             });
 
             const loading = await this.dialogsService.createLoading('Recognizing check...');
@@ -503,7 +503,7 @@ export class HomePage {
             }
 
             const imageFileUri = await Camera.getPicture({
-                sourceType: 0
+                sourceType: PictureSourceType.PHOTOLIBRARY
             });
 
             const buttons = IMAGE_FILTER_LIST.map(imageFilter => ({
