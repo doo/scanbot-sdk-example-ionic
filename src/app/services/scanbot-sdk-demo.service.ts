@@ -123,6 +123,7 @@ export class ScanbotSdkDemoService {
             return false;
         } catch (e) {
             await this.dialogsService.showAlert(e.message);
+            return false
         }
     }
 

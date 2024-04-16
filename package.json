@@ -59,7 +59,6 @@
     "cordova-plugin-scanbot-sdk": "4.18.0-beta.1",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-statusbar": "^2.4.3",
-    "cordova-sqlite-storage": "^6.1.0",
     "cordova.plugins.diagnostic": "^7.1.1",
     "jasmine-core": "5.1.1",
     "jasmine-spec-reporter": "^7.0.0",
@@ -84,7 +83,6 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova-sqlite-storage": {},
       "cordova-plugin-splashscreen": {},
       "cordova.plugins.diagnostic": {
         "ANDROIDX_VERSION": "[1.0, 1.4]",
