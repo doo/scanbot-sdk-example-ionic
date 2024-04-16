@@ -1,55 +1,61 @@
-import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { CheckRecognizerResult } from 'cordova-plugin-scanbot-sdk';
-import { CheckRecognizerResultsService } from '../services/check-recognizer-results.service';
+import {Component, OnInit} from '@angular/core';
+import {CheckRecognizerResult} from 'cordova-plugin-scanbot-sdk';
+import {ScanResultSection, ScanResultSectionList} from '../section-list/section-list.component';
+import {ScannerResultsService} from '../services/scanner-results.service';
+import {GenericDocumentUtils} from '../../utils/gdr-utils';
+import {ImageResultsRepository} from '../services/image-results.repository';
+
 
 @Component({
     selector: 'app-check-recognizer-results',
     templateUrl: './check-recognizer-results.page.html',
 })
-export class CheckRecognizerResultsPage {
+export class CheckRecognizerResultsPage implements OnInit {
     checkResult: CheckRecognizerResult;
-    displayFields: {};
-    photoUri: string;
+    displayFields: ScanResultSectionList;
 
-    constructor(public sanitizer: DomSanitizer, ) {
-        this.checkResult = CheckRecognizerResultsService.checkRecognizerResult;
-        this.displayFields = {};
-        this.setupProperties();
+    constructor(
+        private imageResultsRepository: ImageResultsRepository,
+    ) {
     }
 
-    private setupProperties() {
-        // Setup Photo Image URI from result Fields
-        const photoImageUri = this.checkResult.imageFileUri;
-        if (photoImageUri) {
-            this.photoUri = this.sanitizeFileUri(photoImageUri);
-        }
-
-        // Setup Key - Value entries from result Fields
-        Object.keys(this.checkResult.fields).forEach((key) => {
-            const value = this.checkResult.fields[key].value;
-            let out;
-
-            if (value["text"]) {
-                out = value["text"];
-                if (value["confidence"]) {
-                    let percentage = Math.round(value["confidence"] * 100);
-                    out += "\n(confidence: " + percentage + "%)";
-                }
-            } else if (typeof value === 'string' || value instanceof String) {
-                out = value;
-            }
-
-            if (out) {
-                this.displayFields[key] = out;
-            }
-        });
+    async ngOnInit() {
+        this.checkResult = ScannerResultsService.checkRecognizerResult;
+        this.displayFields = await this.setupProperties();
     }
 
-    private sanitizeFileUri(fileUri: string): string {
-        // see https://ionicframework.com/docs/building/webview/#file-protocol
-        const convertedUri = (window as any).Ionic.WebView.convertFileSrc(fileUri);
-        // see https://angular.io/guide/security#bypass-security-apis
-        return this.sanitizer.bypassSecurityTrustUrl(convertedUri) as string;
+    private async setupProperties(): Promise<ScanResultSectionList> {
+
+        const commonSection: ScanResultSection = {
+            title: 'Check Result',
+            data: [
+                {
+                    key: 'Check Image',
+                    image: this.imageResultsRepository.sanitizeFileUri(this.checkResult.imageFileUri),
+                },
+                {
+                    key: 'Recognition Status',
+                    value: this.checkResult.checkStatus,
+                },
+                {
+                    key: 'Check Type',
+                    value: this.checkResult.checkType,
+                },
+                {
+                    key: 'Recognition confidence',
+                    value: this.checkResult.check.confidence.toString(),
+                },
+            ]
+        };
+
+        const checkFieldsSection: ScanResultSection = {
+            title: this.checkResult.check.type.name,
+            data: GenericDocumentUtils.gdrFields(this.checkResult.check)
+        };
+
+        return [
+            commonSection,
+            checkFieldsSection
+        ];
     }
 }
