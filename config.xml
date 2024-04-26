@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.scanbot.example.sdk.cordova.ionic" version="4.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.scanbot.example.sdk.cordova.ionic" version="4.18.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Scanbot SDK Example Ionic</name>
     <description>Example App for the Scanbot SDK Cordova Plugin with Ionic Framework</description>
     <author email="sdk@scanbot.io" href="https://scanbot.io">Scanbot / doo GmbH</author>
@@ -93,5 +93,5 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
-    <plugin name="cordova-plugin-scanbot-sdk" spec="4.18.0-beta.3" />
+    <plugin name="cordova-plugin-scanbot-sdk" spec="4.18.0-beta.4" />
 </widget>
