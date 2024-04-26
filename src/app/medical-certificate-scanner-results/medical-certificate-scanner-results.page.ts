@@ -33,15 +33,18 @@ export class MedicalCertificateScannerResultsPage implements OnInit {
             title: 'Medical Certificate Result',
             data: [
                 {
-                    key: 'Snapped Image',
-                    image: this.imageResultsRepository.sanitizeFileUri(this.medicalCertificateScannerResult.imageFileUri),
-                },
-                {
                     key: 'Form Type',
                     value: this.medicalCertificateScannerResult.formType
                 },
             ],
         };
+
+        if (this.medicalCertificateScannerResult.imageFileUri) {
+            commonData.data.unshift({
+                key: 'Snapped Image',
+                image: this.imageResultsRepository.sanitizeFileUri(this.medicalCertificateScannerResult.imageFileUri),
+            });
+        }
 
         return [
             commonData,

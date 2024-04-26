@@ -30,10 +30,6 @@ export class CheckRecognizerResultsPage implements OnInit {
             title: 'Check Result',
             data: [
                 {
-                    key: 'Check Image',
-                    image: this.imageResultsRepository.sanitizeFileUri(this.checkResult.imageFileUri),
-                },
-                {
                     key: 'Recognition Status',
                     value: this.checkResult.checkStatus,
                 },
@@ -47,6 +43,13 @@ export class CheckRecognizerResultsPage implements OnInit {
                 },
             ]
         };
+
+        if (this.checkResult.imageFileUri) {
+            commonSection.data.unshift({
+                key: 'Check Image',
+                image: this.imageResultsRepository.sanitizeFileUri(this.checkResult.imageFileUri),
+            });
+        }
 
         const checkFieldsSection: ScanResultSection = {
             title: this.checkResult.check.type.name,
