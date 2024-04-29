@@ -58,7 +58,7 @@
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-scanbot-sdk": "4.18.0",
     "cordova-plugin-splashscreen": "^6.0.0",
-    "cordova-plugin-statusbar": "^2.4.3",
+    "cordova-plugin-statusbar": "^4.0.0",
     "cordova.plugins.diagnostic": "^7.1.1",
     "jasmine-core": "5.1.1",
     "jasmine-spec-reporter": "^7.0.0",
