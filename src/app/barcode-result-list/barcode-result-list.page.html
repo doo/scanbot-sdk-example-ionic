@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
       <ion-buttons slot="start">
           <ion-back-button defaultHref="home"></ion-back-button>
       </ion-buttons>
@@ -27,7 +27,7 @@
                 <ion-label style="margin-left: 0.5em; font-size: 1em; font-weight: 600;">
                     None
                 </ion-label>
-            </div>   
+            </div>
         </div>
         <div *ngIf="detectedBarcode.barcodes">
             <li *ngFor="let barcode of detectedBarcode.barcodes" style="list-style: none;">
@@ -38,7 +38,7 @@
                     <ion-label style="margin-left: 0.5em; font-size: 1em; font-weight: 400; white-space: pre-wrap">
                         {{ barcode.textWithExtension }}
                     </ion-label>
-                </div>          
+                </div>
                 <div style="flex: 1; flex-direction: row">
                     <ion-label style="margin-left: 0.5em; font-size: 1em; font-weight: 600;">
                         {{"RawBytes"}}

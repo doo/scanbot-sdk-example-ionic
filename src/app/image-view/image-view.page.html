@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="image-results"></ion-back-button>
         </ion-buttons>
@@ -7,7 +7,7 @@
             Image View
         </ion-title>
         <ion-buttons slot="end">
-            <ion-button (click)="estimateBlurriness()">
+            <ion-button (click)="documentQualityAnalyzer()">
                 <ion-icon slot="start" name="glasses"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -19,7 +19,7 @@
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-button (click)="startCroppingScreen()">
                 <ion-icon slot="start" name="crop"></ion-icon>

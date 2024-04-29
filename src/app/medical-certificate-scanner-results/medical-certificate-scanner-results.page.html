@@ -4,12 +4,12 @@
             <ion-back-button defaultHref="home"></ion-back-button>
         </ion-buttons>
         <ion-title>
-            Check Recognizer Results
+            Medical Certificate Results
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content [fullscreen]="true" padding>
     <app-section-list [sectionListData]=displayFields />
 </ion-content>
 

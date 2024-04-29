@@ -86,7 +86,7 @@ export class ImageResultsRepository {
 
     public sanitizeFileUri(fileUri: string): string {
         // see https://ionicframework.com/docs/building/webview/#file-protocol
-        const url = (<any>window).Ionic.WebView.convertFileSrc(fileUri);
+        const url = (window as any).Ionic.WebView.convertFileSrc(fileUri);
         // see https://angular.io/guide/security#bypass-security-apis
         return this.sanitizer.bypassSecurityTrustUrl(url) as string;
     }
