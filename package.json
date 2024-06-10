@@ -40,7 +40,7 @@
     "@angular-devkit/build-angular": "^15.2.9",
     "@angular-devkit/core": "^15.2.9",
     "@angular-devkit/schematics": "^15.2.9",
-    "@angular/cli": "^15.2.4",
+    "@angular/cli": "^18.0.3",
     "@angular/compiler": "^15.2.5",
     "@angular/compiler-cli": "^15.2.5",
     "@angular/language-service": "^15.2.5",
