@@ -56,7 +56,7 @@
     "cordova-plugin-file": "8.0.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
-    "cordova-plugin-scanbot-sdk": "4.18.1-beta.4",
+    "cordova-plugin-scanbot-sdk": "4.18.1",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-statusbar": "^2.4.3",
     "cordova.plugins.diagnostic": "^7.1.1",
