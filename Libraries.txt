@@ -1,7 +1,7 @@
-Open Source libraries used in the Scanbot SDK for Cordova version 4.18.1:
+Open Source libraries used in the Scanbot SDK for Cordova version 4.18.2:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Open Source libraries used in the Scanbot SDK for Android version 4.2.0
+Open Source libraries used in the Scanbot SDK for Android version 4.2.1
 
 CWAC-Camera
 
