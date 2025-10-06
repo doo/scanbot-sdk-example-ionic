@@ -1,6 +1,6 @@
 {
   "name": "scanbot-sdk-example-ionic",
-  "version": "4.18.2",
+  "version": "4.18.3-beta.1",
   "author": "Scanbot SDK GmbH",
   "homepage": "https://scanbot.io",
   "scripts": {
@@ -56,7 +56,7 @@
     "cordova-plugin-file": "8.1.3",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
-    "cordova-plugin-scanbot-sdk": "4.18.2",
+    "cordova-plugin-scanbot-sdk": "4.18.3-beta.1",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-statusbar": "^4.0.0",
     "jasmine-core": "5.1.1",
